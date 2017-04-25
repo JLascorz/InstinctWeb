@@ -1,16 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:composition><h:outputStylesheet name="css/register.css" /></ui:composition>
+        <ui:define name="content">
+        <h:form>
+            <label>Nombre: </label>
+            <h:inputText id="nombre" value="#{Usuario.nombre}" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:message for="nombre"/><br></br>
+            <label>Apellidos: </label>
+            <h:inputText id="apellidos" value="#{Usuario.apellidos}" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:message for="apellidos"/><br></br>
+            <label>Email: </label>
+            <h:inputText  id="email" value="#{Usuario.email}" required="true" 
+                         requiredMessage="Este campo es necesario!">
+            </h:inputText>
+            <h:message for="email"/><br></br>
+            <label>Password: </label>
+            <h:inputText id="password" value="#{Usuario.password}" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:message for="password"/><br></br>
+            <label>NIF: </label>    
+            <h:inputText id="nif" value="#{Usuario.nif}" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:message for="nif"/><br></br>
+            <label>Genero: </label>    
+            <h:inputText id="genero" value="#{Usuario.genero}" required="true" 
+                         requiredMessage="Este campo es necesario!">
+            </h:inputText>
+            <h:message for="genero"/><br></br>
+            <label>Fecha de Nacimiento: </label>    
+            <h:inputText id="fecnac" value="#{Usuario.fecNac}" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:message for="fecnac"/><br></br>
+            <label>Tipo de Usuario:</label>
+            <h:selectOneRadio value="#{Usuario.diffus}">
+                <f:selectItem itemValue="3" itemLabel="Deportista"/>
+                <f:selectItem itemValue="2" itemLabel="Organizador"/>
+            </h:selectOneRadio>
+            <h:commandButton id="enviar" action="#{UsuarioMySQL.insertUser(Usuario)}" value="Guardar"></h:commandButton><br></br>
+        </h:form>
+        </ui:define>
+        </ui:composition>  
+    </h:body>
 </html>

@@ -6,12 +6,13 @@
 package com.instinct.web.object;
 
 import static java.lang.Boolean.FALSE;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author daw2017
  */
-
+@ManagedBean(name="Usuario")
 public class Usuario{
     private String nombre, apellidos, email, password, nif, genero;
     private Boolean activo, baja;
