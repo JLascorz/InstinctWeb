@@ -4,9 +4,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
  
-    <h:head>
+    <h:head id="headMain">
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -18,10 +20,10 @@
         <f:facet name="middle">
             <h:outputStylesheet name="bootstrap/css/bootstrap.css" />
             <h:outputStylesheet name="fontawesome/css/font-awesome.css" />
-            <h:outputStylesheet name="css/dashboard.css" />
+            <h:outputStylesheet id="dashboard" name="css/dashboard.css" />
             <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
-            
+            <h:outputScript name="js/aplicarCSS.js" />
             <h:outputScript name="bootstrap/js/bootstrap.js" />
         </f:facet>
         

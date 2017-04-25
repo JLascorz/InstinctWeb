@@ -1,4 +1,46 @@
 
 body{
-    background-image: url("images/register_background.jpg");
+    background-image: url("../images/register_background.jpg.xhtml");
+}
+
+#register{
+    background-color: white;
+    margin: auto;
+    margin-top: 5%;
+    width: 45%;
+    padding: 20px;
+    text-align: center;
+}
+
+input[type=text], select, input[type=date]{
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 80%;
+    background-color: #2196F3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #1976D2;
+}
+
+table{
+    margin:auto !important;
+}
+
+td{
+    padding: 0px 50px !important;
 }

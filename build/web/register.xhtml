@@ -3,41 +3,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
-        <ui:composition><h:outputStylesheet name="css/register.css" /></ui:composition>
         <ui:define name="content">
+        <div id="register">
         <h:form>
-            <label>Nombre: </label>
-            <h:inputText id="nombre" value="#{Usuario.nombre}" required="true" 
+            <h:inputText id="nombre" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
                          requiredMessage="Este campo es necesario!"></h:inputText>
             <h:message for="nombre"/><br></br>
-            <label>Apellidos: </label>
-            <h:inputText id="apellidos" value="#{Usuario.apellidos}" required="true" 
+            <h:inputText id="apellidos" value="#{Usuario.apellidos}"  a:placeholder="Apellidos" required="true" 
                          requiredMessage="Este campo es necesario!"></h:inputText>
             <h:message for="apellidos"/><br></br>
-            <label>Email: </label>
-            <h:inputText  id="email" value="#{Usuario.email}" required="true" 
+            <h:inputText  id="email" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
                          requiredMessage="Este campo es necesario!">
             </h:inputText>
             <h:message for="email"/><br></br>
-            <label>Password: </label>
-            <h:inputText id="password" value="#{Usuario.password}" required="true" 
+            <h:inputText id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
                          requiredMessage="Este campo es necesario!"></h:inputText>
             <h:message for="password"/><br></br>
-            <label>NIF: </label>    
-            <h:inputText id="nif" value="#{Usuario.nif}" required="true" 
+            <h:inputText id="nif" value="#{Usuario.nif}"  a:placeholder="NIF"
                          requiredMessage="Este campo es necesario!"></h:inputText>
             <h:message for="nif"/><br></br>
-            <label>Genero: </label>    
-            <h:inputText id="genero" value="#{Usuario.genero}" required="true" 
+            <h:selectOneMenu value="#{Usuario.genero}" required="true" requiredMessage="Este campo es necesario!">
+                <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
+                <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
+            </h:selectOneMenu>
+            <h:message for="genero"/><br></br>   
+            <h:inputText id="fecnac" value="#{Usuario.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
                          requiredMessage="Este campo es necesario!">
+                <f:convertDateTime pattern="dd-MM-yyyy"/>
             </h:inputText>
-            <h:message for="genero"/><br></br>
-            <label>Fecha de Nacimiento: </label>    
-            <h:inputText id="fecnac" value="#{Usuario.fecNac}" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputText>
             <h:message for="fecnac"/><br></br>
             <label>Tipo de Usuario:</label>
             <h:selectOneRadio value="#{Usuario.diffus}">
@@ -46,6 +44,7 @@
             </h:selectOneRadio>
             <h:commandButton id="enviar" action="#{UsuarioMySQL.insertUser(Usuario)}" value="Guardar"></h:commandButton><br></br>
         </h:form>
+        </div>
         </ui:define>
         </ui:composition>  
     </h:body>
