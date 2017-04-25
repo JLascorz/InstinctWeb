@@ -13,7 +13,6 @@ import static java.lang.Boolean.FALSE;
  */
 
 public class Usuario{
-    //<editor-fold defaultstate="collapsed" desc="Atributos">
     private String nombre, apellidos, email, password, nif, genero;
     private Boolean activo, baja;
     private int diffus, idUser, numVisitas;
@@ -23,7 +22,7 @@ public class Usuario{
     private static final boolean DEF_BAJA = FALSE;
     private static final boolean DEF_ACTIVO = FALSE;
     private static final int DEF_VISITA = 0;
-    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Getters">
     public int getIdUser(){
     	return idUser;

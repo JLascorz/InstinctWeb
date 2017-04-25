@@ -39,8 +39,7 @@ public class Localizacion {
 		this.longitud = longitud;
 	}
         
-        //Constructores
-	public Localizacion(int idAct, String latitud, String longitud){
+        public Localizacion(int idAct, String latitud, String longitud){
 		this.setIdAct(idAct);
 		this.setLatitud(latitud);
 		this.setLongitud(longitud);
