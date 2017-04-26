@@ -5,6 +5,10 @@
  */
 package com.instinct.daos.connection;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,37 +22,104 @@ import java.sql.SQLException;
  * @since 03/03/2017
  * @version 1.0
  */
-public class connectMySQL {
+public abstract class connectMySQL {
     
-    private static Connection conn;
-    private static String link = "jdbc:mysql://172.16.7.150:3306/instinct";
+    private static Session session;
+    
+    private static Connection connection;
+    private static String link = "jdbc:mysql://172.16.7.150:3306/Instinct";
     private static String user = "root";
     private static String pass = "maletin";
+    
+    private static String dataBaseName = "Instinct";
     
     /**
      * Connect() obre la conexio a la Base de Dades.
      * @return conn Connection
      */
-    public static Connection connect() {
-        try{
-            conn = (Connection) DriverManager.getConnection (link, user, pass);
-        }catch(SQLException e){
-            System.err.printf("No se ha podido conectar a la Base de Datos.\n");
-        }
+    private static String driverName = "com.mysql.jdbc.Driver";
+    
+    public static Connection connectToServer() throws SQLException {
+        connectSSH();
+        Connection conn = connectToDataBase();
+        
         return conn;
     }
     
+    public static void connectSSH() throws SQLException {
+        
+        String sshHost = "172.16.7.150";
+        String sshUser = "jordi";
+        String dbuserName = "root";
+        String dbpassword = "maletin";
+    
+        int localPort = 8740;
+        String remoteHost = "172.16.7.150";
+        int remotePort = 3306;
+        String localSSHurl = "localhost";
+        
+        try{
+        //conn = (Connection) DriverManager.getConnection (link, user, pass);
+        java.util.Properties config = new java.util.Properties();
+        JSch jsch = new JSch();
+        session = jsch.getSession(sshUser, sshHost, 22);
+        //jsch.addIdentity(SshKeyFilepath);
+        config.put("StrictHostKeyChecking", "no");
+        config.put("ConnectionAttempts", "3");
+        session.setConfig(config);
+        session.connect();
+        Class.forName(driverName).newInstance();
+        int assinged_port = session.setPortForwardingL(localPort, remoteHost, remotePort);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private static Connection connectToDataBase() throws SQLException {
+        String dbuserName = "root";
+        String dbpassword = "maletin";
+        int localPort = 8740;
+        String localSSHUrl = "localhost";
+        
+        try{
+            MysqlDataSource dataSource = new MysqlDataSource();
+            dataSource.setServerName(localSSHUrl);
+            dataSource.setPortNumber(localPort);
+            dataSource.setUser(dbuserName);
+            dataSource.setAllowMultiQueries(true);
+            
+            dataSource.setPassword(dbpassword);
+            dataSource.setDatabaseName(dataBaseName);
+
+            connection = dataSource.getConnection();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return connection;
+    }
     /**
      * ConnectionClose() tanca la conexio a la Base de Dades.
      */
-    public static void connectionClose(){
+    public static void closeConnections(){
+        CloseDataBaseConnection();
+        CloseSSHConnection();
+    }
+    
+    private static void CloseDataBaseConnection(){
         try{
-           if(conn !=null){
-              conn.close();
-           }
-                
-            }catch(SQLException e){
-                System.err.printf("No se ha podido cerrar bien la conexion a la Base de Datos.\n");
+            if(connection != null && !connection.isClosed()){
+                connection.close();
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    private static void CloseSSHConnection() {
+        if (session != null && session.isConnected()) {
+            session.disconnect();
         }
     }
     

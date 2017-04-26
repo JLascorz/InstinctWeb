@@ -14,7 +14,7 @@ import java.util.List;
  * @author daw2017
  */
 public interface UsuarioDAO {
-    public abstract String insertUsuario(Usuario user) throws PersistenceException;
+    public abstract void insertUsuario(Usuario user) throws PersistenceException, ClassNotFoundException;
     public abstract List<Usuario> getUsuarios() throws PersistenceException;
     public abstract Usuario getUser() throws PersistenceException;
     

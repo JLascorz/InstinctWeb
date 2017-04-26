@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/resources/css/register.css</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/resources/js/aplicarCSS.js</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/templates/default/header.xhtml</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/register.xhtml</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/index.xhtml</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/templates/default/main.xhtml</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/contracts/UsuarioDAO.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/connection/connectMySQL.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/impl/jdbc/UsuariDAO/UsuarioMySQLDAO.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/web/objects/Usuario.java</file>
         </group>
     </open-files>
 </project-private>

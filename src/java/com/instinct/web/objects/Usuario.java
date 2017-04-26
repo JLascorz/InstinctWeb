@@ -172,7 +172,7 @@ public class Usuario{
 	
 	//Constructor registro completo
 	public Usuario(String nombre, String apellidos, String email, String password,
-				   String nif, String genero, String fecNac, int diffus, String fecRegistro){
+				   String nif, String genero, String fecNac, int diffus){
 		this.setNombre(nombre);
 		this.setApellidos(apellidos);
 		this.setEmail(email);
@@ -184,9 +184,10 @@ public class Usuario{
 		this.setBaja(DEF_BAJA);
 		this.setDiffus(diffus);
 		this.setNumVisitas(DEF_VISITA);
-		this.setFecRegistro(fecRegistro);
 	}
 	
+        //Constructor registro
+        
 	public Usuario(){}
     //</editor-fold>
 
