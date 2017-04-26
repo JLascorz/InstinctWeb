@@ -1,6 +1,7 @@
 
 body{
-    background-image: url("../images/register_background.jpg.xhtml");
+    /*background-image: url("../images/register_background.jpg.xhtml");*/
+    background-color: #BDBDBD;
 }
 
 #register{
@@ -12,7 +13,7 @@ body{
     text-align: center;
 }
 
-input[type=text], select, input[type=date]{
+input[type=text], select, input[type=date], input[type=password]{
     width: 80%;
     padding: 12px 20px;
     margin: 8px 0;

@@ -21,8 +21,8 @@
                          requiredMessage="Este campo es necesario!">
             </h:inputText>
             <h:message for="email"/><br></br>
-            <h:inputText id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputText>
+            <h:inputSecret id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputSecret>
             <h:message for="password"/><br></br>
             <h:inputText id="nif" value="#{Usuario.nif}"  a:placeholder="NIF"
                          requiredMessage="Este campo es necesario!"></h:inputText>
@@ -34,7 +34,6 @@
             <h:message for="genero"/><br></br>   
             <h:inputText id="fecnac" value="#{Usuario.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
                          requiredMessage="Este campo es necesario!">
-                <f:convertDateTime pattern="dd-MM-yyyy"/>
             </h:inputText>
             <h:message for="fecnac"/><br></br>
             <label>Tipo de Usuario:</label>
@@ -42,7 +41,7 @@
                 <f:selectItem itemValue="3" itemLabel="Deportista"/>
                 <f:selectItem itemValue="2" itemLabel="Organizador"/>
             </h:selectOneRadio>
-            <h:commandButton id="enviar" action="#{UsuarioMySQL.insertUser(Usuario)}" value="Guardar"></h:commandButton><br></br>
+            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.insertUsuario(Usuario)}" value="Guardar"></h:commandButton><br></br>
         </h:form>
         </div>
         </ui:define>

@@ -6,7 +6,9 @@ function getSessionId(){
     var str = myScript.src;
     var loc = str.indexOf(";");
     var valor = str.substr(loc);
-    
+    if(valor == "l"){
+        return "";
+    }
     return valor;
 }
 
