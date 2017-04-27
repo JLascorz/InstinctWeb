@@ -29,7 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,6 +41,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name="UsuarioMySQLDAO")
 @SessionScoped
+
 public class UsuarioMySQLDAO implements UsuarioDAO {
     
     CallableStatement sql = null;
@@ -54,17 +59,13 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
             Connection conn = connect();
             //<editor-fold defaultstate="collapsed" desc="Fecha de Nacimiento">
             String fnSN = user.getFecNac();
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = format.parse(fnSN);
             Date fecNac = new Date(date.getTime());
             //</editor-fold>
             
             //<editor-fold defaultstate="collapsed" desc="Fecha del Registro">
-            Timestamp fecReg = new Timestamp(System.currentTimeMillis());
-            String fReg = fecReg.toString();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            java.util.Date daReg = dateFormat.parse(fReg);
-            Timestamp fecRegistro = new Timestamp(daReg.getTime());
+            Timestamp fecRegistro = new Timestamp(System.currentTimeMillis());
             //</editor-fold>
             sql = conn.prepareCall("CALL insertUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             sql.setEscapeProcessing(true);
@@ -115,6 +116,17 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     }
 
     @Override
+    public String login(Usuario user) throws PersistenceException, ClassNotFoundException{
+        user = getUser(user);
+        user = setUserActivo(user);
+        if(user.getActivo() == true){
+            guardaSession(user);
+            //recogeSession();
+        }
+        return "index.xhtml?faces-redirect=true";
+    }
+    
+    @Override
     public Usuario getUser(Usuario user) throws PersistenceException, ClassNotFoundException{
         Class.forName("com.mysql.jdbc.Driver");
         try{
@@ -136,7 +148,6 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
                  throw new PersistenceException(e.getErrorCode());
             }
             
-            user = setUserActivo(user);
         }catch(SQLException e){
             throw new PersistenceException(e.getErrorCode());
         }finally{
@@ -161,48 +172,31 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     @Override
     public Usuario setUserActivo(Usuario user) throws PersistenceException, ClassNotFoundException{
         Class.forName("com.mysql.jdbc.Driver");
+        int comprovar = 0;
+        int nVisitas = 0;
+        String fUlt = null;
         try{
             
             //<editor-fold defaultstate="collapsed" desc="Fecha del Registro">
             Timestamp tUlt = new Timestamp(System.currentTimeMillis());
-            String fUlt = tUlt.toString();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            java.util.Date daUlt = dateFormat.parse(fUlt);
-            Timestamp fecUltVis = new Timestamp(daUlt.getTime());
-            
-            String fecVisita  = dateFormat.format(fecUltVis);
+            fUlt = tUlt.toString();
             //</editor-fold>
             
-            int nVisitas = user.getNumVisitas();
+            nVisitas = user.getNumVisitas();
             nVisitas++;
-            
-            user.setNumVisitas(nVisitas);
-            user.setFecUltVis(fecVisita);
-            user.setActivo(true);
             
             Connection conn = connect();
             sql = conn.prepareCall("CALL setUsuarioActivo(?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
                 sql.setInt(1, user.getIdUser());
-                sql.setTimestamp(2, fecUltVis);
+                sql.setTimestamp(2, tUlt);
                 sql.setInt(3, nVisitas);
                 
-            sql.executeUpdate();
-            try{
-                reader = sql.executeQuery();
-                if(reader.next()){
-                    user = JDBCUtils.getUsuario(reader);
-                    
-                }
-            }catch(SQLException e){
-                 throw new PersistenceException(e.getErrorCode());
-            }
+            comprovar = sql.executeUpdate();
             
         }catch(SQLException e){
             throw new PersistenceException(e.getErrorCode());
-        } catch (ParseException ex) {
-            //Logger.getLogger(UsuarioMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             try{
                 if(reader != null){
@@ -214,6 +208,13 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
             }catch(SQLException e){
                 throw new PersistenceException(e.getErrorCode());
             }
+            
+            if(comprovar > 0){
+                user.setNumVisitas(nVisitas);
+                user.setFecUltVis(fUlt);
+                user.setActivo(true);
+            }
+            
             //Llama a la funció per a tancar la conexio
             connectionClose();
            //closeConnections();
@@ -221,4 +222,24 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
         
         return user;
     }
+
+    @Override
+    public void guardaSession(Usuario user) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(false);
+        httpSession.setAttribute("userKey", user);
+    }
+
+    @Override
+    public Usuario recogeSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(false);
+        Usuario user = (Usuario) httpSession.getAttribute("JSESSIONID");
+        
+        return user;
+    }
+    
+    
 }

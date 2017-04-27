@@ -22,7 +22,7 @@
             <h:inputSecret id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
                          requiredMessage="Este campo es necesario!"></h:inputSecret>
             <h:message for="password"/><br></br>
-            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.getUser(Usuario)}" value="Entrar"></h:commandButton><br></br>
+            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.login(Usuario)}" value="Entrar"></h:commandButton><br></br>
         </h:form>
         </div>
         </div>

@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
  
     <ui:composition>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -14,11 +15,16 @@
                     <a class="navbar-brand" href="index.xhtml">Proyecto</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right" id="botonHeader">
                         <li><a href="index.xhtml">Home</a></li>
                         <li><a href="#">Calendario</a></li>
-                        <li><a href="#">Entra</a></li>
-                        <li><a href="register.xhtml">Registrate</a></li>
+                        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                        <li><a href="login.xhtml"><i class="fa fa-sign-in" aria-hidden="true"></i> Entra</a></li>
+                        <li><a href="register.xhtml"><i class="fa fa-user" aria-hidden="true"></i> Registrate</a></li>
+                        </c:if>
+                        <c:if test="#{UsuarioMySQLDAO.recogeSession().getActivo() == true}">
+                        <li><a href="perfil.xhtml"><i class="fa fa-user-circle" aria-hidden="true"></i> #{userKey.getNombre()} #{userKey.getApellidos()}</a></li>
+                        </c:if>
                     </ul>
                     <form class="navbar-form navbar-right">
                         <input type="text" class="form-control" placeholder="Search..." />
@@ -26,6 +32,7 @@
                 </div>
             </div>
         </div>
-        <div id="pONumb" data-prodnumber="${sessionScope.pONumb}" />
+        <div id="recogeSession" value="#{UsuarioMySQLDAO.recogeSession()}"></div>
+        <div id="userKey" data-prodnumber="${sessionScope.userKey}" />
     </ui:composition>
 </html>

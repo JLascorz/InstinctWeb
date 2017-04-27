@@ -7,12 +7,14 @@ package com.instinct.web.objects;
 
 import static java.lang.Boolean.FALSE;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author daw2017
  */
 @ManagedBean(name="Usuario")
+@SessionScoped
 public class Usuario{
     private String nombre, apellidos, email, password, nif, genero;
     private Boolean activo, baja;
