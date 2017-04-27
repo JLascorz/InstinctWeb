@@ -1,13 +1,16 @@
 
 body{
     /*background-image: url("../images/register_background.jpg.xhtml");*/
-    background-color: #BDBDBD;
+    background-color: white;
 }
 
 #register{
     background-color: white;
-    margin: auto;
-    margin-top: 5%;
+    /* margin: auto; */
+    margin-top: 1%;
+    float: right;
+    /* width: 40%; */
+    height: 98.2vh;
     width: 45%;
     padding: 20px;
     text-align: center;
@@ -44,4 +47,18 @@ table{
 
 td{
     padding: 0px 50px !important;
+}
+
+#imgBike{
+    height: 100vh;
+    margin-left: -50%;
+}
+
+#Imagen{
+    float: left;
+    width: 55%;
+}
+
+#j_idt12{
+    margin-top: 15%;
 }

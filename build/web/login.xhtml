@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <div id="contenido">
+        <div id="Imagen">
+            <h:graphicImage value="javax.faces.resource/images/register_bike.jpg.xhtml" id="imgBike" />
+        </div>
+        <div id="register">
+        <h:form>
+            <h:inputText  id="email" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
+                         requiredMessage="Este campo es necesario!">
+            </h:inputText>
+            <h:message for="email"/><br></br>
+            <h:inputSecret id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputSecret>
+            <h:message for="password"/><br></br>
+            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.getUser(Usuario)}" value="Entrar"></h:commandButton><br></br>
+        </h:form>
+        </div>
+        </div>
+        </ui:define>
+        </ui:composition>  
+    </h:body>
+</html>

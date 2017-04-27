@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public abstract class connectMySQL2 {
     private static Connection conn;
-    private static String link = "jdbc:mysql://172.16.7.150:3306/Instinct";
+    private static String link = "jdbc:mysql://172.16.7.150:3306/Instinct?noAccessToProcedureBodies=true";
     private static String user = "jordi";
     private static String pass = "maletin";
     

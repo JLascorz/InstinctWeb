@@ -9,6 +9,10 @@
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
+        <div id="contenido">
+        <div id="Imagen">
+            <h:graphicImage value="javax.faces.resource/images/register_bike.jpg.xhtml" id="imgBike" />
+        </div>
         <div id="register">
         <h:form>
             <h:inputText id="nombre" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
@@ -41,8 +45,9 @@
                 <f:selectItem itemValue="3" itemLabel="Deportista"/>
                 <f:selectItem itemValue="2" itemLabel="Organizador"/>
             </h:selectOneRadio>
-            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.insertUsuario(Usuario)}" value="Guardar"></h:commandButton><br></br>
+            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.insertUsuario(Usuario)}" value="Crear Cuenta"></h:commandButton><br></br>
         </h:form>
+        </div>
         </div>
         </ui:define>
         </ui:composition>  
