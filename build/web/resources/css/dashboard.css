@@ -84,3 +84,32 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+.navbar-inverse .navbar-nav > li > form > a{
+    color: #9d9d9d;
+    text-decoration: none !important;
+}
+
+.navbar-inverse .navbar-nav > li > form > a:hover{
+    color: white;
+    text-decoration: none !important;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > form > a {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}
+
+.navbar-nav > li > form > a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+.nav > li > form > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}

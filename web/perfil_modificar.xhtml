@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+            <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+            </c:if>
+            <c:if test="#{userKey.getActivo() == true}">
+            <div id="perfil">
+                <div id="modPerfil">
+                <div id="CJNameApe">
+                    <span id="Nombre">#{userKey.getNombre()} </span>
+                    <span id="Apellidos">#{userKey.getApellidos()} </span>
+                </div>
+                <div id="CJEmail">
+                    <span id="Correo">#{userKey.getEmail()} </span>
+                </div>
+                <br></br>
+                <h:form>
+                <div id="informacionPersonal">
+                    <h:inputText  id="nombre" value="#{userKey.nombre}"  a:placeholder="Nombre" />
+                    <h:inputText  id="apellidos" value="#{userKey.apellidos}"  a:placeholder="Apellidos" />
+                    <h:selectOneMenu value="#{userKey.genero}" id="genero">
+                        <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
+                        <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
+                    </h:selectOneMenu>
+                    <h:inputText  id="nif" value="#{userKey.nif}"  a:placeholder="Nif" />
+                    <h:inputText id="fecnac" value="#{userKey.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" />
+                    <h:inputText  id="email" value="#{userKey.email}"  a:placeholder="Email" />
+                    <h:inputSecret id="password" value="#{userKey.password}"  a:placeholder="Contraseña" required="true" 
+                         requiredMessage="Este campo es necesario!"></h:inputSecret>
+                </div>
+                <div id="Botones">
+                    <h:commandButton id="modify"  value="Guardar Datos" action="#{UsuarioMySQLDAO.editarUsuario(userKey)}"></h:commandButton>
+                </div>
+                </h:form>
+                </div>
+            </div>
+            </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

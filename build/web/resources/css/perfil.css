@@ -1,0 +1,86 @@
+
+body{
+    background-color: #E0E0E0;
+}
+
+#CJNameApe{
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
+#CJEmail{
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    color: #9E9E9E;
+}
+
+#perfil{
+    margin: auto;
+    width: 80vh;
+    padding: 20px;
+    background-color: white;
+    height: 100vh;
+}
+
+#tab1{
+    width: 100%;
+    margin: auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+tr > td:first-child{
+    font-weight: bold;
+    background-color: #f1f1f1;
+}
+
+td{
+    padding: 3px;
+    border: 1px solid #9E9E9E;
+}
+
+/*
+input[type=submit]{
+    -webkit-appearance: button;
+    width: 45%;
+     margin: 1%; 
+    margin-top: 5%;
+    cursor: pointer;
+    background-color: #1E88E5;
+    border: none;
+    color: white;
+    height: 30px;
+} */
+
+#modify{
+    margin-right: 7%;
+}
+
+#modPerfil{
+    text-align: center;
+}
+
+input[type=text], select, input[type=date], input[type=password]{
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 80%;
+    background-color: #2196F3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #1976D2;
+}

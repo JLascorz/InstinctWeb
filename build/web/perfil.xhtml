@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+            <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+            </c:if>
+            <c:if test="#{userKey.getActivo() == true}">
+            <div id="perfil">
+                <div id="CJNameApe">
+                    <span id="Nombre">#{userKey.getNombre()} </span>
+                    <span id="Apellidos">#{userKey.getApellidos()} </span>
+                </div>
+                <div id="CJEmail">
+                    <span id="Correo">#{userKey.getEmail()} </span>
+                </div>
+                <br></br>
+                
+                <div id="informacionPersonal">
+                    <table id="tab1">
+                        <tr>
+                            <td>Nombre</td>
+                            <td>#{userKey.getNombre()} #{userKey.getApellidos()}</td>
+                        </tr>
+                        <tr>
+                            <td>NIF</td>
+                            <td>#{userKey.getNif()}</td>
+                        </tr>    
+                        <tr>
+                            <td>Genero</td>
+                            <td>#{userKey.getGenero()}</td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de Nacimiento</td>
+                            <td>#{userKey.getFecNac()}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="Botones">
+                    <h:form>
+                    <h:commandButton id="modify"  value="Modificar Datos" action="perfil_modificar.xhtml"></h:commandButton>
+                    <h:commandButton id="delete" value="Eliminar Cuenta" action="#{UsuarioMySQLDAO.eliminarUsuario(userKey)}"></h:commandButton>
+                    </h:form>
+                </div>
+            </div>
+            </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

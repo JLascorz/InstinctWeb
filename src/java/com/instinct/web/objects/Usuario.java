@@ -5,6 +5,7 @@
  */
 package com.instinct.web.objects;
 
+import java.io.Serializable;
 import static java.lang.Boolean.FALSE;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -15,7 +16,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name="Usuario")
 @SessionScoped
-public class Usuario{
+public class Usuario implements Serializable{
     private String nombre, apellidos, email, password, nif, genero;
     private Boolean activo, baja;
     private int diffus, idUser, numVisitas;

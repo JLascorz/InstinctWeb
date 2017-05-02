@@ -16,37 +16,53 @@
         <div id="register">
         <h:form>
             <h:inputText id="nombre" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputText>
-            <h:message for="nombre"/><br></br>
+                         requiredMessage="El nombre es necesario."></h:inputText><br></br>
+                         
             <h:inputText id="apellidos" value="#{Usuario.apellidos}"  a:placeholder="Apellidos" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputText>
-            <h:message for="apellidos"/><br></br>
+                         requiredMessage="Los apellidos son necesarios."></h:inputText><br></br>
+                         
             <h:inputText  id="email" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
-                         requiredMessage="Este campo es necesario!">
-            </h:inputText>
-            <h:message for="email"/><br></br>
-            <h:inputSecret id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputSecret>
-            <h:message for="password"/><br></br>
+                         requiredMessage="El correo es necesario."
+                         validatorMessage="El correo no es valido.">
+                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+            </h:inputText><br></br>
+            <h:inputSecret id="password1" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
+                         requiredMessage="La contraseña es necesaria.">
+                         <f:validator validatorId="registerValidator" />
+            </h:inputSecret><br></br>
+            <h:inputSecret id="password2" value="#{Usuario.rePassword}"  a:placeholder="Repite la contraseña" required="true" 
+                         requiredMessage="Es necesario repetir la contraseña.">
+                         <f:validator validatorId="registerValidator" />
+            </h:inputSecret><br></br>
             <h:inputText id="nif" value="#{Usuario.nif}"  a:placeholder="NIF"
-                         requiredMessage="Este campo es necesario!"></h:inputText>
-            <h:message for="nif"/><br></br>
+                         requiredMessage="El NIF es necesario.">
+                         <f:validator validatorId="registerValidator" />
+            </h:inputText><br></br>
             <h:selectOneMenu value="#{Usuario.genero}" required="true" requiredMessage="Este campo es necesario!">
                 <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
                 <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
-            </h:selectOneMenu>
-            <h:message for="genero"/><br></br>   
+            </h:selectOneMenu><br></br>   
             <h:inputText id="fecnac" value="#{Usuario.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
-                         requiredMessage="Este campo es necesario!">
-            </h:inputText>
-            <h:message for="fecnac"/><br></br>
+                         requiredMessage="La fecha de nacimiento es necesaria.">
+                         <f:validator validatorId="registerValidator" />
+            </h:inputText><br></br>
             <label>Tipo de Usuario:</label>
             <h:selectOneRadio value="#{Usuario.diffus}">
-                <f:selectItem itemValue="3" itemLabel="Deportista"/>
+                <f:selectItem itemValue="3" itemLabel="Deportista" />
                 <f:selectItem itemValue="2" itemLabel="Organizador"/>
             </h:selectOneRadio>
             <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.insertUsuario(Usuario)}" value="Crear Cuenta"></h:commandButton><br></br>
         </h:form>
+            <div id="errores">
+            <h:message for="nombre"></h:message><br></br>
+            <h:message for="apellidos"></h:message><br></br>
+            <h:message for="email"></h:message><br></br>
+            <h:message for="password1"></h:message><br></br>
+            <h:message for="password2"></h:message><br></br>
+            <h:message for="nif"></h:message><br></br>
+            <h:message for="genero"></h:message><br></br>
+            <h:message for="fecnac"></h:message><br></br>
+            </div>
         </div>
         </div>
         </ui:define>

@@ -48,7 +48,7 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     //PreparedStatement sql = null;
     ResultSet reader = null;
     @Override
-    public String insertUsuario(Usuario user) throws PersistenceException ,ClassNotFoundException{
+    public String insertUsuario(Usuario user) throws PersistenceException, ClassNotFoundException{
     //<editor-fold defaultstate="collapsed" desc="Atributos">
         Class.forName("com.mysql.jdbc.Driver");
                 
@@ -118,10 +118,19 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     @Override
     public String login(Usuario user) throws PersistenceException, ClassNotFoundException{
         user = getUser(user);
-        user = setUserActivo(user);
+        user = changeActivity(user, true);
         if(user.getActivo() == true){
             guardaSession(user);
             //recogeSession();
+        }
+        return "index.xhtml?faces-redirect=true";
+    }
+    
+    @Override
+    public String logout(Usuario user) throws PersistenceException, ClassNotFoundException{
+        user = changeActivity(user, false);
+        if(user.getActivo() == false){
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         }
         return "index.xhtml?faces-redirect=true";
     }
@@ -170,28 +179,30 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     }
     
     @Override
-    public Usuario setUserActivo(Usuario user) throws PersistenceException, ClassNotFoundException{
+    public Usuario changeActivity(Usuario user, Boolean activity) throws PersistenceException, ClassNotFoundException{
         Class.forName("com.mysql.jdbc.Driver");
         int comprovar = 0;
         int nVisitas = 0;
         String fUlt = null;
         try{
-            
-            //<editor-fold defaultstate="collapsed" desc="Fecha del Registro">
             Timestamp tUlt = new Timestamp(System.currentTimeMillis());
             fUlt = tUlt.toString();
-            //</editor-fold>
             
-            nVisitas = user.getNumVisitas();
-            nVisitas++;
+            if(activity == true){
+                nVisitas = user.getNumVisitas();
+                nVisitas++;
+            }else{
+                nVisitas = user.getNumVisitas();
+            }
             
             Connection conn = connect();
-            sql = conn.prepareCall("CALL setUsuarioActivo(?, ?, ?)");
+            sql = conn.prepareCall("CALL setUsuarioActivo(?, ?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
                 sql.setInt(1, user.getIdUser());
-                sql.setTimestamp(2, tUlt);
-                sql.setInt(3, nVisitas);
+                sql.setBoolean(2, activity);
+                sql.setTimestamp(3, tUlt);
+                sql.setInt(4, nVisitas);
                 
             comprovar = sql.executeUpdate();
             
@@ -212,7 +223,7 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
             if(comprovar > 0){
                 user.setNumVisitas(nVisitas);
                 user.setFecUltVis(fUlt);
-                user.setActivo(true);
+                user.setActivo(activity);
             }
             
             //Llama a la funció per a tancar la conexio
@@ -240,6 +251,60 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
         
         return user;
     }
+
+    @Override
+    public String editarUsuario(Usuario user) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+
+        int comprovar = 0;
+        try{
+            //<editor-fold defaultstate="collapsed" desc="Fecha de Nacimiento">
+            String fnSN = user.getFecNac();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = format.parse(fnSN);
+            Date fecNac = new Date(date.getTime());
+            //</editor-fold>
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL editUserUs(?, ?, ?, ?, ?, ?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setInt(1, user.getIdUser());
+                sql.setString(2, user.getNombre());
+                sql.setString(3, user.getApellidos());
+                sql.setString(4, user.getEmail());
+                sql.setString(5, user.getNif());
+                sql.setString(6, user.getGenero());
+                sql.setDate(7, fecNac);
+                
+            comprovar = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        } catch (ParseException ex) {
+            Logger.getLogger(UsuarioMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        if(comprovar > 0){
+                return "perfil";
+        }else{
+                return "perfil_modificar";
+        }
+    }
+    
     
     
 }

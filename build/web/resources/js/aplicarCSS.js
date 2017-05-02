@@ -18,7 +18,9 @@ function detectarBody(){
     var session = getSessionId();
     var data = null;
     if(document.getElementById("register")){
-        data = dir+"javax.faces.resource/css/register.css.xhtml"+session;
+        data = dir+"javax.faces.resource/css/register.css.xhtml";
+    }else if(document.getElementById("perfil")){
+        data = dir+"javax.faces.resource/css/perfil.css.xhtml";
     }
     
     cargarCSS(data);
@@ -37,3 +39,7 @@ function cargarCSS(data){
 }
 
 window.onload = detectarBody;
+
+function redirect(){
+    window.location.href='index.xhtml';
+}
