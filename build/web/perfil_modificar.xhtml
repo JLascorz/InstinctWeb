@@ -19,32 +19,45 @@
             <c:if test="#{userKey.getActivo() == true}">
             <div id="perfil">
                 <div id="modPerfil">
-                <div id="CJNameApe">
-                    <span id="Nombre">#{userKey.getNombre()} </span>
-                    <span id="Apellidos">#{userKey.getApellidos()} </span>
-                </div>
-                <div id="CJEmail">
-                    <span id="Correo">#{userKey.getEmail()} </span>
-                </div>
-                <br></br>
                 <h:form>
                 <div id="informacionPersonal">
-                    <h:inputText  id="nombre" value="#{userKey.nombre}"  a:placeholder="Nombre" />
-                    <h:inputText  id="apellidos" value="#{userKey.apellidos}"  a:placeholder="Apellidos" />
+                    <h:inputText  id="nombre" value="#{userKey.nombre}"  a:placeholder="Nombre" required="true" 
+                         requiredMessage="No puedes dejar el nombre vacio.">
+                    </h:inputText>
+                    <h:inputText  id="apellidos" value="#{userKey.apellidos}"  a:placeholder="Apellidos" required="true" 
+                         requiredMessage="No puedes dejar el apellido vacio.">
+                    </h:inputText>
                     <h:selectOneMenu value="#{userKey.genero}" id="genero">
                         <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
                         <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
                     </h:selectOneMenu>
-                    <h:inputText  id="nif" value="#{userKey.nif}"  a:placeholder="Nif" />
-                    <h:inputText id="fecnac" value="#{userKey.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" />
-                    <h:inputText  id="email" value="#{userKey.email}"  a:placeholder="Email" />
-                    <h:inputSecret id="password" value="#{userKey.password}"  a:placeholder="Contraseña" required="true" 
-                         requiredMessage="Este campo es necesario!"></h:inputSecret>
+                    <h:inputText  id="nif" value="#{userKey.nif}"  a:placeholder="Nif" required="true" 
+                         requiredMessage="No puedes dejar el NIF vacio."
+                         validatorMessage="El NIF no es valido (8 Numeros y 1 Letra).">
+                         <f:validateRegex pattern="[0-9A-Z][0-9]{7}[A-Z]" />
+                    </h:inputText>
+                    <h:inputText id="fecnac" value="#{userKey.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
+                         requiredMessage="La fecha de nacimiento es necesaria.">
+                         <f:validator validatorId="registerValidator" />
+                    </h:inputText>
+                    <h:inputText  id="email" value="#{userKey.email}"  a:placeholder="Email" required="true" 
+                         requiredMessage="El correo es necesario."
+                         validatorMessage="El correo no es valido.">
+                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </h:inputText>
                 </div>
                 <div id="Botones">
-                    <h:commandButton id="modify"  value="Guardar Datos" action="#{UsuarioMySQLDAO.editarUsuario(userKey)}"></h:commandButton>
+                    <h:commandButton id="modify"  value="Guardar Datos" action="#{UsuarioMySQLDAO.callEditar(userKey)}"></h:commandButton>
                 </div>
                 </h:form>
+                <div id="errores">
+                    <p><h:message for="nombre"></h:message></p>
+                    <p><h:message for="apellidos"></h:message></p>
+                    <p><h:message for="nif"></h:message></p>
+                    <p><h:message for="fecnac"></h:message></p>
+                    <p><h:message for="email"></h:message></p>
+                    <h:messages globalOnly="true" ></h:messages>
+                </div>
                 </div>
             </div>
             </c:if>

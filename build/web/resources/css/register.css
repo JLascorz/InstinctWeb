@@ -8,14 +8,55 @@ body{
     background-color: white;
     /* margin: auto; */
     margin-top: 1%;
-    float: right;
+    /* float: right; */
     /* width: 40%; */
     height: 98.2vh;
-    width: 45%;
+    /* width: 45%; */
     padding: 20px;
     text-align: center;
 }
 
+.inpText{
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #BDBDBD;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+    -webkit-box-shadow: none !important; 
+    box-shadow: none !important; 
+}
+
+.inpText:hover{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpText:focus{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpSubmit{
+    width: 80%;
+    background-color: #2196F3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+}
+
+.inpSubmit:hover{
+    background-color: #1976D2;
+}
+
+/*
 input[type=text], select, input[type=date], input[type=password]{
     width: 80%;
     padding: 12px 20px;
@@ -24,22 +65,8 @@ input[type=text], select, input[type=date], input[type=password]{
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
+} */
 
-input[type=submit] {
-    width: 80%;
-    background-color: #2196F3;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type=submit]:hover {
-    background-color: #1976D2;
-}
 
 table{
     margin:auto !important;
@@ -61,4 +88,9 @@ td{
 
 #j_idt12{
     margin-top: 15%;
+}
+
+.aregister{
+    color: white !important;
+    text-decoration: none !important;
 }

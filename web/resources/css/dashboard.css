@@ -113,3 +113,24 @@ body {
     display: block;
     padding: 10px 15px;
 }
+
+.container-fluid{
+    height: 70px !important;
+}
+
+.navbar-header, .navbar-collapse{
+    padding: 10px !important;
+}
+
+.navbar-inverse{
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+@media (max-width: 767px){
+    .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+        background-color: #222 !important;
+    }
+  
+}

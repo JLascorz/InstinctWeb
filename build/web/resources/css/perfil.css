@@ -4,9 +4,10 @@ body{
 }
 
 #CJNameApe{
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    text-transform: uppercase;
 }
 
 #CJEmail{
@@ -16,15 +17,23 @@ body{
 }
 
 #perfil{
-    margin: auto;
-    width: 80vh;
-    padding: 20px;
+    padding-top: 10px;
+    /* width: 80vh; */
+    padding: 30px 20px;
     background-color: white;
     height: 100vh;
 }
 
+.delete{
+    background-color: #ef5350 !important;
+}
+
+.delete:hover{
+    background-color: #e53935 !important;
+}
+
 #tab1{
-    width: 100%;
+    width: 50%;
     margin: auto;
     font-family: 'Montserrat', sans-serif;
 }
@@ -83,4 +92,15 @@ input[type=submit] {
 
 input[type=submit]:hover {
     background-color: #1976D2;
+}
+
+.aperfil{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+@media (max-width: 767px){
+    #tab1 {
+        width: 80%;
+    }
 }

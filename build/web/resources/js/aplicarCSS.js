@@ -19,6 +19,8 @@ function detectarBody(){
     var data = null;
     if(document.getElementById("register")){
         data = dir+"javax.faces.resource/css/register.css.xhtml";
+    }else if(document.getElementById("login")){
+        data = dir+"javax.faces.resource/css/login.css.xhtml";
     }else if(document.getElementById("perfil")){
         data = dir+"javax.faces.resource/css/perfil.css.xhtml";
     }

@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
@@ -47,6 +48,80 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     CallableStatement sql = null;
     //PreparedStatement sql = null;
     ResultSet reader = null;
+    
+    @Override
+    public String register(Usuario user) throws PersistenceException, ClassNotFoundException {
+        String devuelve = null;
+        int comprueba = getUserByEmail(user, "registro");
+        if(comprueba == 0){
+            devuelve = insertUsuario(user);
+            return devuelve;
+        }else{
+            FacesMessage message = new FacesMessage("Este usuario ya esta registrado.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            //return "Este usuario ya esta registrado";
+        }
+        return null;
+    }
+
+    @Override
+    public int getUserByEmail(Usuario user, String caller) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int comprobacion = 0;
+        int idUs = 0;
+        try{
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL compruebaEmail(?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setString(1, user.getEmail());
+                
+            try{
+                reader = sql.executeQuery();
+                if(reader.next()){
+                    idUs = reader.getInt("idUser");
+                    
+                }
+            }catch(SQLException e){
+                 throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        if(caller == "registro"){
+            if(idUs != 0){
+                comprobacion++;         
+            }else{
+                comprobacion = 0;
+            }
+        }else if(caller == "editar") {
+            if(idUs == user.getIdUser()){
+                comprobacion = 0;
+            }else if(idUs == 0){
+                comprobacion = 999;
+            }else{
+                comprobacion = 1;
+            }
+        }
+        
+        return comprobacion;
+    }
+    
     @Override
     public String insertUsuario(Usuario user) throws PersistenceException, ClassNotFoundException{
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -103,7 +178,7 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
        if(i>0){
-            return "index";
+            return "login";
         }else{
             return "register";
         }
@@ -118,12 +193,18 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     @Override
     public String login(Usuario user) throws PersistenceException, ClassNotFoundException{
         user = getUser(user);
-        user = changeActivity(user, true);
-        if(user.getActivo() == true){
-            guardaSession(user);
-            //recogeSession();
+        if(user.getBaja() != true){
+            user = changeActivity(user, true);
+            if(user.getActivo() == true){
+              guardaSession(user);
+              //recogeSession();
+              return "index.xhtml?faces-redirect=true";
+            }
+        }else{
+            FacesMessage message = new FacesMessage("Este usuario esta dado de baja.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        return "index.xhtml?faces-redirect=true";
+        return null;
     }
     
     @Override
@@ -253,6 +334,21 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     }
 
     @Override
+    public String callEditar(Usuario user) throws PersistenceException, ClassNotFoundException {
+        String devuelve = null;
+        int comprueba = getUserByEmail(user, "editar");
+        if(comprueba == 0 || comprueba == 999){
+            devuelve = editarUsuario(user);
+            return devuelve;
+        }else{
+            FacesMessage message = new FacesMessage("Ya hay un usuario con este correo.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            //return "Este usuario ya esta registrado";
+        }
+        return null;
+    }
+    
+    @Override
     public String editarUsuario(Usuario user) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
 
@@ -304,6 +400,60 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
                 return "perfil_modificar";
         }
     }
+
+    @Override
+    public String callBaja(Usuario user) throws PersistenceException, ClassNotFoundException {
+        user = changeBaja(user, true);
+        if(user.getBaja() == true){
+            logout(user);
+        }
+        return "index.xhtml?faces-redirect=true";
+    }
+
+    @Override
+    public Usuario changeBaja(Usuario user, Boolean baja) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int comprovar = 0;
+        try{
+            
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL setUsuarioBaja(?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setInt(1, user.getIdUser());
+                sql.setBoolean(2, baja);
+                
+            comprovar = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+            if(comprovar > 0){
+                user.setBaja(baja);
+            }
+            
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        
+        return user;    
+    }
+
+    
+
+    
     
     
     

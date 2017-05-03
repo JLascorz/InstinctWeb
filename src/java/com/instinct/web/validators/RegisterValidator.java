@@ -31,52 +31,30 @@ public class RegisterValidator implements Validator{
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object obj) throws ValidatorException {
-        String pass1 = null;
-        if(component.getId().contains("password1")){
-            pass1 = (String) obj;
-            String pattern = "\"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$\"";
-            
-            if(pass1.length() < 8){
-               FacesMessage msg = new FacesMessage(
-                    "La contraseña no puede tener menos de 8 caracteres!");
-               msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-               throw new ValidatorException(msg); 
-            }else if(!pass1.matches(pattern)){
-               FacesMessage msg = new FacesMessage(
-                    "La contraseña debe tener minimo 8 caracteres, incluyendo 1 mayuscula y 1 minuscula.");
-               msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-               throw new ValidatorException(msg); 
-            }
-        }
         
-        if(component.getId().contains("password2")){
 
-            String confirmPassword = (String) obj;
-            if (!confirmPassword.equals(pass1)) {
-                FacesMessage msg = new FacesMessage(
-                    "Las contraseñas no coinciden.");
-                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                throw new ValidatorException(msg);
-            }
-        }
-        
         if(component.getId().contains("fecnac")){
             String fecNac = (String) obj;
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             Date dt = new Date();
+            String fechaActual = dateFormat.format(dt);
+            String fac[] = fechaActual.split("/");
+            int actyear = Integer.parseInt(fac[0]);
+            int actmonth = Integer.parseInt(fac[1]);
+            int actday = Integer.parseInt(fac[2]);
             
-            String str[] = fecNac.split("/");
-            int day = Integer.parseInt(str[0]);
+            
+            String str[] = fecNac.split("-");
+            int year = Integer.parseInt(str[0]);
             int month = Integer.parseInt(str[1]);
-            int year = Integer.parseInt(str[2]);
+            int day = Integer.parseInt(str[2]);
             //String fechaActual = dateFormat.format(dt);
-            if(year >= dt.getYear() || year <= dt.getYear()-130){
+            if(year >= actyear || year <= actyear-130 || year > actyear - 14){
                 FacesMessage msg = new FacesMessage(
-                    "El año no es valido.");
+                    "Tienes que tener minimo 14 años");
                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
                 throw new ValidatorException(msg);
-            }else 
-            if(month > 12 || month < 1){
+            }else if(month > 12 || month < 1){
                 FacesMessage msg = new FacesMessage(
                     "El mes no es valido.");
                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -114,21 +92,5 @@ public class RegisterValidator implements Validator{
             }
         }
         
-        if(component.getId().contains("nif")){
-            String nif = (String) obj;
-            String pattern = "/^(\\d{8})([A-Z])$/";
-            if(!nif.matches(pattern)){
-               FacesMessage msg = new FacesMessage(
-                    "El nif tiene que ser de 8 numeros y 1 letra.");
-               msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-               throw new ValidatorException(msg); 
-            }else if((nif.length() > 9) || (nif.length() < 9 && nif.length() > 0)){
-               FacesMessage msg = new FacesMessage(
-                    "El nif tiene que ser de 8 numeros y 1 letra.");
-               msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-               throw new ValidatorException(msg); 
-            }
-            
-        }
     }
 }

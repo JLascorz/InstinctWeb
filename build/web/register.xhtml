@@ -5,44 +5,48 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
         <div id="contenido">
-        <div id="Imagen">
-            <h:graphicImage value="javax.faces.resource/images/register_bike.jpg.xhtml" id="imgBike" />
-        </div>
+        
         <div id="register">
         <h:form>
-            <h:inputText id="nombre" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
+            <h:inputText id="nombre" class="inpText" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
                          requiredMessage="El nombre es necesario."></h:inputText><br></br>
                          
-            <h:inputText id="apellidos" value="#{Usuario.apellidos}"  a:placeholder="Apellidos" required="true" 
+            <h:inputText id="apellidos" class="inpText" value="#{Usuario.apellidos}"  a:placeholder="Apellidos" required="true" 
                          requiredMessage="Los apellidos son necesarios."></h:inputText><br></br>
                          
-            <h:inputText  id="email" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
+            <h:inputText  id="email" class="inpText" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
                          requiredMessage="El correo es necesario."
                          validatorMessage="El correo no es valido.">
                          <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
             </h:inputText><br></br>
-            <h:inputSecret id="password1" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
-                         requiredMessage="La contraseña es necesaria.">
-                         <f:validator validatorId="registerValidator" />
-            </h:inputSecret><br></br>
-            <h:inputSecret id="password2" value="#{Usuario.rePassword}"  a:placeholder="Repite la contraseña" required="true" 
-                         requiredMessage="Es necesario repetir la contraseña.">
-                         <f:validator validatorId="registerValidator" />
-            </h:inputSecret><br></br>
-            <h:inputText id="nif" value="#{Usuario.nif}"  a:placeholder="NIF"
-                         requiredMessage="El NIF es necesario.">
-                         <f:validator validatorId="registerValidator" />
+            
+            <p:password id="password1" styleClass="inpText" placeholder="Contraseña" value="#{Usuario.password}" match="password2" 
+                        required="true" requiredMessage="La contraseña es necesaria."
+                        validatorMessage="Las contraseñas no coinciden." /><br></br>
+
+            <p:password id="password2" styleClass="inpText" placeholder="Repite la contraseña" value="#{Usuario.rePassword}" 
+                        required="true" requiredMessage="Es necesario repetir la contraseña."
+                        validatorMessage="Minimo 5 caracteres." >
+                        <f:validateLength minimum="5" />
+            </p:password><br></br>
+            
+
+            <h:inputText id="nif" class="inpText" value="#{Usuario.nif}"  a:placeholder="NIF"
+                         requiredMessage="El NIF es necesario."
+                         validatorMessage="El NIF no es valido (8 Numeros y 1 Letra).">
+                         <f:validateRegex pattern="[0-9A-Z][0-9]{7}[A-Z]" />
             </h:inputText><br></br>
-            <h:selectOneMenu value="#{Usuario.genero}" required="true" requiredMessage="Este campo es necesario!">
+            <h:selectOneMenu value="#{Usuario.genero}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
                 <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
                 <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
             </h:selectOneMenu><br></br>   
-            <h:inputText id="fecnac" value="#{Usuario.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
+            <h:inputText id="fecnac" class="inpText" value="#{Usuario.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
                          requiredMessage="La fecha de nacimiento es necesaria.">
                          <f:validator validatorId="registerValidator" />
             </h:inputText><br></br>
@@ -51,7 +55,7 @@
                 <f:selectItem itemValue="3" itemLabel="Deportista" />
                 <f:selectItem itemValue="2" itemLabel="Organizador"/>
             </h:selectOneRadio>
-            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.insertUsuario(Usuario)}" value="Crear Cuenta"></h:commandButton><br></br>
+            <h:commandButton id="enviar" class="inpSubmit" action="#{UsuarioMySQLDAO.register(Usuario)}" value="Crear Cuenta"></h:commandButton><br></br>
         </h:form>
             <div id="errores">
             <h:message for="nombre"></h:message><br></br>
@@ -60,8 +64,8 @@
             <h:message for="password1"></h:message><br></br>
             <h:message for="password2"></h:message><br></br>
             <h:message for="nif"></h:message><br></br>
-            <h:message for="genero"></h:message><br></br>
             <h:message for="fecnac"></h:message><br></br>
+            <h:messages globalOnly="true" ></h:messages><br></br>
             </div>
         </div>
         </div>

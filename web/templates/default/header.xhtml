@@ -17,20 +17,17 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right" id="botonHeader">
-                        <li><a href="index.xhtml">Home</a></li>
-                        <li><a href="#">Calendario</a></li>
+                        <li><a href="index.xhtml" class="ahome"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                        <li><a href="calendario.xhtml" class="acalendario"><i class="fa fa-calendar" aria-hidden="true"></i> Calendario</a></li>
                         <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
-                        <li><a href="login.xhtml"><i class="fa fa-sign-in" aria-hidden="true"></i> Entra</a></li>
-                        <li><a href="register.xhtml"><i class="fa fa-user" aria-hidden="true"></i> Registrate</a></li>
+                        <li><a href="login.xhtml" class="alogin"><i class="fa fa-sign-in" aria-hidden="true"></i> Entra</a></li>
+                        <li><a href="register.xhtml" class="aregister"><i class="fa fa-user" aria-hidden="true"></i> Registrate</a></li>
                         </c:if>
                         <c:if test="#{userKey.getActivo() == true}">
-                        <li><a href="perfil.xhtml"><i class="fa fa-user" aria-hidden="true"></i> #{userKey.getNombre()} #{userKey.getApellidos()}</a></li>
+                        <li><a href="perfil.xhtml" class="alogin"><i class="fa fa-user" aria-hidden="true"></i> #{userKey.getNombre()} #{userKey.getApellidos()}</a></li>
                         <li><h:form><h:commandLink action="#{UsuarioMySQLDAO.logout(userKey)}"><i class='fa fa-sign-out' aria-hidden='true'></i> Salir</h:commandLink></h:form></li>
                         </c:if>
                     </ul>
-                    <form class="navbar-form navbar-right">
-                        <input type="text" class="form-control" placeholder="Search..." />
-                    </form>
                 </div>
             </div>
         </div>

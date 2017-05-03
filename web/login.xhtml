@@ -10,20 +10,20 @@
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
         <div id="contenido">
-        <div id="Imagen">
-            <h:graphicImage value="javax.faces.resource/images/register_bike.jpg.xhtml" id="imgBike" />
-        </div>
-        <div id="register">
+        <div id="login">
         <h:form>
-            <h:inputText  id="email" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
+            <h:inputText  id="email" class="inpText" value="#{Usuario.email}"  a:placeholder="Email" required="true" 
                          requiredMessage="Este campo es necesario!">
             </h:inputText>
             <h:message for="email"/><br></br>
-            <h:inputSecret id="password" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
+            <h:inputSecret id="password" class="inpText" value="#{Usuario.password}"  a:placeholder="Contraseña" required="true" 
                          requiredMessage="Este campo es necesario!"></h:inputSecret>
             <h:message for="password"/><br></br>
-            <h:commandButton id="enviar" action="#{UsuarioMySQLDAO.login(Usuario)}" value="Entrar"></h:commandButton><br></br>
+            <h:commandButton id="enviar" class="inpSubmit" action="#{UsuarioMySQLDAO.login(Usuario)}" value="Entrar"></h:commandButton><br></br>
         </h:form>
+            <div id="errores">
+                <h:messages globalOnly="true" ></h:messages>
+            </div>
         </div>
         </div>
         </ui:define>

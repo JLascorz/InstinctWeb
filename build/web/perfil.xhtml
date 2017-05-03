@@ -16,6 +16,7 @@
             </c:if>
             <c:if test="#{userKey.getActivo() == true}">
             <div id="perfil">
+                <div id="datos">
                 <div id="CJNameApe">
                     <span id="Nombre">#{userKey.getNombre()} </span>
                     <span id="Apellidos">#{userKey.getApellidos()} </span>
@@ -48,8 +49,12 @@
                 <div id="Botones">
                     <h:form>
                     <h:commandButton id="modify"  value="Modificar Datos" action="perfil_modificar.xhtml"></h:commandButton>
-                    <h:commandButton id="delete" value="Eliminar Cuenta" action="#{UsuarioMySQLDAO.eliminarUsuario(userKey)}"></h:commandButton>
+                    <h:commandButton id="delete" class="delete" value="Eliminar Cuenta" action="#{UsuarioMySQLDAO.callBaja(userKey)}"></h:commandButton>
                     </h:form>
+                </div>
+                <div id="errores">
+                    <h:messages globalOnly="true" ></h:messages>
+                </div>
                 </div>
             </div>
             </c:if>
