@@ -1,0 +1,80 @@
+
+
+body{
+    /*background-image: url("../images/register_background.jpg.xhtml");*/
+    background-color: white;
+}
+
+#crearActividad{
+    background-color: white;
+    /* margin: auto; */
+    margin-top: 1%;
+    /* float: right; */
+    /* width: 40%; */
+    height: 98.2vh;
+    /* width: 45%; */
+    padding: 20px;
+    text-align: center;
+}
+
+.inpText{
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #BDBDBD;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+    -webkit-box-shadow: none !important; 
+    box-shadow: none !important; 
+}
+
+.inpText:hover{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpText:focus{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpSubmit{
+    width: 80%;
+    background-color: #2196F3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+}
+
+.inpSubmit:hover{
+    background-color: #1976D2;
+}
+
+#j_idt12{
+    margin-top: 15%;
+}
+
+.amyactiv{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.inpTextEditor{
+    width: 83%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}

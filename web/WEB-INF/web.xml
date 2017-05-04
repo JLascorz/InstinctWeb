@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <display-name>Instinct</display-name>
     <!-- Change to "Production" when you are ready to deploy -->
     <context-param>
@@ -20,14 +18,13 @@
     </servlet>
     <servlet>
         <servlet-name>redirect</servlet-name>
-        <servlet-class>com.instinct.daos.impl.jdbc.UsuariDAO.UsuarioMySQLDAO</servlet-class>
+        <servlet-class>com.instinct.daos.impl.jdbc.allMySQLDAO.UsuarioMySQLDAO</servlet-class>
     </servlet>
     <!-- Map these files with JSF -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-
     <!-- Font Awesome -->
     <mime-mapping>
         <extension>eot</extension>
@@ -40,15 +37,13 @@
     <mime-mapping>
         <extension>ttf</extension>
         <mime-type>application/x-font-ttf</mime-type>
-    </mime-mapping>            
+    </mime-mapping>
     <mime-mapping>
         <extension>woff</extension>
         <mime-type>application/x-font-ttf</mime-type>
-    </mime-mapping>            
-    
+    </mime-mapping>
     <mime-mapping>
         <extension>svg</extension>
         <mime-type>image/svg-xml</mime-type>
     </mime-mapping>
-    
 </web-app>

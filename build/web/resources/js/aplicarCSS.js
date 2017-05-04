@@ -23,6 +23,10 @@ function detectarBody(){
         data = dir+"javax.faces.resource/css/login.css.xhtml";
     }else if(document.getElementById("perfil")){
         data = dir+"javax.faces.resource/css/perfil.css.xhtml";
+    }else if(document.getElementById("misActividades")){
+        data = dir+"javax.faces.resource/css/misActividades.css.xhtml";
+    }else if(document.getElementById("crearActividad")){
+        data = dir+"javax.faces.resource/css/crear_actividad.css.xhtml";
     }
     
     cargarCSS(data);

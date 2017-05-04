@@ -19,6 +19,7 @@ public interface UsuarioDAO {
     public abstract int getUserByEmail(Usuario user, String caller) throws PersistenceException, ClassNotFoundException;
     public abstract String insertUsuario(Usuario user) throws PersistenceException, ClassNotFoundException;
     
+    //Ver todos los usuarios
     public abstract List<Usuario> getUsuarios() throws PersistenceException, ClassNotFoundException;
     
     //Login

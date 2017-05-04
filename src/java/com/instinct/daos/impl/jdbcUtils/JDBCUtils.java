@@ -5,6 +5,8 @@
  */
 package com.instinct.daos.impl.jdbcUtils;
 
+import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.TipoActividad;
 import com.instinct.web.objects.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,6 +59,41 @@ public class JDBCUtils {
             fecRegistro);
             
             return user;
+    }
+    
+    public static Actividad getActividad(ResultSet reader) throws SQLException{
+        
+        //Fecha de Nacimiento
+        Date dfn = reader.getDate("Fecha");
+        SimpleDateFormat dfor = new SimpleDateFormat("dd-MM-yyyy");
+        String fecha = dfor.format(dfn);
+        
+        Actividad activ = new Actividad(
+            reader.getInt("idAct"),
+            reader.getInt("idUser"),
+            reader.getInt("idTipo"),
+            reader.getString("Nombre"),
+            reader.getString("Descripcion"),
+            reader.getString("Email"),
+            reader.getString("Telefono"),
+            reader.getString("Web"),
+            fecha,
+            reader.getBoolean("Activo"),
+            reader.getBoolean("Baja"),
+            reader.getString("pathResultados"),
+            reader.getString("pathImagen"));
+        
+        return activ;
+    }
+    
+    public static TipoActividad getTipoActividad(ResultSet reader) throws SQLException{
+        
+        TipoActividad tipo = new TipoActividad(
+                reader.getInt("idTipo"),
+                reader.getString("Nombre"),
+                reader.getString("Descripcion"));
+        
+        return tipo;
     }
 
 }

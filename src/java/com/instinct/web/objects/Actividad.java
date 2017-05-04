@@ -6,11 +6,15 @@
 package com.instinct.web.objects;
 
 import static java.lang.Boolean.FALSE;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 /**
  *
  * @author daw2017
  */
+@ManagedBean(name="Actividad")
+@RequestScoped
 public class Actividad {
     //Datos principales de la actividad.
     private String nombre, descripcion, email, telefono, web, fecha;
@@ -187,6 +191,24 @@ public class Actividad {
 		this.setBaja(DEF_BAJA);
 		this.setInformacion(infoAct);
 		this.setLocalizacion(lugar);
+		this.setPathImagen(pathImagen);
+	}
+        
+        public Actividad(int idAct, int idUser, int idTipo, String nombre, String descripcion, String email,
+		     String telefono, String web, String fecha, Boolean activo, Boolean baja,
+                     String pathResultado, String pathImagen){
+		this.setIdAct(idAct);
+		this.setIdUser(idUser);
+		this.setIdTipo(idTipo);
+		this.setNombre(nombre);
+		this.setDescripcion(descripcion);
+		this.setEmail(email);
+		this.setTelefono(telefono);
+		this.setWeb(web);
+		this.setFecha(fecha);
+		this.setActivo(activo);
+		this.setBaja(baja);
+		this.setPathResultado(pathResultado);
 		this.setPathImagen(pathImagen);
 	}
 	

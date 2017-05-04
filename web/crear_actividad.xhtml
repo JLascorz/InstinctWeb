@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <div id="crearActividad">
+        <h:form>
+            <h:inputText id="nombre" class="inpText" value="#{Actividad.nombre}" a:placeholder="Nombre" required="true" 
+                         requiredMessage="El nombre es necesario."></h:inputText><br></br>
+            
+            <h:selectOneMenu value="#{Actividad.idTipo}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                <f:selectItems value="#{TiposMySQLDAO.tiposActividad}" var="tipo" itemValue="#{tipo.idTipo}" itemLabel="#{tipo.nombre}"  />
+            </h:selectOneMenu><br></br>               
+                         
+            <h:inputText  id="email" class="inpText" value="#{Actividad.email}"  a:placeholder="Email" required="true" 
+                         requiredMessage="El correo es necesario."
+                         validatorMessage="El correo no es valido.">
+                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+            </h:inputText><br></br>
+            
+            <h:inputText id="telefono" class="inpText" value="#{Actividad.telefono}" a:placeholder="Telefono" required="true"
+                         requiredMessage="El telefono es necesario.">
+            
+            </h:inputText><br></br>
+           
+            <h:inputText id="web" class="inpText" value="#{Actividad.web}" a:placeholder="Pagina Web"></h:inputText><br></br>
+            
+            <p:textEditor widgetVar="editor2" value="#{Actividad.descripcion}" styleClass="inpTextEditor" height="300" style="margin-bottom:10px" placeholder="Enter your content">
+                <f:facet name="toolbar">
+                     <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                        <button class="ql-strike"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-font"></select>
+                        <select class="ql-size"></select>
+                    </span>
+                </f:facet>
+            </p:textEditor>
+            
+            <h:inputText id="fecnac" class="inpText" value="#{Actividad.fecha}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
+                         requiredMessage="La fecha de nacimiento es necesaria.">
+                         
+            </h:inputText><br></br>
+            <h:commandButton id="enviar" class="inpSubmit" action="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" value="Crear Actividad"></h:commandButton><br></br>
+        </h:form>
+            <div id="errores">
+            <h:message for="nombre"></h:message><br></br>
+            <h:message for="apellidos"></h:message><br></br>
+            <h:message for="email"></h:message><br></br>
+            <h:message for="password1"></h:message><br></br>
+            <h:message for="password2"></h:message><br></br>
+            <h:message for="nif"></h:message><br></br>
+            <h:message for="fecnac"></h:message><br></br>
+            <h:messages globalOnly="true" ></h:messages><br></br>
+            </div>
+        </div>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

@@ -11,7 +11,7 @@ package com.instinct.web.objects;
  */
 public class TipoActividad {
 	private int idTipo;
-	private String nombre, descripcion, pathImg;
+	private String nombre, descripcion;
 	
 //<editor-fold defaultstate="collapsed" desc="Getters">
         public int getIdTipo(){
@@ -26,9 +26,6 @@ public class TipoActividad {
             return descripcion;
         }
 
-        public String getPathImg(){
-            return pathImg;
-        }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Setters">
         public void setIdTipo(int idTipo){
@@ -43,16 +40,13 @@ public class TipoActividad {
             this.descripcion = descripcion;
         }
 
-        public void setPathImg(String pathImg){
-            this.pathImg = pathImg;
-        }
+
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Constructores">
-        public TipoActividad(int idTipo, String nombre, String descripcion, String pathImg){
+        public TipoActividad(int idTipo, String nombre, String descripcion){
 		this.setIdTipo(idTipo);
 		this.setNombre(nombre);
 		this.setDescripcion(descripcion);
-		this.setPathImg(pathImg);
 	}
 	
 	public TipoActividad(){}
