@@ -6,6 +6,7 @@
 package com.instinct.daos.impl.jdbcUtils;
 
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Servicio;
 import com.instinct.web.objects.TipoActividad;
 import com.instinct.web.objects.Usuario;
 import java.sql.ResultSet;
@@ -94,6 +95,16 @@ public class JDBCUtils {
                 reader.getString("Descripcion"));
         
         return tipo;
+    }
+    
+    public static Servicio getServicio(ResultSet reader) throws SQLException{
+        
+        Servicio service = new Servicio(
+                reader.getInt("idServ"),
+                reader.getString("Nombre"),
+                reader.getString("Descripcion"));
+        
+        return service;
     }
 
 }

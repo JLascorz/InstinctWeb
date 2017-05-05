@@ -12,12 +12,17 @@ package com.instinct.web.objects;
 public class Servicio {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
 	private int idServicio;
+        private String nombre;
 	private String descripcion;
 //</editor-fold>
 	
 //<editor-fold defaultstate="collapsed" desc="Getters">
         public int getIdServicio(){
             return idServicio;
+        }
+
+        public String getNombre() {
+            return nombre;
         }
 
         public String getDescripcion(){
@@ -29,14 +34,19 @@ public class Servicio {
             this.idServicio = idServicio;
         }
 
-        public void setDescricpion(String descripcion){
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public void setDescripcion(String descripcion){
             this.descripcion = descripcion;
         }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Constructores">
-	public Servicio(int idServicio, String descripcion){
+	public Servicio(int idServicio, String nombre, String descripcion){
             this.setIdServicio(idServicio);
-            this.setDescricpion(descripcion);
+            this.setNombre(nombre);
+            this.setDescripcion(descripcion);
 	}
 	
 	public Servicio(){}

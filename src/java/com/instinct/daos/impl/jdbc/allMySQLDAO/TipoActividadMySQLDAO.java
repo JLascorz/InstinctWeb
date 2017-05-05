@@ -17,8 +17,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -33,17 +35,109 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     
     @Override
     public String callCrear(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String devuelve = null;
+        int comprueba = getTipoByName(tipoAct);
+        if(comprueba == 0){
+            devuelve = insertarTipoActividad(tipoAct);
+            return devuelve;
+        }else{
+            FacesMessage message = new FacesMessage("Ya existe un tipo de actividad con este nombre.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return null;
     }
 
     @Override
     public int getTipoByName(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Class.forName("com.mysql.jdbc.Driver");
+        int comprobacion = 0;
+        int idTipo = 0;
+        try{
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL compruebaTipo(?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setString(1, tipoAct.getNombre());
+                
+            try{
+                reader = sql.executeQuery();
+                if(reader.next()){
+                    idTipo = reader.getInt("idTipo");
+                    
+                }
+            }catch(SQLException e){
+                 throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+
+            if(idTipo != 0){
+                comprobacion++;         
+            }else{
+                comprobacion = 0;
+            }
+        
+        
+        return comprobacion;    
     }
 
     @Override
     public String insertarTipoActividad(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            
+            sql = conn.prepareCall("CALL insertTipo(?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setString(1, tipoAct.getNombre());
+                sql.setString(2, tipoAct.getDescripcion());
+                
+          i = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+        if(i>0){
+            return "tipos_de_actividad";
+        }else{
+            return "backoffice";
+        }
+    //</editor-fold>
     }
     
     

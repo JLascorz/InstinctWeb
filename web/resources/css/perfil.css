@@ -8,6 +8,7 @@ body{
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-transform: uppercase;
+    text-align: center;
 }
 
 #CJEmail{
@@ -48,18 +49,10 @@ td{
     border: 1px solid #9E9E9E;
 }
 
-/*
-input[type=submit]{
-    -webkit-appearance: button;
-    width: 45%;
-     margin: 1%; 
-    margin-top: 5%;
-    cursor: pointer;
-    background-color: #1E88E5;
-    border: none;
-    color: white;
-    height: 30px;
-} */
+#informacionPersonal{
+    margin: auto;
+    width: 80%;
+}
 
 #modify{
     margin-right: 7%;
@@ -103,4 +96,9 @@ input[type=submit]:hover {
     #tab1 {
         width: 80%;
     }
+}
+
+#Botones{
+    margin: auto;
+    text-align: center;
 }

@@ -11,6 +11,7 @@ import com.instinct.daos.contracts.ActividadDAO;
 import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Usuario;
 import static java.lang.Boolean.FALSE;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -113,7 +114,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
-            //<editor-fold defaultstate="collapsed" desc="Fecha de Nacimiento">
+            //<editor-fold defaultstate="collapsed" desc="Fecha de la Actividad">
             String fec = activ.getFecha();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = format.parse(fec);
@@ -133,7 +134,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 sql.setDate(8, fecAct);
                 sql.setBoolean(9, FALSE);
                 sql.setBoolean(10, FALSE);
-                sql.setString(11, "aaa");
+                sql.setString(11, "NULL");
                 
           i = sql.executeUpdate();
             
@@ -164,19 +165,20 @@ public class ActividadMySQLDAO implements ActividadDAO{
     }
 
     @Override
-    public List<Actividad> getActividadByUser() throws PersistenceException, ClassNotFoundException {
+    public List<Actividad> getActividadByUser(Usuario user) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
     //<editor-fold defaultstate="collapsed" desc="Atributs">
         Connection conn = connect();
-        List<Actividad> activ = new ArrayList<Actividad>();
+        List<Actividad> activities = new ArrayList<Actividad>();
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
-            sql = conn.prepareCall("CALL getTiposActividad()");
+            sql = conn.prepareCall("CALL getActByUser(?)");
+            sql.setInt(1, user.getIdUser());
             reader = sql.executeQuery();
             
             while(reader.next()){
-                activ.add(JDBCUtils.getActividad(reader));
+                activities.add(JDBCUtils.getActividad(reader));
             }
         } catch(SQLException ex){
             throw new PersistenceException(ex.getErrorCode());
@@ -196,7 +198,44 @@ public class ActividadMySQLDAO implements ActividadDAO{
             
         }
     //</editor-fold>
-    return activ;        
+    return activities;        
+    }
+
+    @Override
+    public int mirarSiTieneActividad(Usuario user) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        int cuenta = 0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL ifHaveActivity(?)");
+            sql.setInt(1, user.getIdUser());
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                cuenta = reader.getInt("cuenta");
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+    return cuenta;      
     }
     
 }

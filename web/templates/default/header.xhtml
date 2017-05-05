@@ -27,7 +27,7 @@
                         <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">
                         <li><a href="mis_actividades.xhtml" class="amyactiv"><i class="fa fa-globe" aria-hidden="true"></i> Mis Actividades</a></li>
                         </c:if>
-                        <li><a href="perfil.xhtml" class="alogin"><i class="fa fa-user" aria-hidden="true"></i> #{userKey.getNombre()} #{userKey.getApellidos()}</a></li>
+                        <li><a href="perfil.xhtml" class="aperfil"><i class="fa fa-user" aria-hidden="true"></i> #{userKey.getNombre()} #{userKey.getApellidos()}</a></li>
                         <li><h:form><h:commandLink action="#{UsuarioMySQLDAO.logout(userKey)}"><i class='fa fa-sign-out' aria-hidden='true'></i> Salir</h:commandLink></h:form></li>
                         </c:if>
                     </ul>

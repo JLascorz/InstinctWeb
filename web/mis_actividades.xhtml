@@ -3,16 +3,82 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
+        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+            </c:if>
+        <c:if test="#{userKey.getActivo() == true}">
+        <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">    
         <div id="misActividades">
+        <span class="titleMyAct">Mis Actividades</span><br></br>
         <h:form>
-            <h:commandButton id="addActivity"  value="Crear Actividad" action="crear_actividad.xhtml"></h:commandButton>
+            <h:link class="addActivity"   outcome="crear_actividad.xhtml">
+            <div class='crear'>
+            <i class="fa fa-plus" aria-hidden="true"></i> Crear Actividad
+            </div>
+            </h:link>
         </h:form>
+        <br></br>
+        
+        <c:if test='#{ActividadMySQLDAO.mirarSiTieneActividad(userKey) > 0}'>
+            <h:dataTable styleClass="table table-striped tablaActividades" value="#{ActividadMySQLDAO.getActividadByUser(userKey)}" var="activity" >
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                #{activity.getNombre()}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha</f:facet>
+                #{activity.getFecha()}
+            </h:column>
+            <h:column>
+                <f:facet name='header'>Activo</f:facet>
+                <h:outputText rendered="#{activity.getActivo() == true}" value="Si" />
+                <h:outputText rendered="#{activity.getActivo() == false}" value="No" />
+            </h:column>
+            <h:column>
+                <f:facet name='header'>Imagen</f:facet>
+                <h:link class="btnFiles">
+                    <div class='btnTable'>
+                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    </div>
+                </h:link>
+            </h:column>
+            <h:column>
+                <f:facet name='header'>Resultados</f:facet>
+                <h:link class="btnFiles">
+                    <div class='btnTable'>
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    </div>
+                </h:link>
+            </h:column>
+            <h:column>
+                <f:facet name='header'>Editar</f:facet>
+                <h:link class="editActivity"   outcome="editar_actividad.xhtml">
+                    <div class='btnTable'>
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </h:link>
+            </h:column>
+            <h:column>
+                <f:facet name='header'>Eliminar</f:facet>
+                <h:link class="deleteActivity"   outcome="eliminar_actividad.xhtml">
+                    <div class='btnTable'>
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </div>
+                </h:link>
+            </h:column>
+        </h:dataTable>   
+        </c:if>
         </div>
+        </c:if>
+        </c:if>
         </ui:define>
         </ui:composition>  
 		

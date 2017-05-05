@@ -7,6 +7,7 @@ package com.instinct.daos.contracts;
 
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Usuario;
 import java.util.List;
 
 /**
@@ -21,5 +22,8 @@ public interface ActividadDAO {
     public abstract String insertarActividad(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException;
     
     //Seleccionar actividad con la id del usuario
-    public abstract List<Actividad> getActividadByUser() throws PersistenceException, ClassNotFoundException;
+    public abstract List<Actividad> getActividadByUser(Usuario user) throws PersistenceException, ClassNotFoundException;
+    
+    //Mirar si tiene alguna actividad
+    public abstract int mirarSiTieneActividad(Usuario user) throws PersistenceException, ClassNotFoundException;
 }
