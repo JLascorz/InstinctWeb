@@ -6,6 +6,9 @@
 package com.instinct.daos.impl.jdbcUtils;
 
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Comunidades;
+import com.instinct.web.objects.Municipios;
+import com.instinct.web.objects.Provincias;
 import com.instinct.web.objects.Servicio;
 import com.instinct.web.objects.TipoActividad;
 import com.instinct.web.objects.Usuario;
@@ -105,6 +108,39 @@ public class JDBCUtils {
                 reader.getString("Descripcion"));
         
         return service;
+    }
+    
+    public static Comunidades getComunidad(ResultSet reader) throws SQLException{
+        
+        Comunidades comunidad = new Comunidades(
+                reader.getInt("id"),
+                reader.getString("comunidad")
+        );
+        
+        return comunidad;
+    }
+    
+    public static Provincias getProvincia(ResultSet reader) throws SQLException{
+        
+        Provincias provincia = new Provincias(
+                reader.getInt("id"),
+                reader.getString("provincia"),
+                reader.getInt("comunidad_id")
+        );
+        
+        return provincia;
+    }
+    
+    public static Municipios getMunicipio(ResultSet reader) throws SQLException{
+        
+        Municipios municipio = new Municipios(
+                reader.getInt("id"),
+                reader.getString("municipio"),
+                reader.getInt("provincia_id")
+                
+        );
+        
+        return municipio;
     }
 
 }

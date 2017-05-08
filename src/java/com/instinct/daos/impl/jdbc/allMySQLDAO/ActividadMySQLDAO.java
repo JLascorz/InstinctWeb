@@ -41,12 +41,19 @@ public class ActividadMySQLDAO implements ActividadDAO{
     ResultSet reader = null;
     
     @Override
-    public String callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException {
+    public String callCrear(Actividad activ, int idUser, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
         int comprueba = getActivityByNameYear(activ);
         if(comprueba == 0){
             devuelve = insertarActividad(activ, idUser);
-            return devuelve;
+            activ = getActividadByName(activ);
+            if(devuelve != "insertado"){
+                FacesMessage message = new FacesMessage("No se ha podido insertar la actividad.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }else{
+                return null;
+            }
+            
         }else{
             FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -156,11 +163,11 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
-       if(i>0){
-            return "mis_actividades";
+        if(i>0){
+            return "insertado";
         }else{
-            return "crear_actividad";
-        }
+            return "error";
+        } 
     //</editor-fold>
     }
 
@@ -236,6 +243,49 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }
     //</editor-fold>
     return cuenta;      
+    }
+
+    @Override
+    public Actividad getActividadByName(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int comprobacion = 0;
+        try{
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL compruebaActividad(?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setString(1, activ.getNombre());
+                
+            try{
+                reader = sql.executeQuery();
+                if(reader.next()){
+                    activ.setIdAct(reader.getInt("idAct"));
+                    activ.setIdUser(reader.getInt("idUser"));
+                    activ.setIdTipo(reader.getInt("idTipo"));
+                }
+            }catch(SQLException e){
+                 throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        
+        return activ;
     }
     
 }

@@ -5,44 +5,69 @@
  */
 package com.instinct.web.objects;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
 /**
  *
  * @author daw2017
  */
+@ManagedBean(name="Localizacion")
+@RequestScoped
 public class Localizacion {
     	private int idAct;
-	private String latitud, longitud;
+        private int idComunidad, idProvincia, idMunicipio;
+        private String calle;
 	
 	//Getters
 	public int getIdAct(){
 		return idAct;
 	}
 	
-	public String getLatitud(){
-		return latitud;
-	}
-	
-	public String getLongitud(){
-		return longitud;
-	}
-	
+        public int getIdComunidad() {
+            return idComunidad;
+        }
+
+        public int getIdMunicipio() {
+            return idMunicipio;
+        }
+
+        public int getIdProvincia() {
+            return idProvincia;
+        }
+
+        public String getCalle() {
+            return calle;
+        }
+
 	//Setters
 	public void setIdAct(int idAct){
 		this.idAct = idAct;
 	}
-	
-	public void setLatitud(String latitud){
-		this.latitud = latitud;
-	}
-	
-	public void setLongitud(String longitud){
-		this.longitud = longitud;
-	}
-        
-        public Localizacion(int idAct, String latitud, String longitud){
+
+        public void setIdComunidad(int idComunidad) {
+            this.idComunidad = idComunidad;
+        }
+
+        public void setIdProvincia(int idProvincia) {
+            this.idProvincia = idProvincia;
+        }
+
+        public void setIdMunicipio(int idMunicipio) {
+            this.idMunicipio = idMunicipio;
+        }
+
+        public void setCalle(String calle) {
+            this.calle = calle;
+        }
+
+        public Localizacion(int idAct, int idComunidad, int idProvincia, int idMunicipio, String calle){
 		this.setIdAct(idAct);
-		this.setLatitud(latitud);
-		this.setLongitud(longitud);
+                this.setIdComunidad(idComunidad);
+                this.setIdProvincia(idProvincia);
+                this.setIdMunicipio(idMunicipio);
+                this.setCalle(calle);
+
 	}
 	
 	public Localizacion(){}
