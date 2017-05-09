@@ -8,6 +8,7 @@ package com.instinct.daos.contracts;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Comunidades;
+import com.instinct.web.objects.Localizacion;
 import com.instinct.web.objects.Municipios;
 import com.instinct.web.objects.Provincias;
 import java.util.List;
@@ -23,4 +24,11 @@ public interface LocalizacionDAO {
     public abstract List<Provincias> getProvincias(int idComunidad) throws PersistenceException, ClassNotFoundException;
     public abstract List<Municipios> getMunicipios(int idProvincia) throws PersistenceException, ClassNotFoundException;
     public abstract String escogerLocalizacion(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException;
+
+    //Escoger la localizacion por la id de la actividad.
+    public abstract Localizacion getLocalizacionByIdAct(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract Comunidades getComunidad(Localizacion local) throws PersistenceException, ClassNotFoundException;
+    public abstract Provincias getProvincia(Localizacion local) throws PersistenceException, ClassNotFoundException;
+    public abstract Municipios getMunicipio(Localizacion local) throws PersistenceException, ClassNotFoundException;
+
 }

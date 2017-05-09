@@ -5,16 +5,19 @@
  */
 package com.instinct.web.objects;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author daw2017
  */
 @ManagedBean(name="Localizacion")
-@RequestScoped
-public class Localizacion {
+@ViewScoped
+public class Localizacion implements Serializable {
     	private int idAct;
         private int idComunidad, idProvincia, idMunicipio;
         private String calle;

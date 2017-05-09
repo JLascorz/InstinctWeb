@@ -60,19 +60,25 @@
             </h:column>
             <h:column>
                 <f:facet name='header'>Editar</f:facet>
-                <h:link class="editActivity"   outcome="editar_actividad.xhtml">
+                <h:form>
+                <h:commandLink class="editActivity" >
                     <div class='btnTable'>
                     <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <f:actionListener binding="#{ActividadMySQLDAO.guardarSessionEditar(activity)}" /> 
                     </div>
-                </h:link>
+                </h:commandLink>
+                </h:form>
             </h:column>
             <h:column>
                 <f:facet name='header'>Eliminar</f:facet>
-                <h:link class="deleteActivity"   outcome="eliminar_actividad.xhtml">
+                <h:form>
+                <h:commandLink class="deleteActivity" >
                     <div class='btnTable'>
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    <f:actionListener binding="#{ActividadMySQLDAO.bajaActividad(activity)}" /> 
                     </div>
-                </h:link>
+                </h:commandLink>
+                </h:form>
             </h:column>
         </h:dataTable>   
         </c:if>

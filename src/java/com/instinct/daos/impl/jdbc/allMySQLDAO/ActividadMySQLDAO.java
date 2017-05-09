@@ -12,7 +12,9 @@ import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Usuario;
+import java.io.IOException;
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -28,6 +30,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,7 +45,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
     ResultSet reader = null;
     
     @Override
-    public String callCrear(Actividad activ, int idUser, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException {
+    public void callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
         int comprueba = getActivityByNameYear(activ);
         if(comprueba == 0){
@@ -51,14 +55,14 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 FacesMessage message = new FacesMessage("No se ha podido insertar la actividad.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }else{
-                return null;
+                //return activ;
             }
             
         }else{
             FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        return null;
+        //return null;
     }
 
     @Override
@@ -287,5 +291,68 @@ public class ActividadMySQLDAO implements ActividadDAO{
         
         return activ;
     }
+
+    @Override
+    public void bajaActividad(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    int i = 0;
+        try{
+        Connection conn = connect();
+            sql = conn.prepareCall("CALL setActividadBaja(?, ?)");
+            sql.setInt(1, activ.getIdAct());
+            sql.setBoolean(2, TRUE);
+            
+         i = sql.executeUpdate();
+
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+        
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+
+    @Override
+    public void guardarSessionEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(false);
+        httpSession.setAttribute("activKey", activ);
+        
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("editar_actividad.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    
+    @Override
+    public void borrarSession() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    }
+
+    @Override
+    public void editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     
 }

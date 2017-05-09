@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/resources/js/aplicarCSS.js</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/perfil.xhtml</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/web/objects/Actividad.java</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/resources/css/perfil.css</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/web/objects/Localizacion.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/impl/jdbcUtils/JDBCUtils.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/crear_actividad.xhtml</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/web/objects/Municipios.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/impl/jdbc/allMySQLDAO/LocalizacionMySQLDAO.java</file>
         </group>
     </open-files>
 </project-private>

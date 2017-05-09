@@ -8,13 +8,14 @@ package com.instinct.web.objects;
 import static java.lang.Boolean.FALSE;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author daw2017
  */
 @ManagedBean(name="Actividad")
-@RequestScoped
+@SessionScoped
 public class Actividad {
     //Datos principales de la actividad.
     private String nombre, descripcion, email, telefono, web, fecha;

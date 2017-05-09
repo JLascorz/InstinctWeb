@@ -49,22 +49,30 @@
             </h:inputText><br></br>
             
             <h:selectOneMenu id="comunidades" value="#{Localizacion.idComunidad}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                <f:selectItem itemValue="0" itemLabel="Comunidad autonoma..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.comunidades}" var="comunidad" itemValue="#{comunidad.idComunidad}" itemLabel="#{comunidad.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" render="provincias" />
             </h:selectOneMenu><br></br>
             
             <h:selectOneMenu id="provincias" value="#{Localizacion.idProvincia}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                <f:selectItem itemValue="0" itemLabel="Provincia..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" var="provincia" itemValue="#{provincia.idProvincia}" itemLabel="#{provincia.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" render="municipios" />
             </h:selectOneMenu><br></br> 
             
             <h:selectOneMenu id="municipios" value="#{Localizacion.idMunicipio}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
-                <f:selectItems value="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" var="municipio" itemValue="#{municipio.idProvincia}" itemLabel="#{municipio.nombre}"  />
+                <f:selectItem itemValue="0" itemLabel="Municipio..." />
+                <f:selectItems value="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" var="municipio" itemValue="#{municipio.idMunicipio}" itemLabel="#{municipio.nombre}"  />
                 
-            </h:selectOneMenu><br></br> 
+            </h:selectOneMenu><br></br>
             
-            <h:commandButton id="enviar" class="inpSubmit" action="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" value="Crear Actividad">
-                 <f:actionListener binding="#{LocalizacionMySQLDAO.escogerLocalizacion(Actividad, Comunidades.idComunidad, Provincias.idProvincia, Municipios.idMunicipios)})" />
+            <h:inputText id="calle" class="inpText" value="#{Localizacion.calle}" a:placeholder="Calle" required="true" 
+                         requiredMessage="La calle es necesaria.">    
+            </h:inputText><br></br>
+            
+            <h:commandButton id="enviar" class="inpSubmit" value="Crear Actividad">
+                <f:actionListener binding="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" /> 
+                <f:actionListener binding="#{LocalizacionMySQLDAO.escogerLocalizacion(Actividad, Localizacion.idComunidad, Localizacion.idProvincia, Localizacion.idMunicipio, Localizacion.calle)})" />
             </h:commandButton><br></br>
         </h:form>
             <div id="errores">
