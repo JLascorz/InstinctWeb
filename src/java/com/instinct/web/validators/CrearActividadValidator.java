@@ -33,7 +33,7 @@ public class CrearActividadValidator implements Validator{
     public void validate(FacesContext context, UIComponent component, Object obj) throws ValidatorException {
         
 
-        if(component.getId().contains("fecnac")){
+        if(component.getId().contains("fecha")){
             String fecNac = (String) obj;
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             Date dt = new Date();
@@ -49,11 +49,25 @@ public class CrearActividadValidator implements Validator{
             int month = Integer.parseInt(str[1]);
             int day = Integer.parseInt(str[2]);
             //String fechaActual = dateFormat.format(dt);
-            if(year >= actyear || year <= actyear-130 || year > actyear - 14){
+            if(year < actyear){
                 FacesMessage msg = new FacesMessage(
-                    "Tienes que tener minimo 14 años");
+                    "La actividad no puede ser de años anteriores.");
                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
                 throw new ValidatorException(msg);
+            }else if(year == actyear){
+                if(month < actmonth){
+                   FacesMessage msg = new FacesMessage(
+                    "La actividad no puede ser de meses anteriores.");
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    throw new ValidatorException(msg); 
+                }else if(month == actmonth){
+                    if(day <= actday){
+                    FacesMessage msg = new FacesMessage(
+                    "La actividad no puede ser de dias anteriores.");
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    throw new ValidatorException(msg);
+                    }
+                }
             }else if(month > 12 || month < 1){
                 FacesMessage msg = new FacesMessage(
                     "El mes no es valido.");

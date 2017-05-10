@@ -6,6 +6,7 @@
 package com.instinct.daos.contracts;
 
 import com.instinct.exception.PersistenceException.PersistenceException;
+import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Servicio;
 import java.util.List;
 
@@ -22,5 +23,8 @@ public interface ServicioDAO {
 
     //Seleccionar todos los tipos de Actividad
     public abstract List<Servicio> getServicios() throws PersistenceException, ClassNotFoundException;
+    
+    //Añadir servicios a la actividad
+    public abstract void callServicioActividad(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
     
 }

@@ -56,18 +56,6 @@ body{
     background-color: #1976D2;
 }
 
-/*
-input[type=text], select, input[type=date], input[type=password]{
-    width: 80%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-} */
-
-
 table{
     margin:auto !important;
 }
@@ -76,21 +64,35 @@ td{
     padding: 0px 50px !important;
 }
 
-#imgBike{
-    height: 100vh;
-    margin-left: -50%;
-}
-
-#Imagen{
-    float: left;
-    width: 55%;
-}
-
-#j_idt12{
-    margin-top: 15%;
-}
-
 .alogin{
     color: white !important;
     text-decoration: none !important;
+}
+
+#errores{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    background-color: #ef5350;
+    height: 10%;
+    padding: 10px;
+    /* text-transform: uppercase; */
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#titulo{
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.errorGlobal{
+    margin-top: -25px !important;
+}
+
+li{
+    list-style: none !important;
 }

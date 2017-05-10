@@ -78,3 +78,34 @@ body{
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+
+p{
+    margin: 0px !important;
+}
+
+#errores{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    background-color: #ef5350;
+    padding: 10px;
+    /* text-transform: uppercase; */
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.errorGlobal{
+    margin-top: -25px !important;
+}
+
+li{
+    list-style: none !important;
+}
+
+#titulo{
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+}

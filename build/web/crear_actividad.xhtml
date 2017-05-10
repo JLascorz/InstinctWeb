@@ -20,11 +20,29 @@
         <c:if test="#{userKey.getActivo() == true}">
         <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">        
         <div id="crearActividad">
+            <span id="titulo">Crear Actividad</span><br></br>
+            <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+            <p><h:message for="nombre"></h:message></p>
+            <p><h:message for="tipoActividad"></h:message></p>
+            <p><h:message for="email"></h:message></p>
+            <p><h:message for="telefono"></h:message></p>
+            <p><h:message for="descripcion"></h:message></p>
+            <p><h:message for="nif"></h:message></p>
+            <p><h:message for="fecha"></h:message></p>
+            <p><h:message for="comunidades"></h:message></p>
+            <p><h:message for="provincias"></h:message></p>
+            <p><h:message for="municipios"></h:message></p>
+            <p><h:message for="calle"></h:message></p>
+            <h:messages globalOnly="true" id="errorGlobal"></h:messages>
+            </h:panelGroup>
         <h:form>
+            
+            
+            
             <h:inputText id="nombre" class="inpText" value="#{Actividad.nombre}" a:placeholder="Nombre" required="true" 
                          requiredMessage="El nombre es necesario."></h:inputText><br></br>
             
-            <h:selectOneMenu value="#{Actividad.idTipo}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+            <h:selectOneMenu value="#{Actividad.idTipo}" id="tipoActividad" class="inpText" required="true" requiredMessage="Este campo es necesario!">
                 <f:selectItems value="#{TiposMySQLDAO.tiposActividad}" var="tipo" itemValue="#{tipo.idTipo}" itemLabel="#{tipo.nombre}"  />
             </h:selectOneMenu><br></br>               
                          
@@ -41,26 +59,26 @@
            
             <h:inputText id="web" class="inpText" value="#{Actividad.web}" a:placeholder="Pagina Web"></h:inputText><br></br>
             
-            <p:textEditor widgetVar="editor2" value="#{Actividad.descripcion}" styleClass="inpTextEditor" height="300" style="margin-bottom:10px" placeholder="Descripcion" />
+            <p:textEditor id="descripcion" widgetVar="editor2" value="#{Actividad.descripcion}" styleClass="inpTextEditor" height="300" style="margin-bottom:10px" placeholder="Descripcion" required="true" requiredMessage="Es necesario poner una descripcion."/>
             
-            <h:inputText id="fecnac" class="inpText" value="#{Actividad.fecha}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
-                         requiredMessage="La fecha de nacimiento es necesaria.">
+            <h:inputText id="fecha" class="inpText" value="#{Actividad.fecha}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
+                         requiredMessage="La fecha del acontecimiento es necesaria.">
                          
             </h:inputText><br></br>
             
-            <h:selectOneMenu id="comunidades" value="#{Localizacion.idComunidad}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+            <h:selectOneMenu id="comunidades" value="#{Localizacion.idComunidad}" class="inpText" required="true" requiredMessage="La comunidad autonoma es necesaria.">
                 <f:selectItem itemValue="0" itemLabel="Comunidad autonoma..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.comunidades}" var="comunidad" itemValue="#{comunidad.idComunidad}" itemLabel="#{comunidad.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" render="provincias" />
             </h:selectOneMenu><br></br>
             
-            <h:selectOneMenu id="provincias" value="#{Localizacion.idProvincia}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+            <h:selectOneMenu id="provincias" value="#{Localizacion.idProvincia}" class="inpText" required="true" requiredMessage="La provincia es necesaria.">
                 <f:selectItem itemValue="0" itemLabel="Provincia..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" var="provincia" itemValue="#{provincia.idProvincia}" itemLabel="#{provincia.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" render="municipios" />
             </h:selectOneMenu><br></br> 
             
-            <h:selectOneMenu id="municipios" value="#{Localizacion.idMunicipio}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+            <h:selectOneMenu id="municipios" value="#{Localizacion.idMunicipio}" class="inpText" required="true" requiredMessage="El municipio es necesario.">
                 <f:selectItem itemValue="0" itemLabel="Municipio..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" var="municipio" itemValue="#{municipio.idMunicipio}" itemLabel="#{municipio.nombre}"  />
                 
@@ -70,21 +88,18 @@
                          requiredMessage="La calle es necesaria.">    
             </h:inputText><br></br>
             
+            <h3>Servicios</h3>
+            <p:selectManyCheckbox id="servicios" value="#{SelectManyView.selectedServices}" layout="responsive" columns="3">
+                <f:selectItems value="#{ServicioMySQLDAO.servicios}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
+            </p:selectManyCheckbox><br></br>
+            
             <h:commandButton id="enviar" class="inpSubmit" value="Crear Actividad">
-                <f:actionListener binding="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" /> 
+                <f:actionListener binding="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" />
+                <f:actionListener binding="#{ServicioMySQLDAO.callServicioActividad(Actividad, SelectManyView.selectedServices)}" />
                 <f:actionListener binding="#{LocalizacionMySQLDAO.escogerLocalizacion(Actividad, Localizacion.idComunidad, Localizacion.idProvincia, Localizacion.idMunicipio, Localizacion.calle)})" />
             </h:commandButton><br></br>
         </h:form>
-            <div id="errores">
-            <h:message for="nombre"></h:message><br></br>
-            <h:message for="apellidos"></h:message><br></br>
-            <h:message for="email"></h:message><br></br>
-            <h:message for="password1"></h:message><br></br>
-            <h:message for="password2"></h:message><br></br>
-            <h:message for="nif"></h:message><br></br>
-            <h:message for="fecnac"></h:message><br></br>
-            <h:messages globalOnly="true" ></h:messages><br></br>
-            </div>
+            
         </div>
         </c:if>
         </c:if>

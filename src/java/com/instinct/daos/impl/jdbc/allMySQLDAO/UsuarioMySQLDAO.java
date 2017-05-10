@@ -193,15 +193,20 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
     @Override
     public String login(Usuario user) throws PersistenceException, ClassNotFoundException{
         user = getUser(user);
-        if(user.getBaja() != true){
-            user = changeActivity(user, true);
-            if(user.getActivo() == true){
-              guardaSession(user);
-              //recogeSession();
-              return "index.xhtml?faces-redirect=true";
+        if(user.getNombre() != null){
+            if(user.getBaja() != true){
+                user = changeActivity(user, true);
+                if(user.getActivo() == true){
+                  guardaSession(user);
+                  //recogeSession();
+                  return "index.xhtml?faces-redirect=true";
+                }
+            }else{
+                FacesMessage message = new FacesMessage("Este usuario esta dado de baja.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
         }else{
-            FacesMessage message = new FacesMessage("Este usuario esta dado de baja.");
+            FacesMessage message = new FacesMessage("Email o contraseña incorrecto.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         return null;
@@ -339,6 +344,10 @@ public class UsuarioMySQLDAO implements UsuarioDAO {
         int comprueba = getUserByEmail(user, "editar");
         if(comprueba == 0 || comprueba == 999){
             devuelve = editarUsuario(user);
+            if(devuelve == "perfil"){
+                Usuario temp = getUser(user);
+                guardaSession(temp);
+            }
             return devuelve;
         }else{
             FacesMessage message = new FacesMessage("Ya hay un usuario con este correo.");

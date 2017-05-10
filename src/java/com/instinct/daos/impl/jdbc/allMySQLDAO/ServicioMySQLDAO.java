@@ -10,20 +10,26 @@ import static com.instinct.daos.connection.connectMySQL2.connectionClose;
 import com.instinct.daos.contracts.ServicioDAO;
 import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
+import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Servicio;
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author daw2017
  */
+@ManagedBean(name="ServicioMySQLDAO")
 public class ServicioMySQLDAO implements ServicioDAO {
 
     CallableStatement sql = null;
@@ -141,15 +147,15 @@ public class ServicioMySQLDAO implements ServicioDAO {
     Class.forName("com.mysql.jdbc.Driver");
     //<editor-fold defaultstate="collapsed" desc="Atributs">
         Connection conn = connect();
-        List<Servicio> services = new ArrayList<Servicio>();
+        List<Servicio> servicios = new ArrayList<Servicio>();
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
-            sql = conn.prepareCall("CALL getTiposActividad()");
+            sql = conn.prepareCall("CALL getServicios()");
             reader = sql.executeQuery();
             
             while(reader.next()){
-                services.add(JDBCUtils.getServicio(reader));
+                servicios.add(JDBCUtils.getServicio(reader));
             }
         } catch(SQLException ex){
             throw new PersistenceException(ex.getErrorCode());
@@ -169,7 +175,53 @@ public class ServicioMySQLDAO implements ServicioDAO {
             
         }
     //</editor-fold>
-    return services;    
+    return servicios;    
+    }
+
+    @Override
+    public void callServicioActividad(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+       
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            for(int j=0; j < serviciosSeleccionados.size(); j++){
+                int idServicio = Integer.parseInt(serviciosSeleccionados.get(j));
+                sql = conn.prepareCall("CALL insertServicioActividad(?, ?)");
+                sql.setEscapeProcessing(true);
+                sql.setQueryTimeout(90);
+                    sql.setInt(1, activity.getIdAct());
+                    sql.setInt(2, idServicio);
+
+                i = sql.executeUpdate();
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+        if(i<=0){
+            FacesMessage message = new FacesMessage("No se ha podido añadir los servicios a la actividad.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+    //</editor-fold>    
     }
     
 }
