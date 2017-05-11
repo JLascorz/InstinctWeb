@@ -159,7 +159,10 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         Class.forName("com.mysql.jdbc.Driver");
                 
         int i=0;
-       
+       String verifica = null;
+        if(activity.getIdAct() != 0){
+        verifica = verificarLocalidad(idComunidad, idProvincia, idMunicipio);
+        if(verifica == "existe"){
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
@@ -203,12 +206,24 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
             FacesMessage message = new FacesMessage("No se ha podido añadir la localizacion a la actividad.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
+    }else{
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("crear_actividad.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            FacesContext.getCurrentInstance().responseComplete();
+    }
+    }else{
+        FacesMessage message = new FacesMessage("Error: Ha habido un problema al crear la actividad.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
         return null;
     //</editor-fold>
     }
     
     @Override
-    public Localizacion getLocalizacionByIdAct(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    public void getLocalizacionByIdAct(Actividad activ) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         //<editor-fold defaultstate="collapsed" desc="Atributs">
             Connection conn = connect();
@@ -246,8 +261,7 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
         HttpSession httpSession = request.getSession(false);
         httpSession.setAttribute("localKey", localizacion);
-        
-        return localizacion;    
+            
     }
 
     @Override
@@ -359,6 +373,175 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
             }
         //</editor-fold>
         return municipio;
+    }
+
+    @Override
+    public String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+        String verifica = null;
+        
+        verifica = verificarLocalidad(idComunidad, idProvincia, idMunicipio);
+        if(verifica == "existe"){
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            
+            sql = conn.prepareCall("CALL editLocalizacionAct(?, ?, ?, ?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setInt(1, activity.getIdAct());
+                sql.setInt(2, idComunidad);
+                sql.setInt(3, idProvincia);
+                sql.setInt(4, idMunicipio);
+                sql.setString(5, calle);
+                
+          i = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+            if(i>0){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                 FacesContext.getCurrentInstance().responseComplete();
+            }else{
+                FacesMessage message = new FacesMessage("No se ha podido editar la localizacion a la actividad.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        }else{
+            return null;
+        }
+        return null;
+    //</editor-fold>
+    }
+
+    @Override
+    public String verificarLocalidad(int idComunidad, int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException  {
+        String vProvincia = null;
+        String vMunicipio = null;
+        
+        vProvincia = verifProvincia(idComunidad, idProvincia);
+        
+        if(vProvincia == "ok"){
+            vMunicipio = verifMunicipio(idProvincia, idMunicipio);
+            if(vMunicipio == "ok"){
+                return "existe";
+            }else{
+                FacesMessage message = new FacesMessage("Este municipio no pertenece a esa provincia.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        }else{
+            FacesMessage message = new FacesMessage("Esta provincia no pertenece a esa comunidad.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return null;
+    }
+
+    @Override
+    public String verifProvincia(int idComunidad, int idProvincia) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+            Connection conn = connect();
+            Provincias provincia = null;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+            try{
+                sql = conn.prepareCall("CALL verifProvincia(?, ?)");
+                sql.setInt(1, idComunidad);
+                sql.setInt(2, idProvincia);
+                reader = sql.executeQuery();
+
+                while(reader.next()){
+                    provincia = JDBCUtils.getProvincia(reader);
+                }
+            } catch(SQLException ex){
+                throw new PersistenceException(ex.getErrorCode());
+            }finally{
+                try{
+                    if(reader != null){
+                        reader.close();
+                    }
+                    if(sql !=null){
+                     sql.close();
+                    }
+
+                    connectionClose();
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+
+            }
+            
+            if(provincia != null){
+                return "ok";
+            }else{
+                return "no";
+            }
+        //</editor-fold>
+
+    }
+
+    @Override
+    public String verifMunicipio(int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+            Connection conn = connect();
+            Municipios municipio = null;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+            try{
+                sql = conn.prepareCall("CALL verifMunicipio(?, ?)");
+                sql.setInt(1, idProvincia);
+                sql.setInt(2, idMunicipio);
+                reader = sql.executeQuery();
+
+                while(reader.next()){
+                    municipio = JDBCUtils.getMunicipio(reader);
+                }
+            } catch(SQLException ex){
+                throw new PersistenceException(ex.getErrorCode());
+            }finally{
+                try{
+                    if(reader != null){
+                        reader.close();
+                    }
+                    if(sql !=null){
+                     sql.close();
+                    }
+
+                    connectionClose();
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+
+            }
+            
+            if(municipio != null){
+                return "ok";
+            }else{
+                return "no";
+            }
+        //</editor-fold>
     }
 
 }

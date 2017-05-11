@@ -27,7 +27,6 @@
             <p><h:message for="email"></h:message></p>
             <p><h:message for="telefono"></h:message></p>
             <p><h:message for="descripcion"></h:message></p>
-            <p><h:message for="nif"></h:message></p>
             <p><h:message for="fecha"></h:message></p>
             <p><h:message for="comunidades"></h:message></p>
             <p><h:message for="provincias"></h:message></p>
@@ -54,7 +53,7 @@
             
             <h:inputText id="telefono" class="inpText" value="#{Actividad.telefono}" a:placeholder="Telefono" required="true"
                          requiredMessage="El telefono es necesario.">
-            
+                         <f:validator validatorId="actValidator" />
             </h:inputText><br></br>
            
             <h:inputText id="web" class="inpText" value="#{Actividad.web}" a:placeholder="Pagina Web"></h:inputText><br></br>
@@ -63,25 +62,27 @@
             
             <h:inputText id="fecha" class="inpText" value="#{Actividad.fecha}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
                          requiredMessage="La fecha del acontecimiento es necesaria.">
-                         
+                         <f:validator validatorId="actValidator" />
             </h:inputText><br></br>
             
             <h:selectOneMenu id="comunidades" value="#{Localizacion.idComunidad}" class="inpText" required="true" requiredMessage="La comunidad autonoma es necesaria.">
                 <f:selectItem itemValue="0" itemLabel="Comunidad autonoma..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.comunidades}" var="comunidad" itemValue="#{comunidad.idComunidad}" itemLabel="#{comunidad.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" render="provincias" />
+                <f:validator validatorId="actValidator" />
             </h:selectOneMenu><br></br>
             
             <h:selectOneMenu id="provincias" value="#{Localizacion.idProvincia}" class="inpText" required="true" requiredMessage="La provincia es necesaria.">
                 <f:selectItem itemValue="0" itemLabel="Provincia..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.getProvincias(Localizacion.idComunidad)}" var="provincia" itemValue="#{provincia.idProvincia}" itemLabel="#{provincia.nombre}"  />
                 <f:ajax listener="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" render="municipios" />
+                <f:validator validatorId="actValidator" />
             </h:selectOneMenu><br></br> 
             
             <h:selectOneMenu id="municipios" value="#{Localizacion.idMunicipio}" class="inpText" required="true" requiredMessage="El municipio es necesario.">
                 <f:selectItem itemValue="0" itemLabel="Municipio..." />
                 <f:selectItems value="#{LocalizacionMySQLDAO.getMunicipios(Localizacion.idProvincia)}" var="municipio" itemValue="#{municipio.idMunicipio}" itemLabel="#{municipio.nombre}"  />
-                
+                <f:validator validatorId="actValidator" />
             </h:selectOneMenu><br></br>
             
             <h:inputText id="calle" class="inpText" value="#{Localizacion.calle}" a:placeholder="Calle" required="true" 
@@ -95,8 +96,8 @@
             
             <h:commandButton id="enviar" class="inpSubmit" value="Crear Actividad">
                 <f:actionListener binding="#{ActividadMySQLDAO.callCrear(Actividad, userKey.getIdUser())}" />
-                <f:actionListener binding="#{ServicioMySQLDAO.callServicioActividad(Actividad, SelectManyView.selectedServices)}" />
-                <f:actionListener binding="#{LocalizacionMySQLDAO.escogerLocalizacion(Actividad, Localizacion.idComunidad, Localizacion.idProvincia, Localizacion.idMunicipio, Localizacion.calle)})" />
+                <f:actionListener binding="#{ActServiceMySQLDAO.callServicioActividad(Actividad, SelectManyView.selectedServices)}" />
+                <f:actionListener binding="#{LocalizacionMySQLDAO.escogerLocalizacion(Actividad, Localizacion.idComunidad, Localizacion.idProvincia, Localizacion.idMunicipio, Localizacion.calle)}" />
             </h:commandButton><br></br>
         </h:form>
             

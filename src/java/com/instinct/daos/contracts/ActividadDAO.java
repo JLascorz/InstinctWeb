@@ -17,7 +17,7 @@ import java.util.List;
 public interface ActividadDAO {
     
     //Crear Actividad
-    public abstract void callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException;
+    public abstract String callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException;
     public abstract int getActivityByNameYear(Actividad activ) throws PersistenceException, ClassNotFoundException;
     public abstract String insertarActividad(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException;
     
@@ -38,5 +38,6 @@ public interface ActividadDAO {
     public abstract void borrarSession();
     
     //Editar la actividad
-    public abstract void editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract void callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
 }

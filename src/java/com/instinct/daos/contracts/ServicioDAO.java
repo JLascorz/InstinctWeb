@@ -24,7 +24,5 @@ public interface ServicioDAO {
     //Seleccionar todos los tipos de Actividad
     public abstract List<Servicio> getServicios() throws PersistenceException, ClassNotFoundException;
     
-    //Añadir servicios a la actividad
-    public abstract void callServicioActividad(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
     
 }

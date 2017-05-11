@@ -32,7 +32,7 @@ public class CrearActividadValidator implements Validator{
     @Override
     public void validate(FacesContext context, UIComponent component, Object obj) throws ValidatorException {
         
-
+        //<editor-fold defaultstate="collapsed" desc="Fecha del Acontecimiento">
         if(component.getId().contains("fecha")){
             String fecNac = (String) obj;
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -105,6 +105,57 @@ public class CrearActividadValidator implements Validator{
                 }
             }
         }
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Telefono">
+        if(component.getId().contains("telefono")){
+            String telefono = (String) obj;
+            
+            if(telefono.length() < 9 || telefono.length() > 9){
+                FacesMessage msg = new FacesMessage(
+                    "El telefono tiene que tener 9 numeros.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }else if(!telefono.matches(".*\\d.*")){
+                FacesMessage msg = new FacesMessage(
+                    "El telefono solo puede tener numeros.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
+        }
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Localizacion">
+        if(component.getId().contains("comunidades")){
+            int comunidad = (int) obj;
+            
+            if(comunidad == 0){
+                FacesMessage msg = new FacesMessage(
+                    "Porfavor selecciona una comunidad autonoma.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
+        }
         
+        if(component.getId().contains("provincias")){
+            int provincia = (int) obj;
+            
+            if(provincia == 0){
+                FacesMessage msg = new FacesMessage(
+                    "Porfavor selecciona una provincia.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
+        }
+        
+        if(component.getId().contains("municipios")){
+            int municipio = (int) obj;
+            
+            if(municipio == 0){
+                FacesMessage msg = new FacesMessage(
+                    "Porfavor selecciona un municipio.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
+        }
+        //</editor-fold>
     }
 }

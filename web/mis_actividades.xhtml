@@ -64,6 +64,7 @@
                 <h:commandLink class="editActivity" >
                     <div class='btnTable'>
                     <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activity)}" />
                     <f:actionListener binding="#{ActividadMySQLDAO.guardarSessionEditar(activity)}" /> 
                     </div>
                 </h:commandLink>

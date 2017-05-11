@@ -45,8 +45,9 @@ public class ActividadMySQLDAO implements ActividadDAO{
     ResultSet reader = null;
     
     @Override
-    public void callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException {
+    public String callCrear(Actividad activ, int idUser) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        String error = "error";
         int comprueba = getActivityByNameYear(activ);
         if(comprueba == 0){
             devuelve = insertarActividad(activ, idUser);
@@ -54,15 +55,13 @@ public class ActividadMySQLDAO implements ActividadDAO{
             if(devuelve != "insertado"){
                 FacesMessage message = new FacesMessage("No se ha podido insertar la actividad.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            }else{
-                //return activ;
-            }
-            
+            }            
         }else{
             FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        //return null;
+        
+        return null;
     }
 
     @Override
@@ -70,6 +69,8 @@ public class ActividadMySQLDAO implements ActividadDAO{
     Class.forName("com.mysql.jdbc.Driver");
         int comprobacion = 0;
         int idAct = 0;
+        String nombre = null;
+        
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL compruebaActividad(?)");
@@ -81,7 +82,13 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 reader = sql.executeQuery();
                 if(reader.next()){
                     idAct = reader.getInt("idAct");
-                    
+                    nombre = reader.getString("Nombre");
+                    if(activ.getFecha() == null || activ.getFecha().isEmpty()){
+                        java.util.Date dfn = reader.getDate("Fecha");
+                        SimpleDateFormat dfor = new SimpleDateFormat("yyyy-MM-dd");
+                        String fecha = dfor.format(dfn);
+                        activ.setFecha(fecha);
+                    }
                 }
             }catch(SQLException e){
                  throw new PersistenceException(e.getErrorCode());
@@ -106,7 +113,15 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }
 
             if(idAct != 0){
-                comprobacion++;         
+                if(idAct == activ.getIdAct()){
+                    if(nombre.equals(activ.getNombre())){
+                        comprobacion = 0;
+                    }else{
+                        comprobacion++;
+                    }
+                }else{
+                comprobacion++;
+                }
             }else{
                 comprobacion = 0;
             }
@@ -140,8 +155,8 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 sql.setString(3, activ.getNombre());
                 sql.setString(4, activ.getDescripcion());
                 sql.setString(5, activ.getEmail());
-                sql.setString(6, activ.getWeb());
-                sql.setString(7, activ.getTelefono());
+                sql.setString(6, activ.getTelefono());
+                sql.setString(7, activ.getWeb());
                 sql.setDate(8, fecAct);
                 sql.setBoolean(9, FALSE);
                 sql.setBoolean(10, FALSE);
@@ -347,11 +362,85 @@ public class ActividadMySQLDAO implements ActividadDAO{
     public void borrarSession() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
+    
+    @Override
+    public void callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        String devuelve = null;
+        int comprueba = getActivityByNameYear(activ);
+        if(comprueba == 0){
+            devuelve = editarActividad(activ);
+            activ = getActividadByName(activ);
+            if(devuelve != "editado"){
+                FacesMessage message = new FacesMessage("No se ha podido editar la actividad.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }else{
+                //return activ;
+            }
+            
+        }else{
+            FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
 
     @Override
-    public void editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            //<editor-fold defaultstate="collapsed" desc="Fecha de la Actividad">
+            String fec = activ.getFecha();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = format.parse(fec);
+            Date fecAct = new Date(date.getTime());
+            //</editor-fold>
+            
+            sql = conn.prepareCall("CALL edictActivUs(?, ?, ?, ?, ?, ?, ?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setInt(1, activ.getIdAct());
+                sql.setInt(2, activ.getIdTipo());
+                sql.setString(3, activ.getNombre());
+                sql.setString(4, activ.getDescripcion());
+                sql.setString(5, activ.getEmail());
+                sql.setString(6, activ.getTelefono());
+                sql.setString(7, activ.getWeb());
+                sql.setDate(8, fecAct);
+                
+          i = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        } catch (ParseException ex) {
+            Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+        if(i>0){
+            return "editado";
+        }else{
+            return "error";
+        } 
+    //</editor-fold>    
     }
+
+    
 
     
     
