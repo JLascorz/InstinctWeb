@@ -38,6 +38,6 @@ public interface ActividadDAO {
     public abstract void borrarSession();
     
     //Editar la actividad
-    public abstract void callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract String callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
     public abstract String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
 }

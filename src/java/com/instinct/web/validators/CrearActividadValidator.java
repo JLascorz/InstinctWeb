@@ -68,6 +68,11 @@ public class CrearActividadValidator implements Validator{
                     throw new ValidatorException(msg);
                     }
                 }
+            }else if(year > 2020){
+                FacesMessage msg = new FacesMessage(
+                    "No puedes crear para dentro de muchos años.");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
             }else if(month > 12 || month < 1){
                 FacesMessage msg = new FacesMessage(
                     "El mes no es valido.");

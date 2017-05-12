@@ -383,6 +383,7 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         int i=0;
         String verifica = null;
         
+        if(activity.getIdAct() != 0){
         verifica = verificarLocalidad(idComunidad, idProvincia, idMunicipio);
         if(verifica == "existe"){
     //</editor-fold>
@@ -417,19 +418,23 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
-            if(i>0){
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
-                } catch (IOException ex) {
-                    Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                if(i>0){
+                    try {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+                    } catch (IOException ex) {
+                        Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                     FacesContext.getCurrentInstance().responseComplete();
+                }else{
+                    FacesMessage message = new FacesMessage("No se ha podido editar la localizacion a la actividad.");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
                 }
-                 FacesContext.getCurrentInstance().responseComplete();
             }else{
-                FacesMessage message = new FacesMessage("No se ha podido editar la localizacion a la actividad.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
             }
         }else{
-            return null;
+            FacesMessage message = new FacesMessage("Error: Ha habido un problema al editar la actividad.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         }
         return null;
     //</editor-fold>
@@ -542,6 +547,58 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
                 return "no";
             }
         //</editor-fold>
+    }
+
+    @Override
+    public String callGetLugar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        Localizacion local = null;
+        Municipios municipio = null;
+        String lugar = null;
+        local = getLugarAct(activ);
+        if(local != null){
+            municipio = getMunicipio(local);
+            lugar = municipio.getNombre();
+            return lugar;
+        }else{
+            return null;
+        }
+
+    }
+
+    @Override
+    public Localizacion getLugarAct(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+            Connection conn = connect();
+            Localizacion localizacion = null;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+            try{
+                sql = conn.prepareCall("CALL getLocalizacionByIdAct(?)");
+                sql.setInt(1, activ.getIdAct());
+                reader = sql.executeQuery();
+
+                while(reader.next()){
+                    localizacion = JDBCUtils.getLocalizacion(reader);
+                }
+            } catch(SQLException ex){
+                throw new PersistenceException(ex.getErrorCode());
+            }finally{
+                try{
+                    if(reader != null){
+                        reader.close();
+                    }
+                    if(sql !=null){
+                     sql.close();
+                    }
+
+                    connectionClose();
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+
+            }
+            return localizacion;
     }
 
 }

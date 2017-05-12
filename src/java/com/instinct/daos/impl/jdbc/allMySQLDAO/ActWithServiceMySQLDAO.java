@@ -8,16 +8,22 @@ package com.instinct.daos.impl.jdbc.allMySQLDAO;
 import static com.instinct.daos.connection.connectMySQL2.connect;
 import static com.instinct.daos.connection.connectMySQL2.connectionClose;
 import com.instinct.daos.contracts.ActWithServiceDAO;
+import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
+import com.instinct.web.objects.ActServ;
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Servicio;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,6 +33,7 @@ import javax.faces.context.FacesContext;
 public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
     
     CallableStatement sql = null;
+    CallableStatement sql2 = null;
     ResultSet reader = null;
     
     @Override
@@ -79,9 +86,16 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
     }
 
     @Override
-    public void callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException {
-        eliminarRelacion(activity);
-        callServicioActividad(activity, serviciosSeleccionados);
+    public String callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException {
+        if(activity.getIdAct() != 0){
+            eliminarRelacion(activity);
+            callServicioActividad(activity, serviciosSeleccionados);
+        }else{
+            FacesMessage message = new FacesMessage("Error: Ha habido un problema al editar la actividad.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        
+        return null;
     }
 
     @Override
@@ -126,5 +140,66 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
         }
 
     //</editor-fold>   
+    }
+
+    @Override
+    public void getServiciosByIdAct(Actividad activity) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int i = 0;
+        Connection conn = connect();
+        List<ActServ> actServ = new ArrayList<>();
+        List<Servicio> servicios = new ArrayList<>();
+        List<String> selected = new ArrayList<>();
+        
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        
+        try{
+            sql = conn.prepareCall("CALL getActServiceById(?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+            sql.setInt(1, activity.getIdAct());
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                actServ.add(JDBCUtils.getActServ(reader));
+            }
+            
+            for(int j=0; j < actServ.size(); j++){
+                sql2 = conn.prepareCall("CALL getServicioById(?)");
+                sql2.setEscapeProcessing(true);
+                sql2.setQueryTimeout(90);
+                sql2.setInt(1, actServ.get(j).getIdServicio());
+                
+                reader = sql2.executeQuery();
+                while(reader.next()){
+                    servicios.add(JDBCUtils.getServicio(reader));
+                    selected.add(Integer.toString(servicios.get(j).getIdServicio()));
+                }
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+            
+            
+        }
+    //</editor-fold>
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(false);
+        httpSession.setAttribute("servKey", selected);
+
     }
 }

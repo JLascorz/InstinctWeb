@@ -364,7 +364,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
     }
     
     @Override
-    public void callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    public String callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
         int comprueba = getActivityByNameYear(activ);
         if(comprueba == 0){
@@ -373,6 +373,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
             if(devuelve != "editado"){
                 FacesMessage message = new FacesMessage("No se ha podido editar la actividad.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                activ.setIdAct(0);
             }else{
                 //return activ;
             }
@@ -380,39 +381,46 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }else{
             FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
             FacesContext.getCurrentInstance().addMessage(null, message);
+            activ.setIdAct(0);
         }
+        
+        return null;
     }
 
     @Override
     public String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
         Class.forName("com.mysql.jdbc.Driver");
-                
+        Date fecAct = null;
         int i=0;
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
             //<editor-fold defaultstate="collapsed" desc="Fecha de la Actividad">
-            String fec = activ.getFecha();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date date = format.parse(fec);
-            Date fecAct = new Date(date.getTime());
-            //</editor-fold>
-            
-            sql = conn.prepareCall("CALL edictActivUs(?, ?, ?, ?, ?, ?, ?, ?)");
-            sql.setEscapeProcessing(true);
-            sql.setQueryTimeout(90);
-                sql.setInt(1, activ.getIdAct());
-                sql.setInt(2, activ.getIdTipo());
-                sql.setString(3, activ.getNombre());
-                sql.setString(4, activ.getDescripcion());
-                sql.setString(5, activ.getEmail());
-                sql.setString(6, activ.getTelefono());
-                sql.setString(7, activ.getWeb());
+            if(activ.getFecha() == null || activ.getFecha().isEmpty() || activ.getFecha().equals("")){
+                sql = conn.prepareCall("CALL editActivUsWoFec(?, ?, ?, ?, ?, ?, ?)");
+            }else{
+                String fec = activ.getFecha();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date = format.parse(fec);
+                fecAct = new Date(date.getTime());
+                sql = conn.prepareCall("CALL edictActivUs(?, ?, ?, ?, ?, ?, ?, ?)");
                 sql.setDate(8, fecAct);
-                
-          i = sql.executeUpdate();
+            }
+                //</editor-fold>
+
+                sql.setEscapeProcessing(true);
+                sql.setQueryTimeout(90);
+                    sql.setInt(1, activ.getIdAct());
+                    sql.setInt(2, activ.getIdTipo());
+                    sql.setString(3, activ.getNombre());
+                    sql.setString(4, activ.getDescripcion());
+                    sql.setString(5, activ.getEmail());
+                    sql.setString(6, activ.getTelefono());
+                    sql.setString(7, activ.getWeb());
+              i = sql.executeUpdate();
+          
             
         }catch(SQLException e){
             throw new PersistenceException(e.getErrorCode());

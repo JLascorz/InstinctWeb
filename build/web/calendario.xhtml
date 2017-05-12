@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+            <br></br><br></br>
+            <div id="calendario">
+                <span id="titulo">Calendario</span><br></br>
+                <h:form>
+                <h:selectOneMenu styleClass="inpText" id="year" value="#{calendarioView.year}">
+                    <f:selectItem itemValue="0" itemLabel="Escoge el año..." />
+                    <f:selectItem itemValue="2017" itemLabel="2017"/>
+                    <f:selectItem itemValue="2018" itemLabel="2018"/>
+                    <f:selectItem itemValue="2019" itemLabel="2019"/>
+                    <f:selectItem itemValue="2020" itemLabel="2020"/>
+                </h:selectOneMenu>
+                <h:selectOneMenu styleClass="inpText" id="month" value="#{calendarioView.month}">
+                    <f:selectItem itemValue="0" itemLabel="Escoge el mes..." />
+                    <f:selectItem itemValue="01" itemLabel="Enero"/>
+                    <f:selectItem itemValue="02" itemLabel="Febrero"/>
+                    <f:selectItem itemValue="03" itemLabel="Marzo"/>
+                    <f:selectItem itemValue="04" itemLabel="Abril"/>
+                    <f:selectItem itemValue="05" itemLabel="Mayo"/>
+                    <f:selectItem itemValue="06" itemLabel="Junio"/>
+                    <f:selectItem itemValue="07" itemLabel="Julio"/>
+                    <f:selectItem itemValue="08" itemLabel="Agosto"/>
+                    <f:selectItem itemValue="09" itemLabel="Septiembre"/>
+                    <f:selectItem itemValue="10" itemLabel="Octubre"/>
+                    <f:selectItem itemValue="11" itemLabel="Noviembre"/>
+                    <f:selectItem itemValue="12" itemLabel="Diciembre"/>
+                </h:selectOneMenu>
+                <h:commandButton id="consultar" class="inpSubmit" value="Consultar Actividades">
+                 <f:ajax listener="#{ActividadMySQLDAO.getActivityByYearMonth(calendarioView.year, calendarioView.month)}" render="calFech" />
+                </h:commandButton>    
+                </h:form>
+                
+                <c:if test='#{ActividadMySQLDAO.haveActYearMonth(calendarioView.year, calendarioView.month) > 0}'>
+                <h:dataTable id="calFech" styleClass="table table-striped tablaActividades" value="#{ActividadMySQLDAO.getActivityByYearMonth(calendarioView.year, calendarioView.month)}" var="activitys" >
+                <h:column>
+                    <f:facet name="header">Tipo</f:facet>
+                    #{TiposMySQLDAO.getTipoByAct()}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Evento</f:facet>
+                    #{activitys.getNombre()}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Fecha</f:facet>
+                    #{activitys.getFecha()}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Lugar</f:facet>
+                    #{LocalizacionMySQLDAO.callGetLugar(activitys)}
+                </h:column>    
+                </h:dataTable>    
+                </c:if>
+            </div>    
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

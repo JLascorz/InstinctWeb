@@ -27,6 +27,8 @@ function detectarBody(){
         data = dir+"javax.faces.resource/css/misActividades.css.xhtml";
     }else if(document.getElementById("crearActividad")){
         data = dir+"javax.faces.resource/css/crear_actividad.css.xhtml";
+    }else if(document.getElementById("calendario")){
+        data = dir+"javax.faces.resource/css/calendario.css.xhtml";
     }
     
     cargarCSS(data);

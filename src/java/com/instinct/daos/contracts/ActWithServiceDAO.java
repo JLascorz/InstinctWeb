@@ -7,6 +7,7 @@ package com.instinct.daos.contracts;
 
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
+import com.instinct.web.objects.Servicio;
 import java.util.List;
 
 /**
@@ -19,6 +20,9 @@ public interface ActWithServiceDAO {
     public abstract void callServicioActividad(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
     
     //Editar los servicios de una actividad
-    public abstract void callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
+    public abstract String callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
     public abstract void eliminarRelacion(Actividad activity) throws PersistenceException, ClassNotFoundException;
+
+    //Coger los servicios de una actividad
+    public abstract void getServiciosByIdAct(Actividad activity) throws PersistenceException, ClassNotFoundException;
 }

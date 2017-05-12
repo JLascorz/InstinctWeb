@@ -5,6 +5,7 @@
  */
 package com.instinct.daos.impl.jdbcUtils;
 
+import com.instinct.web.objects.ActServ;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Comunidades;
 import com.instinct.web.objects.Localizacion;
@@ -89,6 +90,16 @@ public class JDBCUtils {
             reader.getString("pathImagen"));
         
         return activ;
+    }
+    
+    public static ActServ getActServ(ResultSet reader) throws SQLException{
+        
+        ActServ actserv = new ActServ(
+                reader.getInt("idActividad"),
+                reader.getInt("idServicio")
+        );
+        
+        return actserv;
     }
     
     public static TipoActividad getTipoActividad(ResultSet reader) throws SQLException{

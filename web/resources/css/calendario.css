@@ -1,0 +1,46 @@
+
+#calendario{
+    background-color: white;
+    /* margin: auto; */
+    margin-top: 1%;
+    /* float: right; */
+    /* width: 40%; */
+    height: 98.2vh;
+    /* width: 45%; */
+    padding: 20px;
+    text-align: center;
+}
+
+.acalendario{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+#titulo{
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.inpText{
+    width: 80%;
+    padding: 12px 20px;
+    margin: -15px 0;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #BDBDBD;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+    -webkit-box-shadow: none !important; 
+    box-shadow: none !important; 
+}
+
+.inpText:hover{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpText:focus{
+    border-bottom: 2px solid #1E88E5;
+}

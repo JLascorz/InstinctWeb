@@ -5,10 +5,15 @@
  */
 package com.instinct.web.objects;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
 /**
  *
  * @author daw2017
  */
+@ManagedBean(name="TipoAct")
+@ViewScoped
 public class TipoActividad {
 	private int idTipo;
 	private String nombre, descripcion;

@@ -38,4 +38,8 @@ public interface LocalizacionDAO {
     public abstract String verificarLocalidad(int idComunidad, int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException ;
     public abstract String verifProvincia(int idComunidad, int idProvincia) throws PersistenceException, ClassNotFoundException;
     public abstract String verifMunicipio(int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException;
+
+    //Seleccionar el lugar de la actividad
+    public abstract String callGetLugar(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract Localizacion getLugarAct(Actividad activ) throws PersistenceException, ClassNotFoundException;
 }
