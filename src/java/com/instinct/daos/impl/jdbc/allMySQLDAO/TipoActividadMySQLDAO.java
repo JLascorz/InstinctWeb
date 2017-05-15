@@ -10,6 +10,7 @@ import static com.instinct.daos.connection.connectMySQL2.connectionClose;
 import com.instinct.daos.contracts.TipoActividadDAO;
 import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
+import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.TipoActividad;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -175,6 +176,45 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         }
     //</editor-fold>
     return tiposActividad;    
+    }
+
+    @Override
+    public String getTipoByAct(Actividad activity) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        String tipo = null;
+        TipoActividad tipoAct = null;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL getTipoByAct(?)");
+            sql.setInt(1, activity.getIdTipo());
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                tipoAct = JDBCUtils.getTipoActividad(reader);
+                tipo = tipoAct.getNombre();
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+        return tipo;    
     }
     
 }

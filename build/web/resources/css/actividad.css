@@ -1,0 +1,46 @@
+
+#actividad{
+    width: 80%;
+    margin: auto;
+}
+
+#titulo{
+    font-size: 40px;
+    background-color: #dcdcdc;
+    padding-left: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#contacto, #informacion, #descripcion{
+    background-color: #EEEEEE;
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 5px;
+}
+
+#botones{
+    margin-top: 1%;
+    text-align: center;
+}
+
+.boton{
+    width: 49.8%;
+    background-color: #1E88E5;
+    color: white;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.boton:hover{
+    background-color: #42A5F5;
+}
+
+.boton > form > a, .boton > form > a:hover{
+    color: white !important;
+    text-decoration: none !important;
+}

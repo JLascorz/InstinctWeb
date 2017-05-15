@@ -67,7 +67,7 @@
                     <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activity)}" />
                     <f:actionListener binding="#{ActServiceMySQLDAO.getServiciosByIdAct(activity)}" />
                     <f:setPropertyActionListener target="#{SelectManyView.selectedOptions}" value="#{servKey}" />
-                    <f:actionListener binding="#{ActividadMySQLDAO.guardarSessionEditar(activity)}" /> 
+                    <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activity, 'editar')}" /> 
                     </div>
                 </h:commandLink>
                 </h:form>

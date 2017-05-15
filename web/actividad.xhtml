@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+            <br></br><br></br>
+            <div id='actividad'>
+                <p id='titulo'>#{activKey.nombre}</p>
+                <div id='informacion'>
+                <p id='tipoActividad'><b>Tipo:</b> #{TiposMySQLDAO.getTipoByAct(activKey)}</p>
+                <p id="fecha"><b>Fecha:</b> #{activKey.fecha}</p>
+                <p id='localizacion'><b>Localizacion: </b>#{LocalizacionMySQLDAO.getMunicipio(localKey).getNombre()}, 
+                                     #{LocalizacionMySQLDAO.getProvincia(localKey).getNombre()} | 
+                                     #{LocalizacionMySQLDAO.getComunidad(localKey).getNombre()}</p>
+                </div>
+                <div id='contacto'>
+                    <p id='telefono'><b>Telf: </b>#{activKey.telefono}</p>
+                    <p id='web'><b>Web:</b> <a href='#{activKey.web}'> Ir a la Web</a></p>
+                    <p id='email'><b>Correo: </b>#{activKey.email}</p>
+                </div>
+                <div id='descripcion'>
+                <h:outputText value="#{activKey.descripcion}" escape="false" />
+                </div>
+                <div id='botones'>
+                <div id='boton1' class='boton'>
+                <h:form><h:commandLink action="#{UsuarioMySQLDAO.logout(userKey)}">
+                    <div id="VerParticipantes" class='participantes inpSubmit'>
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                            <span>Ver Participantes</span>
+                    </div>
+                </h:commandLink></h:form>
+                </div>
+                <div id='boton2' class='boton'>
+                <h:form><h:commandLink action="#{ParticipaMySQLDAO.callParticipa(activKey, userKey)}">
+                    <div id="Inscribirme" class='inscripcion inpSubmit'>
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            <span>Inscribirme</span>
+                    </div>
+                </h:commandLink></h:form>
+                </div>    
+                </div>
+            </div>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

@@ -16,6 +16,8 @@
             <div id="calendario">
                 <span id="titulo">Calendario</span><br></br>
                 <h:form>
+                <h:panelGroup id="eventCalendari">
+                <c:set var='pagina' value="visualizar"/>
                 <h:selectOneMenu styleClass="inpText" id="year" value="#{calendarioView.year}">
                     <f:selectItem itemValue="0" itemLabel="Escoge el año..." />
                     <f:selectItem itemValue="2017" itemLabel="2017"/>
@@ -38,16 +40,17 @@
                     <f:selectItem itemValue="11" itemLabel="Noviembre"/>
                     <f:selectItem itemValue="12" itemLabel="Diciembre"/>
                 </h:selectOneMenu>
-                <h:commandButton id="consultar" class="inpSubmit" value="Consultar Actividades">
-                 <f:ajax listener="#{ActividadMySQLDAO.getActivityByYearMonth(calendarioView.year, calendarioView.month)}" render="calFech" />
+                <h:commandButton id="consultar" class="inpSubmit" value="Consultar Actividades"
+                                 actionListener="#{ActividadMySQLDAO.getActivitiesByYearMonth(calendarioView.year, calendarioView.month)}">
+                 <f:ajax execute="@form" render="eventCalendari" />
                 </h:commandButton>    
-                </h:form>
                 
-                <c:if test='#{ActividadMySQLDAO.haveActYearMonth(calendarioView.year, calendarioView.month) > 0}'>
-                <h:dataTable id="calFech" styleClass="table table-striped tablaActividades" value="#{ActividadMySQLDAO.getActivityByYearMonth(calendarioView.year, calendarioView.month)}" var="activitys" >
+                <c:if test='#{ActividadMySQLDAO.getActivitiesByYearMonth(calendarioView.year, calendarioView.month).size() > 0}'>
+                <h:dataTable id="calend" styleClass="table table-striped tablaActividades" value="#{ActividadMySQLDAO.getActivitiesByYearMonth(calendarioView.year, calendarioView.month)}" var="activitys" >
+
                 <h:column>
                     <f:facet name="header">Tipo</f:facet>
-                    #{TiposMySQLDAO.getTipoByAct()}
+                    #{TiposMySQLDAO.getTipoByAct(activitys)}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Evento</f:facet>
@@ -60,9 +63,20 @@
                 <h:column>
                     <f:facet name="header">Lugar</f:facet>
                     #{LocalizacionMySQLDAO.callGetLugar(activitys)}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Ver Actividad</f:facet>
+                    <h:commandLink>
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                     <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activitys)}" />
+                     <f:actionListener binding="#{ActServiceMySQLDAO.getServiciosByIdAct(activitys)}" />
+                     <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activitys, pagina)}" /> 
+                    </h:commandLink>  
                 </h:column>    
-                </h:dataTable>    
+                </h:dataTable>
                 </c:if>
+                </h:panelGroup>
+                </h:form>
             </div>    
         </ui:define>
         </ui:composition>  

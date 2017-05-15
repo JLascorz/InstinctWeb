@@ -17,6 +17,7 @@ function detectarBody(){
     var dir = href.substring(0, href.lastIndexOf('/')) + "/";
     var session = getSessionId();
     var data = null;
+    var datajs = null;
     if(document.getElementById("register")){
         data = dir+"javax.faces.resource/css/register.css.xhtml";
     }else if(document.getElementById("login")){
@@ -29,6 +30,10 @@ function detectarBody(){
         data = dir+"javax.faces.resource/css/crear_actividad.css.xhtml";
     }else if(document.getElementById("calendario")){
         data = dir+"javax.faces.resource/css/calendario.css.xhtml";
+    }else if(document.getElementById("actividad")){
+        data = dir+"javax.faces.resource/css/actividad.css.xhtml";
+        datajs = dir+"javax.faces.resource/js/actividad.js.xhtml";
+        cargarCSS(datajs);
     }
     
     cargarCSS(data);

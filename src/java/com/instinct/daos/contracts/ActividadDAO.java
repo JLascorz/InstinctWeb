@@ -34,10 +34,14 @@ public interface ActividadDAO {
     public abstract void bajaActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
     
     //Guardar actividad en la session // Borrar la session.
-    public abstract void guardarSessionEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract void guardarSession(Actividad activ, String pagina) throws PersistenceException, ClassNotFoundException;
     public abstract void borrarSession();
     
     //Editar la actividad
     public abstract String callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
     public abstract String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
+
+    //Seleccionar la actividad por el mes y el año
+    public abstract int haveActYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException;
+    public abstract List<Actividad> getActivitiesByYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException;
 }

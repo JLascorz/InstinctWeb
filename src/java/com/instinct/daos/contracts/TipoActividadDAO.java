@@ -6,6 +6,7 @@
 package com.instinct.daos.contracts;
 
 import com.instinct.exception.PersistenceException.PersistenceException;
+import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.TipoActividad;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface TipoActividadDAO {
     //Seleccionar todos los tipos de Actividad
     public abstract List<TipoActividad> getTiposActividad() throws PersistenceException, ClassNotFoundException;
     
+    //Coger el tipo de actividad por actividad
+    public abstract String getTipoByAct(Actividad activity) throws PersistenceException, ClassNotFoundException;
 }

@@ -344,16 +344,24 @@ public class ActividadMySQLDAO implements ActividadDAO{
     }
 
     @Override
-    public void guardarSessionEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    public void guardarSession(Actividad activ, String pagina) throws PersistenceException, ClassNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
         HttpSession httpSession = request.getSession(false);
         httpSession.setAttribute("activKey", activ);
         
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("editar_actividad.xhtml");
-        } catch (IOException ex) {
-            Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        if(pagina.equals("editar")){
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("editar_actividad.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(pagina.equals("visualizar")){
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("actividad.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         FacesContext.getCurrentInstance().responseComplete();
     }
@@ -446,6 +454,82 @@ public class ActividadMySQLDAO implements ActividadDAO{
             return "error";
         } 
     //</editor-fold>    
+    }
+
+    @Override
+    public List<Actividad> getActivitiesByYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        List<Actividad> activities = new ArrayList<>();
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL getActivitiesByMonthYear(?, ?)");
+            sql.setInt(1, year);
+            sql.setInt(2, month);
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                activities.add(JDBCUtils.getActividad(reader));
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+    return activities;     
+    }
+
+    @Override
+    public int haveActYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        int count = 0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL getActivitiesByMonthYear(?, ?)");
+            sql.setInt(1, year);
+            sql.setInt(2, month);
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                count = reader.getInt("cuenta");
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+    return count;  
     }
 
     
