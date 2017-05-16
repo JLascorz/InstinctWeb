@@ -1,0 +1,29 @@
+
+.amyinscrip{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+#misInscripciones{
+    background-color: white;
+    margin-top: 1%;
+    height: 98.2vh;
+    padding: 20px;
+    text-align: center;
+}
+
+.tablaActividades{
+    width: 80% !important;
+    margin: auto;
+}
+
+th{
+    text-align:center !important;
+}
+
+.titleMyAct{
+    font-size: 25px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}

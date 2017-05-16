@@ -5,6 +5,7 @@
 }
 
 #titulo{
+    margin-top: 1%;
     font-size: 40px;
     background-color: #dcdcdc;
     padding-left: 20px;
@@ -13,7 +14,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-#contacto, #informacion, #descripcion{
+.cajas{
     background-color: #EEEEEE;
     padding: 10px 20px;
     font-family: 'Montserrat', sans-serif;
@@ -22,6 +23,7 @@
 
 #botones{
     margin-top: 1%;
+    margin-bottom: 2%;
     text-align: center;
 }
 
@@ -43,4 +45,39 @@
 .boton > form > a, .boton > form > a:hover{
     color: white !important;
     text-decoration: none !important;
+}
+
+.commandLink, .commandLink:hover{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+li{
+    list-style: none !important;
+}
+
+#errores{
+    margin-bottom: 2%;
+    text-align: center;
+    margin: auto;
+    background-color: #ef5350;
+    height: 10%;
+    padding: 10px;
+    /* text-transform: uppercase; */
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#inscrito{
+    margin-bottom: 2%;
+    text-align: center;
+    margin: auto;
+    background-color: #2ecc71;
+    height: 10%;
+    padding: 10px;
+    /* text-transform: uppercase; */
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
 }

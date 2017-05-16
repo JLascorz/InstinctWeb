@@ -10,6 +10,7 @@ import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Comunidades;
 import com.instinct.web.objects.Localizacion;
 import com.instinct.web.objects.Municipios;
+import com.instinct.web.objects.Participante;
 import com.instinct.web.objects.Provincias;
 import com.instinct.web.objects.Servicio;
 import com.instinct.web.objects.TipoActividad;
@@ -100,6 +101,16 @@ public class JDBCUtils {
         );
         
         return actserv;
+    }
+    
+    public static Participante getParticipante(ResultSet reader) throws SQLException{
+        
+        Participante participante = new Participante(
+                reader.getInt("idUsuario"),
+                reader.getInt("idActividad")
+        );
+        
+        return participante;
     }
     
     public static TipoActividad getTipoActividad(ResultSet reader) throws SQLException{

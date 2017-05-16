@@ -69,7 +69,7 @@
                     <h:commandLink>
                     <i class="fa fa-eye" aria-hidden="true"></i>
                      <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activitys)}" />
-                     <f:actionListener binding="#{ActServiceMySQLDAO.getServiciosByIdAct(activitys)}" />
+                     <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(activitys)}" />
                      <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activitys, pagina)}" /> 
                     </h:commandLink>  
                 </h:column>    

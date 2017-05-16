@@ -553,11 +553,15 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     public String callGetLugar(Actividad activ) throws PersistenceException, ClassNotFoundException {
         Localizacion local = null;
         Municipios municipio = null;
+        Provincias provincia = null;
+        Comunidades comunidad = null;
         String lugar = null;
         local = getLugarAct(activ);
         if(local != null){
             municipio = getMunicipio(local);
-            lugar = municipio.getNombre();
+            provincia = getProvincia(local);
+            comunidad = getComunidad(local);
+            lugar = municipio.getNombre() + ", " + provincia.getNombre() + " | " + comunidad.getNombre();
             return lugar;
         }else{
             return null;

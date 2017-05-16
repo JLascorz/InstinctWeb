@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+        </c:if>
+        <c:if test="#{userKey.getActivo() == true}">
+        <c:if test="#{userKey.getDiffus() >= 1}">    
+            <div id="misInscripciones">
+                <span class="titleMyAct">Mis Inscripciones</span><br></br>
+                <h:form>
+                <c:set var='pagina' value="visualizar"/>
+                <c:if test='#{ParticipaMySQLDAO.getInscripcionesUser(userKey).size() > 0}'>
+                    <h:dataTable styleClass="table table-striped tablaActividades" value="#{ParticipaMySQLDAO.getInscripcionesUser(userKey)}" var="activity" >
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        #{activity.getNombre()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Fecha</f:facet>
+                        #{activity.getFecha()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Web</f:facet>
+                        <a href='#{activity.web}'> Ir a la Web</a>
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Ver Actividad</f:facet>
+                        <h:commandLink>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                         <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activity)}" />
+                         <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(activity)}" />
+                         <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activity, pagina)}" /> 
+                        </h:commandLink>
+                    </h:column>
+                    </h:dataTable>    
+                </c:if>        
+                </h:form>
+            </div>
+        </c:if>
+        </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>

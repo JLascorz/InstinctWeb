@@ -5,10 +5,17 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:t="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
+        <c:if test="#{userKey.getActivo() == true}">
+                <script>
+                redirect();
+                </script>
+        </c:if>
+        <c:if test="#{empty userKey}"> 
         <div id="contenido">
         <div id="login">
         <h:form>
@@ -27,6 +34,7 @@
             </h:panelGroup>
         </div>
         </div>
+        </c:if>    
         </ui:define>
         </ui:composition>  
     </h:body>

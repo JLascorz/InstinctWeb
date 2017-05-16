@@ -4,6 +4,13 @@ body{
     background-color: white;
 }
 
+#titulo{
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+}
+
 #register{
     background-color: white;
     /* margin: auto; */

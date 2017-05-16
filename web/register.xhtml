@@ -6,14 +6,24 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
+            
+        <c:if test="#{userKey.getActivo() == true}">
+                <script>
+                redirect();
+                </script>
+        </c:if>
+        <c:if test="#{empty userKey}">    
+            
         <div id="contenido">
         
         <div id="register">
         <h:form>
+            <span id="titulo">Registrate</span><br></br>
             <h:inputText id="nombre" class="inpText" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
                          requiredMessage="El nombre es necesario."></h:inputText><br></br>
                          
@@ -70,6 +80,7 @@
             </div>
         </div>
         </div>
+        </c:if>    
         </ui:define>
         </ui:composition>  
     </h:body>

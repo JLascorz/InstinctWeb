@@ -202,4 +202,63 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
         httpSession.setAttribute("servKey", selected);
 
     }
+
+    @Override
+    public void showServicesinAct(Actividad activity) throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int i = 0;
+        Connection conn = connect();
+        List<ActServ> actServ = new ArrayList<>();
+        List<Servicio> servicios = new ArrayList<>();
+        List<String> selected = new ArrayList<>();
+        
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        
+        try{
+            sql = conn.prepareCall("CALL getActServiceById(?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+            sql.setInt(1, activity.getIdAct());
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                actServ.add(JDBCUtils.getActServ(reader));
+            }
+            
+            for(int j=0; j < actServ.size(); j++){
+                sql2 = conn.prepareCall("CALL getServicioById(?)");
+                sql2.setEscapeProcessing(true);
+                sql2.setQueryTimeout(90);
+                sql2.setInt(1, actServ.get(j).getIdServicio());
+                
+                reader = sql2.executeQuery();
+                while(reader.next()){
+                    servicios.add(JDBCUtils.getServicio(reader));
+                    selected.add(servicios.get(j).getNombre());
+                }
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                if(sql2 !=null){
+                 sql2.close();
+                }
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+         }
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(false);
+        httpSession.setAttribute("servKey", selected);
+     }
 }

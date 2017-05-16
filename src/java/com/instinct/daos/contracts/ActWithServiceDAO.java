@@ -25,4 +25,7 @@ public interface ActWithServiceDAO {
 
     //Coger los servicios de una actividad
     public abstract void getServiciosByIdAct(Actividad activity) throws PersistenceException, ClassNotFoundException;
+
+    //Coger los servicios para mostrar la actividad
+    public abstract void showServicesinAct(Actividad activity) throws PersistenceException, ClassNotFoundException;
 }

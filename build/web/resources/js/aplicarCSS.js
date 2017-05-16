@@ -18,7 +18,9 @@ function detectarBody(){
     var session = getSessionId();
     var data = null;
     var datajs = null;
-    if(document.getElementById("register")){
+    if(document.getElementById("index")){
+        data = dir+"javax.faces.resource/css/index.css.xhtml";
+    }else if(document.getElementById("register")){
         data = dir+"javax.faces.resource/css/register.css.xhtml";
     }else if(document.getElementById("login")){
         data = dir+"javax.faces.resource/css/login.css.xhtml";
@@ -34,6 +36,8 @@ function detectarBody(){
         data = dir+"javax.faces.resource/css/actividad.css.xhtml";
         datajs = dir+"javax.faces.resource/js/actividad.js.xhtml";
         cargarCSS(datajs);
+    }else if(document.getElementById("misInscripciones")){
+        data = dir+"javax.faces.resource/css/misInscripciones.css.xhtml";
     }
     
     cargarCSS(data);

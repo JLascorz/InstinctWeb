@@ -19,7 +19,8 @@ public class calendarioView {
     
     public int month;
     public int year;
-
+    public String carga;
+    
     public int getMonth() {
         return month;
     }
@@ -35,5 +36,15 @@ public class calendarioView {
     public void setYear(int year) {
         this.year = year;
     }
+
+    public String getCarga() {
+        return carga;
+    }
+
+    public void setCarga(String carga) {
+        this.carga = carga;
+    }
+    
+    
     
 }
