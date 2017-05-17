@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+        </c:if>    
+        <c:if test="#{userKey.getActivo() == true}">
+        <c:if test="#{userKey.getDiffus() >= 2}">
+            <script>
+                redirect();
+            </script>
+        </c:if>     
+        <c:if test="#{userKey.getDiffus() == 1}">
+        <div id="backoffice">  
+            <c:if test="#{adminView.funcion eq 'usuarios'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Editar Usuario</p>
+                    <h:form>
+                    <div id="informacionPersonal">
+                        <h:inputText  id="nombre" styleClass="inpText" value="#{userAdm.nombre}"  a:placeholder="Nombre" required="true" 
+                             requiredMessage="No puedes dejar el nombre vacio.">
+                        </h:inputText>
+                        <h:inputText  id="apellidos" styleClass="inpText" value="#{userAdm.apellidos}"  a:placeholder="Apellidos" required="true" 
+                             requiredMessage="No puedes dejar el apellido vacio.">
+                        </h:inputText>
+                        <h:selectOneMenu value="#{userAdm.genero}" styleClass="inpText" id="genero">
+                            <f:selectItem itemValue="Hombre" itemLabel="Hombre" />
+                            <f:selectItem itemValue="Mujer"  itemLabel="Mujer"  />
+                        </h:selectOneMenu>
+                        <h:inputText  id="nif" value="#{userAdm.nif}" styleClass="inpText"  a:placeholder="Nif" required="true" 
+                             requiredMessage="No puedes dejar el NIF vacio."
+                             validatorMessage="El NIF no es valido (8 Numeros y 1 Letra).">
+                             <f:validateRegex pattern="[0-9A-Z][0-9]{7}[A-Z]" />
+                        </h:inputText>
+                        <h:inputText id="fecnac" value="#{userAdm.fecNac}" styleClass="inpText" a:placeholder="Fecha de Nacimiento" t:type="date">
+                             <f:validator validatorId="registerValidator" />
+                        </h:inputText>
+                        <h:inputText  id="email" value="#{userAdm.email}" styleClass="inpText" a:placeholder="Email" required="true" 
+                             requiredMessage="El correo es necesario."
+                             validatorMessage="El correo no es valido.">
+                             <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                        </h:inputText>
+                        <h:selectOneMenu value="#{userAdm.diffus}" styleClass="inpText" id="permiso">
+                            <f:selectItem itemValue="1" itemLabel="Administrador" />
+                            <f:selectItem itemValue="2"  itemLabel="Organizador"  />
+                            <f:selectItem itemValue="3"  itemLabel="Deportista"  />
+                        </h:selectOneMenu>
+                        <h:selectOneMenu value="#{userAdm.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Usuario activo" />
+                            <f:selectItem itemValue="false"  itemLabel="Usuario no activo"  />
+                        </h:selectOneMenu>
+                        <h:selectOneMenu value="#{userAdm.baja}" styleClass="inpText" id="baja">
+                            <f:selectItem itemValue="true"   itemLabel="Usuario dado de baja" />
+                            <f:selectItem itemValue="false"  itemLabel="Usuario sin baja"  />
+                        </h:selectOneMenu>
+                    </div>
+                    <div id="Botones">
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Guardar Datos" action="#{UsuarioMySQLDAO.callEditar(userAdm,'editAdmin')}"></h:commandButton>
+                    </div>
+                    </h:form>
+                    <div id="errores">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="apellidos"></h:message></p>
+                        <p><h:message for="nif"></h:message></p>
+                        <p><h:message for="fecnac"></h:message></p>
+                        <p><h:message for="email"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </div>
+                </div>
+            </c:if>
+        </div>        
+        </c:if>
+        </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>    

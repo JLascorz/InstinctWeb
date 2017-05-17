@@ -34,7 +34,11 @@ public class RegisterValidator implements Validator{
         
 
         if(component.getId().contains("fecnac")){
+            
             String fecNac = (String) obj;
+            if(fecNac  == null || fecNac.isEmpty() || fecNac.equals("")){
+                
+            }else{
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             Date dt = new Date();
             String fechaActual = dateFormat.format(dt);
@@ -89,6 +93,7 @@ public class RegisterValidator implements Validator{
                         throw new ValidatorException(msg);
                     }
                 }
+            }
             }
         }
         

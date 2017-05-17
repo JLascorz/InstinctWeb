@@ -26,4 +26,7 @@ public interface ParticipaDAO {
     
     //Seleccionar en que actividades esta inscrito.
     public abstract List<Actividad> getInscripcionesUser(Usuario user) throws PersistenceException, ClassNotFoundException;
+
+    //Seleccionar el numero de usuarios inscritos a actividades
+    public abstract int getTotalParticipantes() throws PersistenceException, ClassNotFoundException;
 }

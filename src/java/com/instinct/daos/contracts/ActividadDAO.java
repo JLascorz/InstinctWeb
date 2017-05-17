@@ -44,4 +44,10 @@ public interface ActividadDAO {
     //Seleccionar la actividad por el mes y el año
     public abstract int haveActYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException;
     public abstract List<Actividad> getActivitiesByYearMonth(int year, int month) throws PersistenceException, ClassNotFoundException;
+
+    //Coger el total de actividades creadas
+    public abstract int getTotalActividades() throws PersistenceException, ClassNotFoundException;
+    
+    //Seleccionar todas las actividades
+    public abstract List<Actividad> getActividades() throws PersistenceException, ClassNotFoundException;
 }

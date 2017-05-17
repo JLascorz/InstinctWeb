@@ -134,3 +134,52 @@ body {
     }
   
 }
+
+.titleHeader{
+    font-weight: bold !important;
+    font-size: 50px !important;
+    font-style: italic !important;
+    letter-spacing: -4px !important;
+    /* font-family: arial; */
+    background: -webkit-linear-gradient(#ffffff,#6f6f6f) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: white !important;
+}
+
+/* SCROLLBAR */
+
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #434343;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #808080;
+}
+::-webkit-scrollbar-track {
+  background: #262626;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #2a2a2a;
+}
+::-webkit-scrollbar-track:active {
+  background: #1b1b1b;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

@@ -1,5 +1,186 @@
 
+#backoffice{
+    background-color: white;
+    margin-top: 1%;
+    height: 98.2vh;
+    padding: 20px;
+    text-align: center;
+}
+
 .abackoffice{
     color: white !important;
     text-decoration: none !important;
+}
+
+/* PANELES */
+
+.panel, .panel-heading {
+  border: 0px !important;
+  border-radius: 0px !important;
+}
+
+.huge{
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.descPanel{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.panel-yellow {
+    border-color: #D81B60;
+}
+
+.panel-yellow > .panel-heading {
+    border-color: #D81B60;
+    color: white;
+    background-color: #D81B60;
+}
+
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green > .panel-heading {
+    border-color: #5cb85c;
+    color: white;
+    background-color: #5cb85c;
+}
+
+.panel-orange{
+    border-color: #FB8C00;
+}
+
+.panel-orange > .panel-heading {
+    border-color: #FB8C00;
+    color: white;
+    background-color: #FB8C00;
+}
+
+.dropMenu{
+    width: 100% !important;
+}
+
+.dropdown-menu{
+    min-width: 100% !important;
+}
+
+/* BOTONES */
+
+.boton{
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 15px;
+}
+
+.boton-orange{
+    background-color: #616161;
+}
+
+.boton-orange:hover{
+    background-color: #212121;
+}
+
+.boton > a{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* TABLAS */
+
+.tablasBack{
+    margin-top: 1% !important;
+}
+
+th{
+  text-align: center !important;  
+}
+
+.tituloTabla{
+    background-color: #616161;
+    padding: 10px;
+    color: white;
+    margin-top: 2%;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btnTable{
+    width: 100%;
+}
+
+.editTable{
+    color: #1565C0 !important;
+    text-decoration: none !important;
+}
+
+.editTable:hover, .editTable:focus, .editTable:active{
+    color: #0D47A1 !important;
+    text-decoration: none !important;
+}
+
+/* PAGINA DE EDITAR */
+
+.inpText{
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid #BDBDBD;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+    -webkit-box-shadow: none !important; 
+    box-shadow: none !important; 
+}
+
+.inpText:hover{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.inpText:focus{
+    border-bottom: 2px solid #1E88E5;
+}
+
+.btnSubmitEdit{
+    width: 80%;
+    background-color: #2196F3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 30px;
+}
+
+.btnSubmitEdit:hover{
+    background-color: #1976D2;
+}
+
+.tituloEdit{
+    background-color: #616161;
+    padding: 10px;
+    width: 80%;
+    margin: auto;
+    color: white;
+    margin-top: 2%;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
 }

@@ -24,63 +24,64 @@
             </script>
         </c:if>     
         <c:if test="#{userKey.getDiffus() == 1}">
-            <div id="backoffice">
+        <div id="backoffice">
+            <div id="paneles">    
                 <div class="row">
                 <div class="col-lg-3 col-md-6">    
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-eye fa-4x" aria-hidden="true"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">26</div>
-                                <div>New Comments!</div>
+                                <div class="huge">#{UsuarioMySQLDAO.getTotalVisitas()}</div>
+                                <div class="descPanel">Total visitas de usuarios registrados</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 </div>   
                 <div class="col-lg-3 col-md-6">    
-                <div class="panel panel-primary">
+                <div class="panel panel-yellow">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-tasks fa-4x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">26</div>
-                                <div>New Comments!</div>
+                                <div class="huge">#{ActividadMySQLDAO.getTotalActividades()}</div>
+                                <div class="descPanel">Total de actividades creadas</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 </div>   
                 <div class="col-lg-3 col-md-6">    
-                <div class="panel panel-primary">
+                <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-users fa-4x" aria-hidden="true"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">26</div>
-                                <div>New Comments!</div>
+                                <div class="huge">#{UsuarioMySQLDAO.getTotalUsers()}</div>
+                                <div class="descPanel">Total de usuarios registrados</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 </div>   
                 <div class="col-lg-3 col-md-6">    
-                <div class="panel panel-primary">
+                <div class="panel panel-orange">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-book fa-4x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">26</div>
-                                <div>New Comments!</div>
+                                <div class="huge">#{ParticipaMySQLDAO.getTotalParticipantes()}</div>
+                                <div class="descPanel">Total de Participantes en actividades</div>
                             </div>
                         </div>
                     </div>
@@ -88,6 +89,186 @@
                 </div>       
                 </div>
             </div>
+            <h:form>
+             
+            <div id="funciones">
+                
+                <div class="row">
+                    
+                <div class="col-lg-3 col-md-6">    
+                    <div class="boton boton-orange">
+                        <h:commandLink styleClass="commandLink" action="#{UsuarioMySQLDAO.getUsuarios()}">
+                        <div id="users" class='users inpSubmit'>
+                            <i class="fa fa-map-signs" aria-hidden="true"></i>
+                                <span>Usuarios</span>
+                        </div>
+                        <f:setPropertyActionListener target="#{adminView.funcion}" value="usuarios" />
+                        <f:ajax execute="@form" render="tablas" />    
+                        </h:commandLink>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">    
+                    <div class="boton boton-orange">
+                        <h:commandLink styleClass="commandLink" action="#{ActividadMySQLDAO.getActividades()}">
+                        <div id="Activitys" class='activity inpSubmit'>
+                            <i class="fa fa-map-signs" aria-hidden="true"></i>
+                                <span>Actividades</span>
+                        </div>
+                        <f:setPropertyActionListener target="#{adminView.funcion}" value="actividades" />
+                        <f:ajax execute="@form" render="tablas" />
+                        </h:commandLink>
+                    </div>
+                </div>                    
+                    
+                <div class="col-lg-3 col-md-6">    
+                    <div class="boton boton-orange">
+                        <h:commandLink styleClass="commandLink" action="#{ParticipaMySQLDAO.callParticipa(activKey, userKey)}">
+                        <div id="Servicios" class='service inpSubmit'>
+                            <i class="fa fa-map-signs" aria-hidden="true"></i>
+                                <span>Servicios</span>
+                        </div>
+                        </h:commandLink>
+                    </div>
+                </div>
+                    
+                <div class="col-lg-3 col-md-6">    
+                    <div class="boton boton-orange">
+                        <h:commandLink styleClass="commandLink" action="#{ParticipaMySQLDAO.callParticipa(activKey, userKey)}">
+                        <div id="TiposActividades" class='tipus inpSubmit'>
+                            <i class="fa fa-map-signs" aria-hidden="true"></i>
+                                <span>Tipos de Actividad</span>
+                        </div>
+                        </h:commandLink>
+                    </div>
+                </div>
+                    
+                </div>
+                 
+            </div>
+            
+            <h:panelGroup id="tablas">
+                
+                <c:if test="#{adminView.funcion eq 'usuarios'}">
+                <div id="usuarios">
+                    <p class="tituloTabla">Usuarios</p>
+                    <h:dataTable styleClass="table table-striped tablasBack" value="#{UsuarioMySQLDAO.getUsuarios()}" var="user">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        #{user.getIdUser()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        #{user.getNombre()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Apellidos</f:facet>
+                        #{user.getApellidos()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Correo</f:facet>
+                        #{user.getEmail()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Nif</f:facet>
+                        #{user.getNif()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Genero</f:facet>
+                        #{user.getGenero()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Permisos</f:facet>
+                        <h:outputText rendered="#{user.getDiffus() == 1}" value="Admin" />
+                        <h:outputText rendered="#{user.getDiffus() == 2}" value="Organizador" />
+                        <h:outputText rendered="#{user.getDiffus() == 3}" value="Deportista" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Activo</f:facet>
+                        <h:outputText rendered="#{user.getActivo() == true}" value="Si" />
+                        <h:outputText rendered="#{user.getActivo() == false}" value="No" />
+                    </h:column> 
+                    <h:column>
+                        <f:facet name='header'>Baja</f:facet>
+                        <h:outputText rendered="#{user.getBaja() == true}" value="Si" />
+                        <h:outputText rendered="#{user.getBaja() == false}" value="No" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Editar</f:facet>
+                        <h:commandLink class="editTable" >
+                            <div class='btnTable'>
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <f:actionListener binding="#{UsuarioMySQLDAO.guardaSession(user, 'backoffice')}" /> 
+                            </div>
+                        </h:commandLink>
+                    </h:column>    
+                    </h:dataTable>
+                    
+                </div>
+                </c:if>    
+                <c:if test="#{adminView.funcion eq 'actividades'}">
+                <div id="actividades">
+                   <p class="tituloTabla">Actividades</p> 
+                   <h:dataTable id="calend" styleClass="table table-striped tablaActividades" 
+                                value="#{ActividadMySQLDAO.getActividades()}" var="actividad" >
+                    <h:column>
+                        <f:facet name="header">ID Actividad</f:facet>
+                        #{actividad.getIdAct()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">ID Usuario</f:facet>
+                        #{actividad.getIdUser()}
+                    </h:column>    
+                    <h:column>
+                        <f:facet name="header">Tipo</f:facet>
+                        #{TiposMySQLDAO.getTipoByAct(actividad)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Evento</f:facet>
+                        #{actividad.getNombre()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Fecha</f:facet>
+                        #{actividad.getFecha()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Lugar</f:facet>
+                        #{LocalizacionMySQLDAO.callGetLugar(actividad)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Activo</f:facet>
+                        <h:outputText rendered="#{actividad.getActivo() == true}" value="Si" />
+                        <h:outputText rendered="#{actividad.getActivo() == false}" value="No" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name='header'>Baja</f:facet>
+                        <h:outputText rendered="#{actividad.getBaja() == true}" value="Si" />
+                        <h:outputText rendered="#{actividad.getBaja() == false}" value="No" />
+                    </h:column>   
+                    <h:column>
+                        <f:facet name="header">Ver Actividad</f:facet>
+                        <h:commandLink>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                         <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(actividad)}" />
+                         <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(actividad)}" />
+                         <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(actividad, 'visualizar')}" /> 
+                        </h:commandLink>  
+                    </h:column>
+                     <h:column>
+                        <f:facet name="header">Editar Actividad</f:facet>
+                        <h:commandLink>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                         <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(actividad)}" />
+                         <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(actividad)}" />
+                         <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(actividad, 'backoffice')}" /> 
+                        </h:commandLink>  
+                    </h:column>  
+                    </h:dataTable>
+                </div>
+                </c:if>    
+            </h:panelGroup>
+            </h:form>       
+        </div>        
         </c:if>
         </c:if>
         </ui:define>

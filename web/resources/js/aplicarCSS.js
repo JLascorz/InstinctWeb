@@ -38,6 +38,8 @@ function detectarBody(){
         cargarCSS(datajs);
     }else if(document.getElementById("misInscripciones")){
         data = dir+"javax.faces.resource/css/misInscripciones.css.xhtml";
+    }else if(document.getElementById("backoffice")){
+        data = dir+"javax.faces.resource/css/backoffice.css.xhtml";
     }
     
     cargarCSS(data);

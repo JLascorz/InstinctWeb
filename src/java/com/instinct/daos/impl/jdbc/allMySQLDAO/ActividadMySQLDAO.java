@@ -345,22 +345,38 @@ public class ActividadMySQLDAO implements ActividadDAO{
 
     @Override
     public void guardarSession(Actividad activ, String pagina) throws PersistenceException, ClassNotFoundException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
-        HttpSession httpSession = request.getSession(false);
-        httpSession.setAttribute("activKey", activ);
         
-        if(pagina.equals("editar")){
+        if(pagina.equals("backoffice")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+            HttpSession httpSession = request.getSession(false);
+            httpSession.setAttribute("activAdm", activ);
+        
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("editar_actividad.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("edit_backoffice.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(pagina.equals("visualizar")){
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("actividad.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }else{
+        
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+            HttpSession httpSession = request.getSession(false);
+            httpSession.setAttribute("activKey", activ);
+
+            if(pagina.equals("editar")){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("editar_actividad.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else if(pagina.equals("visualizar")){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("actividad.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         FacesContext.getCurrentInstance().responseComplete();
@@ -530,6 +546,82 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }
     //</editor-fold>
     return count;  
+    }
+
+    @Override
+    public int getTotalActividades() throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int actividades = 0;
+        try{
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL getTotalActividades()");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+
+            try{
+                reader = sql.executeQuery();
+                if(reader.next()){
+                    actividades = reader.getInt("cuenta");
+                }
+            }catch(SQLException e){
+                 throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        
+        return actividades;
+    }
+
+    @Override
+    public List<Actividad> getActividades() throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+            Connection conn = connect();
+            List<Actividad> actividades = new ArrayList<>();
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+            try{
+                sql = conn.prepareCall("CALL getActividades()");
+                reader = sql.executeQuery();
+
+                while(reader.next()){
+                    actividades.add(JDBCUtils.getActividad(reader));
+                }
+            } catch(SQLException ex){
+                throw new PersistenceException(ex.getErrorCode());
+            }finally{
+                try{
+                    if(reader != null){
+                        reader.close();
+                    }
+                    if(sql !=null){
+                     sql.close();
+                    }
+
+                    connectionClose();
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+
+            }
+        //</editor-fold>
+        return actividades; 
     }
 
     

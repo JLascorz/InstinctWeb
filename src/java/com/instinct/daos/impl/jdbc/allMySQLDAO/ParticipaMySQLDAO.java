@@ -324,5 +324,45 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
     //</editor-fold>
     return inscripciones;   
     }
+
+    @Override
+    public int getTotalParticipantes() throws PersistenceException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        int participantes = 0;
+        try{
+            Connection conn = connect();
+            sql = conn.prepareCall("CALL getTotalParticipantes()");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+
+            try{
+                reader = sql.executeQuery();
+                if(reader.next()){
+                    participantes = reader.getInt("cuenta");
+                }
+            }catch(SQLException e){
+                 throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+        
+        return participantes;
+    }
     
 }

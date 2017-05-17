@@ -36,8 +36,7 @@
                          validatorMessage="El NIF no es valido (8 Numeros y 1 Letra).">
                          <f:validateRegex pattern="[0-9A-Z][0-9]{7}[A-Z]" />
                     </h:inputText>
-                    <h:inputText id="fecnac" value="#{userKey.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date" required="true" 
-                         requiredMessage="La fecha de nacimiento es necesaria.">
+                    <h:inputText id="fecnac" value="#{userKey.fecNac}" a:placeholder="Fecha de Nacimiento" t:type="date">
                          <f:validator validatorId="registerValidator" />
                     </h:inputText>
                     <h:inputText  id="email" value="#{userKey.email}"  a:placeholder="Email" required="true" 
@@ -47,7 +46,7 @@
                     </h:inputText>
                 </div>
                 <div id="Botones">
-                    <h:commandButton id="modify"  value="Guardar Datos" action="#{UsuarioMySQLDAO.callEditar(userKey)}"></h:commandButton>
+                    <h:commandButton id="modify"  value="Guardar Datos" action="#{UsuarioMySQLDAO.callEditar(userKey, 'editPerfil')}"></h:commandButton>
                 </div>
                 </h:form>
                 <div id="errores">

@@ -27,16 +27,23 @@ public interface UsuarioDAO {
     public abstract String logout(Usuario user) throws PersistenceException, ClassNotFoundException;
     public abstract Usuario getUser(Usuario user) throws PersistenceException, ClassNotFoundException;
     public abstract Usuario changeActivity(Usuario user, Boolean activity) throws PersistenceException, ClassNotFoundException;
-    public abstract void guardaSession(Usuario user);
+    public abstract void guardaSession(Usuario user, String pagina);
     public abstract Usuario recogeSession();
     
     //Editar Usuario
-    public abstract String callEditar(Usuario user) throws PersistenceException, ClassNotFoundException;
+    public abstract String callEditar(Usuario user, String pagina) throws PersistenceException, ClassNotFoundException;
     public abstract String editarUsuario(Usuario user) throws PersistenceException, ClassNotFoundException;
 
     //Dar usuario de baja
     public abstract String callBaja(Usuario user) throws PersistenceException, ClassNotFoundException;
     public abstract Usuario changeBaja(Usuario user, Boolean baja) throws PersistenceException, ClassNotFoundException;
     
+    //Seleccionar cuenta de visitas
+    public abstract int getTotalVisitas() throws PersistenceException, ClassNotFoundException;
 
+    //Seleccionar el numero de usuarios registrados
+    public abstract int getTotalUsers() throws PersistenceException, ClassNotFoundException;
+    
+    //Editar usuario como admin
+    public abstract String editUserLikeAdmin(Usuario user) throws PersistenceException, ClassNotFoundException;
 }
