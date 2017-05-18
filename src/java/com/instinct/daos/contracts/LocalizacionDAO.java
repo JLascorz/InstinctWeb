@@ -32,7 +32,7 @@ public interface LocalizacionDAO {
     public abstract Municipios getMunicipio(Localizacion local) throws PersistenceException, ClassNotFoundException;
 
     //Editar la localizacion de una actividad
-    public abstract String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException;
+    public abstract String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle, int error, String pagina) throws PersistenceException, ClassNotFoundException;
 
     //Verificar si existe alguna provincia en esa comunidad o un monicipio en esa provincia.
     public abstract String verificarLocalidad(int idComunidad, int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException ;

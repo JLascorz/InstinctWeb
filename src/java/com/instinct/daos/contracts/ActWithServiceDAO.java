@@ -20,7 +20,7 @@ public interface ActWithServiceDAO {
     public abstract void callServicioActividad(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
     
     //Editar los servicios de una actividad
-    public abstract String callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException;
+    public abstract String callEditServAct(Actividad activity, List<String> serviciosSeleccionados, int error) throws PersistenceException, ClassNotFoundException;
     public abstract void eliminarRelacion(Actividad activity) throws PersistenceException, ClassNotFoundException;
 
     //Coger los servicios de una actividad

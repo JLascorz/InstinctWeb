@@ -62,3 +62,4 @@ window.onload = detectarBody;
 function redirect(){
     window.location.href='index.xhtml';
 }
+

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+            </c:if>
+        <c:if test="#{userKey.getActivo() == true}">
+        <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">        
+        <div id="crearActividad">
+            <span id="titulo">Subir Resultado</span><br></br>
+            <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+            <h:messages globalOnly="true" id="errorGlobal"></h:messages>
+            </h:panelGroup>
+        <h:form  enctype="multipart/form-data">    
+            <h:outputLabel for="resultado" value="Sube los resultados de tu actividad:" />
+ 
+            <p:fileUpload id="resultado" fileUploadListener="#{ActividadMySQLDAO.uploadResultado(SelectManyView.resultado, activKey)}" mode="advanced" skinSimple="true" />
+
+        </h:form>
+
+        </div>
+        </c:if>
+        </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>
+

@@ -5,15 +5,21 @@
  */
 package com.instinct.web.objects;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
 /**
  *
  * @author daw2017
  */
+@ManagedBean(name="Servicio")
+@ViewScoped
 public class Servicio {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
 	private int idServicio;
         private String nombre;
 	private String descripcion;
+        private boolean activo;
 //</editor-fold>
 	
 //<editor-fold defaultstate="collapsed" desc="Getters">
@@ -28,6 +34,11 @@ public class Servicio {
         public String getDescripcion(){
             return descripcion;
         }
+        
+        public boolean getActivo(){
+            return activo;
+        }
+        
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Setters">
         public void setIdServicio(int idServicio){
@@ -41,12 +52,19 @@ public class Servicio {
         public void setDescripcion(String descripcion){
             this.descripcion = descripcion;
         }
+
+        public void setActivo(boolean activo) {
+            this.activo = activo;
+        }
+        
+        
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Constructores">
-	public Servicio(int idServicio, String nombre, String descripcion){
+	public Servicio(int idServicio, String nombre, String descripcion, boolean activo){
             this.setIdServicio(idServicio);
             this.setNombre(nombre);
             this.setDescripcion(descripcion);
+            this.setActivo(activo);
 	}
 	
 	public Servicio(){}

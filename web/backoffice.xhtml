@@ -95,56 +95,61 @@
                 
                 <div class="row">
                     
-                <div class="col-lg-3 col-md-6">    
-                    <div class="boton boton-orange">
+                <div class="col-lg-3 col-md-6 btnDes">   
                         <h:commandLink styleClass="commandLink" action="#{UsuarioMySQLDAO.getUsuarios()}">
+                        <div class="boton boton-orange">
                         <div id="users" class='users inpSubmit'>
                             <i class="fa fa-map-signs" aria-hidden="true"></i>
                                 <span>Usuarios</span>
                         </div>
                         <f:setPropertyActionListener target="#{adminView.funcion}" value="usuarios" />
-                        <f:ajax execute="@form" render="tablas" />    
+                        <f:ajax execute="@form" render="tablas" />
+                        </div>
                         </h:commandLink>
-                    </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6">    
-                    <div class="boton boton-orange">
+                <div class="col-lg-3 col-md-6 btnDes">    
                         <h:commandLink styleClass="commandLink" action="#{ActividadMySQLDAO.getActividades()}">
+                        <div class="boton boton-orange">
                         <div id="Activitys" class='activity inpSubmit'>
                             <i class="fa fa-map-signs" aria-hidden="true"></i>
                                 <span>Actividades</span>
                         </div>
                         <f:setPropertyActionListener target="#{adminView.funcion}" value="actividades" />
                         <f:ajax execute="@form" render="tablas" />
+                        </div>
                         </h:commandLink>
-                    </div>
                 </div>                    
                     
-                <div class="col-lg-3 col-md-6">    
-                    <div class="boton boton-orange">
-                        <h:commandLink styleClass="commandLink" action="#{ParticipaMySQLDAO.callParticipa(activKey, userKey)}">
+                <div class="col-lg-3 col-md-6 btnDes">    
+                        <h:commandLink styleClass="commandLink" action="#{ServicioMySQLDAO.getServiciosAdm()}">
+                        <div class="boton boton-orange">
                         <div id="Servicios" class='service inpSubmit'>
                             <i class="fa fa-map-signs" aria-hidden="true"></i>
                                 <span>Servicios</span>
                         </div>
+                        <f:setPropertyActionListener target="#{adminView.funcion}" value="servicios" />
+                        <f:ajax execute="@form" render="tablas" />
+                        </div>
                         </h:commandLink>
-                    </div>
                 </div>
                     
-                <div class="col-lg-3 col-md-6">    
-                    <div class="boton boton-orange">
-                        <h:commandLink styleClass="commandLink" action="#{ParticipaMySQLDAO.callParticipa(activKey, userKey)}">
+                <div class="col-lg-3 col-md-6 btnDes">    
+                        <h:commandLink styleClass="commandLink" action="#{TiposMySQLDAO.getTiposActividadAdm()}">
+                        <div class="boton boton-orange">
                         <div id="TiposActividades" class='tipus inpSubmit'>
                             <i class="fa fa-map-signs" aria-hidden="true"></i>
                                 <span>Tipos de Actividad</span>
                         </div>
+                        <f:setPropertyActionListener target="#{adminView.funcion}" value="tiposActividad" />
+                        <f:ajax execute="@form" render="tablas" />
+                        </div>
                         </h:commandLink>
-                    </div>
+                    
                 </div>
                     
                 </div>
-                 
+                <p class="col-lg-12 col-md-6 tituloInfo">Si la opcion seleccionada tarda en cargar, click 2 o 3 veces y esperar...</p>  
             </div>
             
             <h:panelGroup id="tablas">
@@ -257,15 +262,110 @@
                      <h:column>
                         <f:facet name="header">Editar Actividad</f:facet>
                         <h:commandLink>
-                        <i class="fa fa-eye" aria-hidden="true"></i>
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
                          <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(actividad)}" />
-                         <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(actividad)}" />
+                         <f:actionListener binding="#{ActServiceMySQLDAO.getServiciosByIdAct(actividad)}" />
+                         <f:setPropertyActionListener target="#{SelectManyView.selectedOptions}" value="#{servKey}" />
                          <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(actividad, 'backoffice')}" /> 
                         </h:commandLink>  
                     </h:column>  
                     </h:dataTable>
                 </div>
-                </c:if>    
+                </c:if>
+                <c:if test="#{adminView.funcion eq 'servicios'}">
+                <div id="servicios">
+                    <p class="tituloTabla">Servicios</p>
+                    <div class="row">
+                    <div class="col-lg-4 col-md-6 btnDes">    
+                    
+                        <h:commandLink styleClass="commandLink" action="crear_backoffice.xhtml">
+                        <div class="boton boton-crear">
+                        <div id="TiposActividades" class='tipus inpSubmit'>
+                            <i class="fa fa-plus" aria-hidden="true"></i> 
+                                <span>Crear Servicio</span>
+                        </div>
+                        </div>
+                        </h:commandLink>
+                    
+                    </div>
+                    </div>    
+                    <h:dataTable styleClass="table table-striped tablasBack" value="#{ServicioMySQLDAO.getServiciosAdm()}" var="service">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        #{service.idServicio}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        #{service.nombre}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Descripcion</f:facet>
+                        #{service.descripcion}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Activo</f:facet>
+                        <h:outputText rendered="#{service.getActivo() == true}" value="Si" />
+                        <h:outputText rendered="#{service.getActivo() == false}" value="No" />
+                    </h:column>    
+                    <h:column>
+                        <f:facet name='header'>Editar</f:facet>
+                        <h:commandLink class="editTable" >
+                            <div class='btnTable'>
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <f:actionListener binding="#{ServicioMySQLDAO.guardarSession(service, 'backoffice')}" /> 
+                            </div>
+                        </h:commandLink>
+                    </h:column>    
+                    </h:dataTable>
+                </div>
+                </c:if>
+                <c:if test="#{adminView.funcion eq 'tiposActividad'}">
+                <div id="servicios">
+                    <p class="tituloTabla">Tipos de Actividad</p>
+                    <div class="row">
+                    <div class="col-lg-4 col-md-6 btnDes">    
+                    
+                        <h:commandLink styleClass="commandLink" action="crear_backoffice.xhtml">
+                        <div class="boton boton-crear">
+                        <div id="TiposActividades" class='tipus inpSubmit'>
+                            <i class="fa fa-plus" aria-hidden="true"></i> 
+                                <span>Crear Tipo de Actividad</span>
+                        </div>
+                        </div>    
+                        </h:commandLink>
+                    
+                    </div>
+                    </div>    
+                    <h:dataTable styleClass="table table-striped tablasBack" value="#{TiposMySQLDAO.getTiposActividadAdm()}" var="tipoActiv">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        #{tipoActiv.idTipo}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        #{tipoActiv.nombre}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Descripcion</f:facet>
+                        #{tipoActiv.descripcion}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Activo</f:facet>
+                        <h:outputText rendered="#{tipoActiv.getActivo() == true}" value="Si" />
+                        <h:outputText rendered="#{tipoActiv.getActivo() == false}" value="No" />
+                    </h:column>    
+                    <h:column>
+                        <f:facet name='header'>Editar</f:facet>
+                        <h:commandLink class="editTable" >
+                            <div class='btnTable'>
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <f:actionListener binding="#{TiposMySQLDAO.guardarSession(tipoActiv, 'backoffice')}" /> 
+                            </div>
+                        </h:commandLink>
+                    </h:column>    
+                    </h:dataTable>
+                </div>
+                </c:if>
             </h:panelGroup>
             </h:form>       
         </div>        

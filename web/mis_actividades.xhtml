@@ -52,11 +52,14 @@
             </h:column>
             <h:column>
                 <f:facet name='header'>Resultados</f:facet>
-                <h:link class="btnFiles">
+                <h:form>
+                <h:commandLink class="btnFiles">
                     <div class='btnTable'>
                     <i class="fa fa-file" aria-hidden="true"></i>
                     </div>
-                </h:link>
+                    <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activity, 'subirFichero')}" />
+                </h:commandLink>
+                </h:form>    
             </h:column>
             <h:column>
                 <f:facet name='header'>Editar</f:facet>

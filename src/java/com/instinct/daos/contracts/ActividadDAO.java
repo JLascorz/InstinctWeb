@@ -8,7 +8,9 @@ package com.instinct.daos.contracts;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Usuario;
+import java.io.IOException;
 import java.util.List;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -38,7 +40,7 @@ public interface ActividadDAO {
     public abstract void borrarSession();
     
     //Editar la actividad
-    public abstract String callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException;
+    public abstract String callEditar(Actividad activ, String pagina, int error) throws PersistenceException, ClassNotFoundException;
     public abstract String editarActividad(Actividad activ) throws PersistenceException, ClassNotFoundException;
 
     //Seleccionar la actividad por el mes y el año
@@ -50,4 +52,10 @@ public interface ActividadDAO {
     
     //Seleccionar todas las actividades
     public abstract List<Actividad> getActividades() throws PersistenceException, ClassNotFoundException;
+    
+    //Editar la actividad como administrador
+    public abstract String editarActividadAdm(Actividad activ) throws PersistenceException, ClassNotFoundException;
+
+    //Subir los resultados de la actividad
+    public void uploadResultado(FileUploadEvent e, Actividad activ) throws IOException;
 }

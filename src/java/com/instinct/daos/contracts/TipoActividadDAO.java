@@ -23,7 +23,14 @@ public interface TipoActividadDAO {
     
     //Seleccionar todos los tipos de Actividad
     public abstract List<TipoActividad> getTiposActividad() throws PersistenceException, ClassNotFoundException;
-    
+    public abstract List<TipoActividad> getTiposActividadAdm() throws PersistenceException, ClassNotFoundException;
     //Coger el tipo de actividad por actividad
     public abstract String getTipoByAct(Actividad activity) throws PersistenceException, ClassNotFoundException;
+
+    //Guardar la session del tipo de actividad
+    public abstract void guardarSession(TipoActividad tipoAct, String pagina) throws PersistenceException, ClassNotFoundException;
+    
+    //Editar tipo de actividad
+    public abstract String callEditar(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException;
+    public abstract String editarTipoActividad(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException;
 }

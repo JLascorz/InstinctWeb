@@ -86,8 +86,8 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
     }
 
     @Override
-    public String callEditServAct(Actividad activity, List<String> serviciosSeleccionados) throws PersistenceException, ClassNotFoundException {
-        if(activity.getIdAct() != 0){
+    public String callEditServAct(Actividad activity, List<String> serviciosSeleccionados, int error) throws PersistenceException, ClassNotFoundException {
+        if(error == 0){
             eliminarRelacion(activity);
             callServicioActividad(activity, serviciosSeleccionados);
         }else{
@@ -226,7 +226,7 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
             }
             
             for(int j=0; j < actServ.size(); j++){
-                sql2 = conn.prepareCall("CALL getServicioById(?)");
+                sql2 = conn.prepareCall("CALL getServicioByIdUs(?)");
                 sql2.setEscapeProcessing(true);
                 sql2.setQueryTimeout(90);
                 sql2.setInt(1, actServ.get(j).getIdServicio());

@@ -12,16 +12,21 @@ import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.TipoActividad;
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -89,7 +94,11 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         }
 
             if(idTipo != 0){
-                comprobacion++;         
+                if(idTipo == tipoAct.getIdTipo()){
+                    comprobacion = 0;
+                }else{
+                    comprobacion++;
+                }
             }else{
                 comprobacion = 0;
             }
@@ -109,12 +118,12 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         try{
             Connection conn = connect();
             
-            sql = conn.prepareCall("CALL insertTipo(?, ?)");
+            sql = conn.prepareCall("CALL insertTipo(?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
                 sql.setString(1, tipoAct.getNombre());
                 sql.setString(2, tipoAct.getDescripcion());
-                
+                sql.setBoolean(3, tipoAct.getActivo());
           i = sql.executeUpdate();
             
         }catch(SQLException e){
@@ -134,9 +143,9 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
         if(i>0){
-            return "tipos_de_actividad";
-        }else{
             return "backoffice";
+        }else{
+            return "crear_backoffice";
         }
     //</editor-fold>
     }
@@ -151,7 +160,7 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
-            sql = conn.prepareCall("CALL getTiposActividad()");
+            sql = conn.prepareCall("CALL getTiposActividadUs()");
             reader = sql.executeQuery();
             
             while(reader.next()){
@@ -215,6 +224,118 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         }
     //</editor-fold>
         return tipo;    
+    }
+
+    @Override
+    public List<TipoActividad> getTiposActividadAdm() throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        List<TipoActividad> tiposActividad = new ArrayList<TipoActividad>();
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL getTiposActividadAdm()");
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                tiposActividad.add(JDBCUtils.getTipoActividad(reader));
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+    return tiposActividad;
+    }
+
+    @Override
+    public void guardarSession(TipoActividad tipoAct, String pagina) throws PersistenceException, ClassNotFoundException {
+        if(pagina.equals("backoffice")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+            HttpSession httpSession = request.getSession(false);
+            httpSession.setAttribute("tipoAdm", tipoAct);
+            
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("edit_backoffice.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(UsuarioMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            FacesContext.getCurrentInstance().responseComplete();
+        }    
+    }
+
+    @Override
+    public String callEditar(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
+        String devuelve = null;
+        int comprueba = getTipoByName(tipoAct);
+        if(comprueba == 0){
+            devuelve = editarTipoActividad(tipoAct);
+            return devuelve;
+        }else{
+            FacesMessage message = new FacesMessage("Ya existe un tipo de actividad con este nombre.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return null;
+    }
+
+    @Override
+    public String editarTipoActividad(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+    //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+            try{
+                Connection conn = connect();
+
+                sql = conn.prepareCall("CALL editTipo(?, ?, ?, ?)");
+                sql.setEscapeProcessing(true);
+                sql.setQueryTimeout(90);
+                    sql.setInt(1, tipoAct.getIdTipo());
+                    sql.setString(2, tipoAct.getNombre());
+                    sql.setString(3, tipoAct.getDescripcion());
+                    sql.setBoolean(4, tipoAct.getActivo());
+              i = sql.executeUpdate();
+
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }finally{
+                try{
+                    if(sql !=null){
+                         sql.close();
+                    }
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+                //Llama a la funció per a tancar la conexio
+                connectionClose();
+               //closeConnections();
+            }
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+            if(i>0){
+                return "backoffice";
+            }else{
+                return "edit_backoffice";
+            }
+        //</editor-fold>
     }
     
 }

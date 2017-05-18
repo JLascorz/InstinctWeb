@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -56,7 +58,7 @@ public class ServicioMySQLDAO implements ServicioDAO {
         int idService = 0;
         try{
             Connection conn = connect();
-            sql = conn.prepareCall("CALL compruebaDescripcion(?)");
+            sql = conn.prepareCall("CALL compruebaServicio(?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
                 sql.setString(1, serv.getNombre());
@@ -90,7 +92,11 @@ public class ServicioMySQLDAO implements ServicioDAO {
         }
 
             if(idService != 0){
-                comprobacion++;         
+                if(idService == serv.getIdServicio()){
+                    comprobacion = 0;
+                }else{
+                    comprobacion++;         
+                }
             }else{
                 comprobacion = 0;
             }
@@ -110,11 +116,12 @@ public class ServicioMySQLDAO implements ServicioDAO {
         try{
             Connection conn = connect();
             
-            sql = conn.prepareCall("CALL insertService(?, ?)");
+            sql = conn.prepareCall("CALL insertServicio(?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
                 sql.setString(1, serv.getNombre());
                 sql.setString(2, serv.getDescripcion());
+                sql.setBoolean(3, serv.getActivo());
                 
           i = sql.executeUpdate();
             
@@ -135,15 +142,15 @@ public class ServicioMySQLDAO implements ServicioDAO {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
         if(i>0){
-            return "servicios";
+            return "backoffice";
         }else{
-            return "servicios";
+            return "crear_backoffice";
         }
     //</editor-fold>
     }
 
     @Override
-    public List<Servicio> getServicios() throws PersistenceException, ClassNotFoundException {
+    public List<Servicio> getServiciosUs() throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
     //<editor-fold defaultstate="collapsed" desc="Atributs">
         Connection conn = connect();
@@ -151,7 +158,7 @@ public class ServicioMySQLDAO implements ServicioDAO {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
-            sql = conn.prepareCall("CALL getServicios()");
+            sql = conn.prepareCall("CALL getServiciosUs()");
             reader = sql.executeQuery();
             
             while(reader.next()){
@@ -176,6 +183,120 @@ public class ServicioMySQLDAO implements ServicioDAO {
         }
     //</editor-fold>
     return servicios;    
+    }
+
+    @Override
+    public List<Servicio> getServiciosAdm() throws PersistenceException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Connection conn = connect();
+        List<Servicio> servicios = new ArrayList<Servicio>();
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            sql = conn.prepareCall("CALL getServiciosAdm()");
+            reader = sql.executeQuery();
+            
+            while(reader.next()){
+                servicios.add(JDBCUtils.getServicio(reader));
+            }
+        } catch(SQLException ex){
+            throw new PersistenceException(ex.getErrorCode());
+        }finally{
+            try{
+                if(reader != null){
+                    reader.close();
+                }
+                if(sql !=null){
+                 sql.close();
+                }
+                
+                connectionClose();
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            
+        }
+    //</editor-fold>
+    return servicios;  
+    }
+
+    @Override
+    public void guardarSession(Servicio serv, String pagina) throws PersistenceException, ClassNotFoundException {
+        if(pagina.equals("backoffice")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+            HttpSession httpSession = request.getSession(false);
+            httpSession.setAttribute("servAdm", serv);
+            
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("edit_backoffice.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(UsuarioMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            FacesContext.getCurrentInstance().responseComplete();
+        }
+        
+    }
+
+    @Override
+    public String callEditar(Servicio serv) throws PersistenceException, ClassNotFoundException {
+        String devuelve = null;
+        int comprueba = getServiceByName(serv);
+        if(comprueba == 0){
+            devuelve = editarServicio(serv);
+            return devuelve;
+        }else{
+            FacesMessage message = new FacesMessage("Ya existe un servicio con este nombre.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return null;    
+    }
+
+    @Override
+    public String editarServicio(Servicio serv) throws PersistenceException, ClassNotFoundException {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+                
+        int i=0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            
+            sql = conn.prepareCall("CALL editServicio(?, ?, ?, ?)");
+            sql.setEscapeProcessing(true);
+            sql.setQueryTimeout(90);
+                sql.setInt(1, serv.getIdServicio());
+                sql.setString(2, serv.getNombre());
+                sql.setString(3, serv.getDescripcion());
+                sql.setBoolean(4, serv.getActivo());
+                
+          i = sql.executeUpdate();
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+        if(i>0){
+            return "backoffice";
+        }else{
+            return "edit_backoffice";
+        }
+    //</editor-fold>    
     }
 
 }

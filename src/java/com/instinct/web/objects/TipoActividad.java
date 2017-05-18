@@ -17,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 public class TipoActividad {
 	private int idTipo;
 	private String nombre, descripcion;
+        private boolean activo;
 	
 //<editor-fold defaultstate="collapsed" desc="Getters">
         public int getIdTipo(){
@@ -29,6 +30,10 @@ public class TipoActividad {
 
         public String getDescripcion(){
             return descripcion;
+        }
+        
+        public boolean getActivo(){
+            return activo;
         }
 
 //</editor-fold>
@@ -45,13 +50,18 @@ public class TipoActividad {
             this.descripcion = descripcion;
         }
 
+        public void setActivo(boolean activo) {
+            this.activo = activo;
+        }
 
+        
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Constructores">
-        public TipoActividad(int idTipo, String nombre, String descripcion){
+        public TipoActividad(int idTipo, String nombre, String descripcion, boolean activo){
 		this.setIdTipo(idTipo);
 		this.setNombre(nombre);
 		this.setDescripcion(descripcion);
+                this.setActivo(activo);
 	}
 	
 	public TipoActividad(){}

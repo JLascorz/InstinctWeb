@@ -86,13 +86,14 @@
             
             <h3>Servicios</h3>
             <p:selectManyCheckbox id="servicios" value="#{SelectManyView.selectedOptions}"  layout="responsive" columns="3">
-                <f:selectItems value="#{ServicioMySQLDAO.servicios}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
+                <f:selectItems value="#{ServicioMySQLDAO.getServiciosUs()}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
             </p:selectManyCheckbox><br></br>
             
             <h:commandButton id="enviar" class="inpSubmit" value="Editar Actividad">
-                <f:actionListener binding="#{ActividadMySQLDAO.callEditar(activKey)}" />
-                <f:actionListener binding="#{ActServiceMySQLDAO.callEditServAct(activKey, SelectManyView.selectedOptions)}" />
-                <f:actionListener binding="#{LocalizacionMySQLDAO.editaLocalizacionAct(activKey, localKey.idComunidad, localKey.idProvincia, localKey.idMunicipio, localKey.calle)}" />
+                
+                <f:actionListener binding="#{ActividadMySQLDAO.callEditar(activKey, 'editActUs', 0)}" />
+                <f:actionListener binding="#{ActServiceMySQLDAO.callEditServAct(activKey, SelectManyView.selectedOptions, errorTemp)}" />
+                <f:actionListener binding="#{LocalizacionMySQLDAO.editaLocalizacionAct(activKey, localKey.idComunidad, localKey.idProvincia, localKey.idMunicipio, localKey.calle, errorTemp, 'editActUs')}" />
             </h:commandButton><br></br>
         </h:form>
         </div>

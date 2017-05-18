@@ -376,14 +376,14 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     }
 
     @Override
-    public String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException {
+    public String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle, int error, String pagina) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
         Class.forName("com.mysql.jdbc.Driver");
                 
         int i=0;
         String verifica = null;
         
-        if(activity.getIdAct() != 0){
+        if(error == 0){
         verifica = verificarLocalidad(idComunidad, idProvincia, idMunicipio);
         if(verifica == "existe"){
     //</editor-fold>
@@ -419,10 +419,18 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
                 if(i>0){
-                    try {
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
-                    } catch (IOException ex) {
-                        Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    if(pagina.equals("editActUs")){
+                        try {
+                            FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+                        } catch (IOException ex) {
+                            Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }else if(pagina.equals("editActAdm")){
+                        try {
+                            FacesContext.getCurrentInstance().getExternalContext().redirect("backoffice.xhtml");
+                        } catch (IOException ex) {
+                            Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                      FacesContext.getCurrentInstance().responseComplete();
                 }else{

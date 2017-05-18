@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+        <c:if test="#{!userKey.getActivo() || userKey.getActivo() == null || userKey.getActivo() == false}">
+                <script>
+                redirect();
+                </script>
+        </c:if>    
+        <c:if test="#{userKey.getActivo() == true}">
+        <c:if test="#{userKey.getDiffus() >= 2}">
+            <script>
+                redirect();
+            </script>
+        </c:if>     
+        <c:if test="#{userKey.getDiffus() == 1}">
+        <div id="backoffice">  
+            <c:if test="#{adminView.funcion eq 'servicios'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Crear Servicio</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="descripcion"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </h:panelGroup>    
+                    <h:form>
+                    <div id="informacionPersonal">
+                        <h:inputText  id="nombre" styleClass="inpText" value="#{Servicio.nombre}"  a:placeholder="Nombre" required="true" 
+                             requiredMessage="No puedes dejar el nombre vacio.">
+                        </h:inputText>
+                        <h:inputText  id="descripcion" styleClass="inpText" value="#{Servicio.descripcion}"  a:placeholder="Descripcion" required="true" 
+                             requiredMessage="No puedes dejar la descripcion vacia.">
+                        </h:inputText>
+                        <h:selectOneMenu value="#{Servicio.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Activado" />
+                            <f:selectItem itemValue="false"  itemLabel="Desactivado"  />
+                        </h:selectOneMenu>
+                    </div>
+                    <div id="Botones">
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Guardar Datos" action="#{ServicioMySQLDAO.callCrear(Servicio)}"></h:commandButton>
+                    </div>
+                    </h:form>
+                   
+                </div>
+            </c:if>
+            <c:if test="#{adminView.funcion eq 'tiposActividad'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Crear Tipo de Actividad</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="descripcion"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </h:panelGroup>    
+                    <h:form>
+                    <div id="informacionPersonal">
+                        <h:inputText  id="nombre" styleClass="inpText" value="#{TipoAct.nombre}"  a:placeholder="Nombre" required="true" 
+                             requiredMessage="No puedes dejar el nombre vacio.">
+                        </h:inputText>
+                        <h:inputText  id="descripcion" styleClass="inpText" value="#{TipoAct.descripcion}"  a:placeholder="Descripcion" required="true" 
+                             requiredMessage="No puedes dejar la descripcion vacia.">
+                        </h:inputText>
+                        <h:selectOneMenu value="#{TipoAct.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Activado" />
+                            <f:selectItem itemValue="false"  itemLabel="Desactivado"  />
+                        </h:selectOneMenu>
+                    </div>
+                    <div id="Botones">
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Guardar Datos" action="#{TiposMySQLDAO.callCrear(TipoAct)}"></h:commandButton>
+                    </div>
+                    </h:form>
+                   
+                </div>
+            </c:if>
+            
+        </div>    
+        </c:if>
+        </c:if>
+        </ui:define>
+        </ui:composition>  
+		
+    </h:body>
+</html>    

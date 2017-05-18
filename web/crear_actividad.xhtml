@@ -91,7 +91,7 @@
             
             <h3>Servicios</h3>
             <p:selectManyCheckbox id="servicios" value="#{SelectManyView.selectedServices}" layout="responsive" columns="3">
-                <f:selectItems value="#{ServicioMySQLDAO.servicios}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
+                <f:selectItems value="#{ServicioMySQLDAO.getServiciosUs()}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
             </p:selectManyCheckbox><br></br>
             
             <h:commandButton id="enviar" class="inpSubmit" value="Crear Actividad">

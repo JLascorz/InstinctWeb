@@ -68,7 +68,7 @@
                         </h:selectOneMenu>
                     </div>
                     <div id="Botones">
-                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Guardar Datos" action="#{UsuarioMySQLDAO.callEditar(userAdm,'editAdmin')}"></h:commandButton>
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Editar Datos" action="#{UsuarioMySQLDAO.callEditar(userAdm,'editAdmin')}"></h:commandButton>
                     </div>
                     </h:form>
                     <div id="errores">
@@ -79,6 +79,149 @@
                         <p><h:message for="email"></h:message></p>
                         <h:messages globalOnly="true" ></h:messages>
                     </div>
+                </div>
+            </c:if>
+            <c:if test="#{adminView.funcion eq 'actividades'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Editar Actividad</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="tipoActividad"></h:message></p>
+                        <p><h:message for="email"></h:message></p>
+                        <p><h:message for="telefono"></h:message></p>
+                        <p><h:message for="descripcion"></h:message></p>
+                        <p><h:message for="fecha"></h:message></p>
+                        <p><h:message for="comunidades"></h:message></p>
+                        <p><h:message for="provincias"></h:message></p>
+                        <p><h:message for="municipios"></h:message></p>
+                        <p><h:message for="calle"></h:message></p>
+                        <h:messages globalOnly="true" id="errorGlobal"></h:messages>
+                    </h:panelGroup>
+                <h:form>
+                    <h:inputText id="nombre" class="inpText" value="#{activAdm.nombre}" a:placeholder="Nombre" required="true" 
+                                 requiredMessage="El nombre es necesario."></h:inputText><br></br>
+
+                    <h:selectOneMenu value="#{activAdm.idTipo}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                        <f:selectItems value="#{TiposMySQLDAO.tiposActividad}" var="tipo" itemValue="#{tipo.idTipo}" itemLabel="#{tipo.nombre}"  />
+                    </h:selectOneMenu><br></br>               
+
+                    <h:inputText  id="email" class="inpText" value="#{activAdm.email}"  a:placeholder="Email" required="true" 
+                                 requiredMessage="El correo es necesario."
+                                 validatorMessage="El correo no es valido.">
+                                 <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </h:inputText><br></br>
+
+                    <h:inputText id="telefono" class="inpText" value="#{activAdm.telefono}" a:placeholder="Telefono" required="true"
+                                 requiredMessage="El telefono es necesario.">
+                                 <f:validator validatorId="actValidator" />
+                    </h:inputText><br></br>
+
+                    <h:inputText id="web" class="inpText" value="#{activAdm.web}" a:placeholder="Pagina Web"></h:inputText><br></br>
+
+                    <p:textEditor widgetVar="editor2" value="#{activAdm.descripcion}" styleClass="inpTextEditor" height="300" style="margin-bottom:10px" placeholder="Descripcion" />
+
+                    <h:inputText id="fecnac" class="inpText" value="#{activAdm.fecha}" a:placeholder="Fecha de Nacimiento" t:type="date">
+                                 <f:validator validatorId="actValidator" />
+                    </h:inputText><br></br>
+
+
+                    <h:selectOneMenu id="comunidades" value="#{localKey.idComunidad}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                        <f:selectItems value="#{LocalizacionMySQLDAO.comunidades}" var="comunidad" itemValue="#{comunidad.idComunidad}" itemLabel="#{comunidad.nombre}"  rendered="#{LocalizacionMySQLDAO.getComunidad(localKey).idComunidad eq comunidad.idComunidad}"  />
+                        <f:ajax listener="#{LocalizacionMySQLDAO.getProvincias(localKey.idComunidad)}" render="provincias" />
+                        <f:validator validatorId="actValidator" />
+                    </h:selectOneMenu><br></br>
+
+                    <h:selectOneMenu id="provincias" value="#{localKey.idProvincia}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                        <f:selectItems value="#{LocalizacionMySQLDAO.getProvincias(localKey.idComunidad)}" var="provincia" itemValue="#{provincia.idProvincia}" itemLabel="#{provincia.nombre}" rendered="#{LocalizacionMySQLDAO.getProvincia(localKey).idProvincia eq provincia.idProvincia}"  />
+                        <f:ajax listener="#{LocalizacionMySQLDAO.getMunicipios(localKey.idProvincia)}" render="municipios" />
+                        <f:validator validatorId="actValidator" />
+                    </h:selectOneMenu><br></br> 
+
+                    <h:selectOneMenu id="municipios" value="#{localKey.idMunicipio}" class="inpText" required="true" requiredMessage="Este campo es necesario!">
+                        <f:selectItems value="#{LocalizacionMySQLDAO.getMunicipios(localKey.idProvincia)}" var="municipio" itemValue="#{municipio.idMunicipio}" itemLabel="#{municipio.nombre}" rendered="#{LocalizacionMySQLDAO.getMunicipio(localKey).idMunicipio eq comunidad.idMunicipio}" />
+                        <f:validator validatorId="actValidator" />
+                    </h:selectOneMenu><br></br>
+
+                    <h:inputText id="calle" class="inpText" value="#{localKey.calle}" a:placeholder="Calle" required="true" 
+                                 requiredMessage="La calle es necesaria.">    
+                    </h:inputText><br></br>
+
+                    <h3>Servicios</h3>
+                    <p:selectManyCheckbox id="servicios" value="#{SelectManyView.selectedOptions}"  layout="responsive" columns="3">
+                        <f:selectItems value="#{ServicioMySQLDAO.servicios}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
+                    </p:selectManyCheckbox><br></br>
+                    
+                    <h:selectOneMenu value="#{activAdm.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Actividad activa" />
+                            <f:selectItem itemValue="false"  itemLabel="Actividad no activa"  />
+                    </h:selectOneMenu>
+                    <h:selectOneMenu value="#{activAdm.baja}" styleClass="inpText" id="baja">
+                            <f:selectItem itemValue="true"   itemLabel="Actividad dada de baja" />
+                            <f:selectItem itemValue="false"  itemLabel="Actividad sin baja"  />
+                    </h:selectOneMenu>
+
+                    <h:commandButton id="enviar" class="btnSubmitEdit" value="Editar Datos">
+                        <f:actionListener binding="#{ActividadMySQLDAO.callEditar(activAdm, 'editActAdm', 0)}" />
+                        <f:actionListener binding="#{ActServiceMySQLDAO.callEditServAct(activAdm, SelectManyView.selectedOptions, errorTemp)}" />
+                        <f:actionListener binding="#{LocalizacionMySQLDAO.editaLocalizacionAct(activAdm, localKey.idComunidad, localKey.idProvincia, localKey.idMunicipio, localKey.calle, errorTemp, 'editActAdm')}" />
+                    </h:commandButton><br></br>
+                </h:form>
+            </div>
+        </c:if>
+        <c:if test="#{adminView.funcion eq 'servicios'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Editar Servicio</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="descripcion"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </h:panelGroup>    
+                    <h:form>
+                    <div id="informacionPersonal">
+                        <h:inputText  id="nombre" styleClass="inpText" value="#{servAdm.nombre}"  a:placeholder="Nombre" required="true" 
+                             requiredMessage="No puedes dejar el nombre vacio.">
+                        </h:inputText>
+                        <h:inputText  id="descripcion" styleClass="inpText" value="#{servAdm.descripcion}"  a:placeholder="Descripcion" required="true" 
+                             requiredMessage="No puedes dejar la descripcion vacia.">
+                        </h:inputText>
+                        <h:selectOneMenu value="#{servAdm.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Activado" />
+                            <f:selectItem itemValue="false"  itemLabel="Desactivado"  />
+                        </h:selectOneMenu>
+                    </div>
+                    <div id="Botones">
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Editar Datos" action="#{ServicioMySQLDAO.callEditar(servAdm)}"></h:commandButton>
+                    </div>
+                    </h:form>
+                   
+                </div>
+            </c:if>
+            <c:if test="#{adminView.funcion eq 'tiposActividad'}">
+                <div id="usuarios">
+                    <p class="tituloEdit">Editar Tipo de Actividad</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="descripcion"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </h:panelGroup>    
+                    <h:form>
+                    <div id="informacionPersonal">
+                        <h:inputText  id="nombre" styleClass="inpText" value="#{tipoAdm.nombre}"  a:placeholder="Nombre" required="true" 
+                             requiredMessage="No puedes dejar el nombre vacio.">
+                        </h:inputText>
+                        <h:inputText  id="descripcion" styleClass="inpText" value="#{tipoAdm.descripcion}"  a:placeholder="Descripcion" required="true" 
+                             requiredMessage="No puedes dejar la descripcion vacia.">
+                        </h:inputText>
+                        <h:selectOneMenu value="#{tipoAdm.activo}" styleClass="inpText" id="activo">
+                            <f:selectItem itemValue="true"   itemLabel="Activado" />
+                            <f:selectItem itemValue="false"  itemLabel="Desactivado"  />
+                        </h:selectOneMenu>
+                    </div>
+                    <div id="Botones">
+                        <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Editar Datos" action="#{TiposMySQLDAO.callEditar(tipoAdm)}"></h:commandButton>
+                    </div>
+                    </h:form>
+                   
                 </div>
             </c:if>
         </div>        

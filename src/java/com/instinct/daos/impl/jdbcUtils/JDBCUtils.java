@@ -118,7 +118,8 @@ public class JDBCUtils {
         TipoActividad tipo = new TipoActividad(
                 reader.getInt("idTipo"),
                 reader.getString("Nombre"),
-                reader.getString("Descripcion"));
+                reader.getString("Descripcion"),
+                reader.getBoolean("Activo"));
         
         return tipo;
     }
@@ -128,7 +129,8 @@ public class JDBCUtils {
         Servicio service = new Servicio(
                 reader.getInt("idServ"),
                 reader.getString("Nombre"),
-                reader.getString("Descripcion"));
+                reader.getString("Descripcion"),
+                reader.getBoolean("Activo"));
         
         return service;
     }

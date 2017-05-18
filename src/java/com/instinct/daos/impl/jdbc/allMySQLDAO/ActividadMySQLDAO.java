@@ -12,6 +12,9 @@ import com.instinct.daos.impl.jdbcUtils.JDBCUtils;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Usuario;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -32,6 +35,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -70,7 +76,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
         int comprobacion = 0;
         int idAct = 0;
         String nombre = null;
-        
+        java.util.Date dfn = null;
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL compruebaActividad(?)");
@@ -83,12 +89,8 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 if(reader.next()){
                     idAct = reader.getInt("idAct");
                     nombre = reader.getString("Nombre");
-                    if(activ.getFecha() == null || activ.getFecha().isEmpty()){
-                        java.util.Date dfn = reader.getDate("Fecha");
-                        SimpleDateFormat dfor = new SimpleDateFormat("yyyy-MM-dd");
-                        String fecha = dfor.format(dfn);
-                        activ.setFecha(fecha);
-                    }
+                    dfn = reader.getDate("Fecha");
+                    
                 }
             }catch(SQLException e){
                  throw new PersistenceException(e.getErrorCode());
@@ -116,6 +118,11 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 if(idAct == activ.getIdAct()){
                     if(nombre.equals(activ.getNombre())){
                         comprobacion = 0;
+                        if(activ.getFecha() == null || activ.getFecha().isEmpty()){
+                            SimpleDateFormat dfor = new SimpleDateFormat("yyyy-MM-dd");
+                            String fecha = dfor.format(dfn);
+                            activ.setFecha(fecha);
+                        }
                     }else{
                         comprobacion++;
                     }
@@ -377,6 +384,12 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 } catch (IOException ex) {
                     Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }else if(pagina.equals("subirFichero")){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("subir_resultado.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         FacesContext.getCurrentInstance().responseComplete();
@@ -388,16 +401,20 @@ public class ActividadMySQLDAO implements ActividadDAO{
     }
     
     @Override
-    public String callEditar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    public String callEditar(Actividad activ, String pagina, int error) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        
         int comprueba = getActivityByNameYear(activ);
         if(comprueba == 0){
-            devuelve = editarActividad(activ);
-            activ = getActividadByName(activ);
-            if(devuelve != "editado"){
+            if(pagina.equals("editActUs")){
+                devuelve = editarActividad(activ);
+            }else if(pagina.equals("editActAdm")){
+                devuelve = editarActividadAdm(activ);
+            }
+            if(!devuelve.equals("editado")){
                 FacesMessage message = new FacesMessage("No se ha podido editar la actividad.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-                activ.setIdAct(0);
+                error = 1;
             }else{
                 //return activ;
             }
@@ -405,8 +422,15 @@ public class ActividadMySQLDAO implements ActividadDAO{
         }else{
             FacesMessage message = new FacesMessage("Esta actividad ya ha sido creada anteriormente.");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            activ.setIdAct(0);
+            error = 1;
         }
+        
+
+          FacesContext context = FacesContext.getCurrentInstance();
+          HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+          HttpSession httpSession = request.getSession(false);
+          httpSession.setAttribute("errorTemp", error);  
+        
         
         return null;
     }
@@ -624,8 +648,87 @@ public class ActividadMySQLDAO implements ActividadDAO{
         return actividades; 
     }
 
+    @Override
+    public String editarActividadAdm(Actividad activ) throws PersistenceException, ClassNotFoundException {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
+        Class.forName("com.mysql.jdbc.Driver");
+        Date fecAct = null;
+        int i=0;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        try{
+            Connection conn = connect();
+            //<editor-fold defaultstate="collapsed" desc="Fecha de la Actividad">
+            if(activ.getFecha() == null || activ.getFecha().isEmpty() || activ.getFecha().equals("")){
+                sql = conn.prepareCall("CALL editActivAdmWoFec(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            }else{
+                String fec = activ.getFecha();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date = format.parse(fec);
+                fecAct = new Date(date.getTime());
+                sql = conn.prepareCall("CALL editActivAdm(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.setDate(10, fecAct);
+            }
+                //</editor-fold>
+
+                sql.setEscapeProcessing(true);
+                sql.setQueryTimeout(90);
+                    sql.setInt(1, activ.getIdAct());
+                    sql.setInt(2, activ.getIdTipo());
+                    sql.setString(3, activ.getNombre());
+                    sql.setString(4, activ.getDescripcion());
+                    sql.setString(5, activ.getEmail());
+                    sql.setString(6, activ.getTelefono());
+                    sql.setString(7, activ.getWeb());
+                    sql.setBoolean(8, activ.getActivo());
+                    sql.setBoolean(9, activ.getBaja());
+              i = sql.executeUpdate();
+          
+            
+        }catch(SQLException e){
+            throw new PersistenceException(e.getErrorCode());
+        } catch (ParseException ex) {
+            Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try{
+                if(sql !=null){
+                     sql.close();
+                }
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }
+            //Llama a la funció per a tancar la conexio
+            connectionClose();
+           //closeConnections();
+        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+        if(i>0){
+            return "editado";
+        }else{
+            return "error";
+        } 
+    //</editor-fold>
+    }
+
+    @Override
+    public void uploadResultado(FileUploadEvent e, Actividad activ) throws IOException {
+        UploadedFile uploadedResultado=e.getFile();
+ 
+        String filePath="/uploads/actividades/resultados/";
+        String fileNameActividad = Integer.toString(activ.getIdAct());
+        byte[] bytes=null;
+ 
+            if (null!=uploadedResultado) {
+                    bytes = uploadedResultado.getContents();
+                    String filename = FilenameUtils.getName(uploadedResultado.getFileName());
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+fileNameActividad)));
+                    stream.write(bytes);
+                    stream.close();
+            }
+
+            FacesContext.getCurrentInstance().addMessage("messages",new FacesMessage(FacesMessage.SEVERITY_INFO,"Your Photo (File Name "+ uploadedResultado.getFileName()+ " with size "+ uploadedResultado.getSize()+ ")  Uploaded Successfully", ""));
+    }
     
 
-    
-    
 }

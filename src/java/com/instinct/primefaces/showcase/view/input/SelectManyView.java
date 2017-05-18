@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.model.UploadedFile;
  
  
 @ManagedBean(name="SelectManyView")
@@ -22,7 +23,9 @@ public class SelectManyView {
     private List<String> selectedOptions;
     private List<String> selectedServices;
     private List<Servicio> services;
-     
+    private int tempError;
+    private UploadedFile resultado;
+    
     @ManagedProperty("#{themeService}")
     private Servicio service;
       
@@ -49,4 +52,21 @@ public class SelectManyView {
     public void setSelectedServices(List<String> selectedServices) {
         this.selectedServices = selectedServices;
     }
+
+    public int getTempError() {
+        return tempError;
+    }
+
+    public void setTempError(int tempError) {
+        this.tempError = tempError;
+    }
+
+    public UploadedFile getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(UploadedFile resultado) {
+        this.resultado = resultado;
+    }
+
 }
