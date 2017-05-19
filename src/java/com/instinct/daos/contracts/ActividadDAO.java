@@ -8,9 +8,11 @@ package com.instinct.daos.contracts;
 import com.instinct.exception.PersistenceException.PersistenceException;
 import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Usuario;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -57,5 +59,8 @@ public interface ActividadDAO {
     public abstract String editarActividadAdm(Actividad activ) throws PersistenceException, ClassNotFoundException;
 
     //Subir los resultados de la actividad
-    public void uploadResultado(FileUploadEvent e, Actividad activ) throws IOException;
+    public void uploadResultado(UploadedFile resultado, Actividad activ) throws PersistenceException, ClassNotFoundException, FileNotFoundException, IOException;
+
+    //Subir la imagen de la actividad
+    public void uploadImagen(UploadedFile imagen, Actividad activ) throws PersistenceException, ClassNotFoundException, FileNotFoundException, IOException;
 }

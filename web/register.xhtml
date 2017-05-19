@@ -22,6 +22,17 @@
         <div id="contenido">
         
         <div id="register">
+        <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+            <h:message for="nombre"></h:message><br></br>
+            <h:message for="apellidos"></h:message><br></br>
+            <h:message for="email"></h:message><br></br>
+            <h:message for="password1"></h:message><br></br>
+            <h:message for="password2"></h:message><br></br>
+            <h:message for="nif"></h:message><br></br>
+            <h:message for="fecnac"></h:message><br></br>
+            <h:messages globalOnly="true" ></h:messages><br></br>
+        </h:panelGroup>
+        <div id="registro">    
         <h:form>
             <span id="titulo">Registrate</span><br></br>
             <h:inputText id="nombre" class="inpText" value="#{Usuario.nombre}" a:placeholder="Nombre" required="true" 
@@ -68,16 +79,7 @@
             </h:selectOneRadio>
             <h:commandButton id="enviar" class="inpSubmit" action="#{UsuarioMySQLDAO.register(Usuario)}" value="Crear Cuenta"></h:commandButton><br></br>
         </h:form>
-            <div id="errores">
-            <h:message for="nombre"></h:message><br></br>
-            <h:message for="apellidos"></h:message><br></br>
-            <h:message for="email"></h:message><br></br>
-            <h:message for="password1"></h:message><br></br>
-            <h:message for="password2"></h:message><br></br>
-            <h:message for="nif"></h:message><br></br>
-            <h:message for="fecnac"></h:message><br></br>
-            <h:messages globalOnly="true" ></h:messages><br></br>
-            </div>
+        </div>   
         </div>
         </div>
         </c:if>    

@@ -41,7 +41,7 @@ function detectarBody(){
     }else if(document.getElementById("backoffice")){
         data = dir+"javax.faces.resource/css/backoffice.css.xhtml";
     }
-    
+    //alert(location.pathname);
     cargarCSS(data);
 }
 

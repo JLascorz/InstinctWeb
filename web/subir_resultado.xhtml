@@ -22,13 +22,16 @@
         <div id="crearActividad">
             <span id="titulo">Subir Resultado</span><br></br>
             <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+            <h:message for="resultado"></h:message>
             <h:messages globalOnly="true" id="errorGlobal"></h:messages>
             </h:panelGroup>
         <h:form  enctype="multipart/form-data">    
-            <h:outputLabel for="resultado" value="Sube los resultados de tu actividad:" />
+            <h:outputLabel for="resultado" value="Sube los resultados de tu actividad:" /><br></br>
  
-            <p:fileUpload id="resultado" fileUploadListener="#{ActividadMySQLDAO.uploadResultado(SelectManyView.resultado, activKey)}" mode="advanced" skinSimple="true" />
-
+            <p:fileUpload id="resultado" value="#{FileUploadView.file}" mode="simple" skinSimple="true"
+                          allowTypes="/(\.|\/)(pdf)$/" invalidFileMessage="El archivo tiene que ser .pdf"
+                          validatorMessage="El archivo tiene que ser .pdf"/>
+            <p:commandButton value="Subir" ajax="false" action="#{ActividadMySQLDAO.uploadResultado(FileUploadView.file, activKey)}" />
         </h:form>
 
         </div>

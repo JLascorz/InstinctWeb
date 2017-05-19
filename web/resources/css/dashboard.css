@@ -147,6 +147,17 @@ body {
     color: white !important;
 }
 
+.titleHeader:hover , .titleHeader:active, .titleHeader:focus{
+    font-weight: bold !important;
+    font-size: 50px !important;
+    font-style: italic !important;
+    letter-spacing: -4px !important;
+    background: -webkit-linear-gradient(#00dcff,#13224b) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: white !important;
+}
+
 /* SCROLLBAR */
 
 

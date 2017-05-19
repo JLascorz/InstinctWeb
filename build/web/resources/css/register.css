@@ -23,6 +23,18 @@ body{
     text-align: center;
 }
 
+#errores{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    background-color: #ef5350;
+    padding: 10px;
+    /* text-transform: uppercase; */
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 .inpText{
     width: 80%;
     padding: 12px 20px;

@@ -148,7 +148,7 @@
 
                     <h3>Servicios</h3>
                     <p:selectManyCheckbox id="servicios" value="#{SelectManyView.selectedOptions}"  layout="responsive" columns="3">
-                        <f:selectItems value="#{ServicioMySQLDAO.servicios}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
+                        <f:selectItems value="#{ServicioMySQLDAO.getServiciosUs()}" var="service" itemValue="#{service.idServicio}" itemLabel="#{service.nombre}" />
                     </p:selectManyCheckbox><br></br>
                     
                     <h:selectOneMenu value="#{activAdm.activo}" styleClass="inpText" id="activo">

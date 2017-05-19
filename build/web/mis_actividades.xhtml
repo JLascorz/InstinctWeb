@@ -44,11 +44,14 @@
             </h:column>
             <h:column>
                 <f:facet name='header'>Imagen</f:facet>
-                <h:link class="btnFiles">
+                <h:form>
+                <h:commandLink class="btnFiles">
                     <div class='btnTable'>
-                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                      <i class="fa fa-picture-o" aria-hidden="true"></i>
                     </div>
-                </h:link>
+                    <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activity, 'subirImagen')}" />
+                </h:commandLink>
+                </h:form> 
             </h:column>
             <h:column>
                 <f:facet name='header'>Resultados</f:facet>
@@ -61,6 +64,17 @@
                 </h:commandLink>
                 </h:form>    
             </h:column>
+            <h:column>
+                        <f:facet name="header">Ver Actividad</f:facet>
+                        <h:form>
+                        <h:commandLink>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                         <f:actionListener binding="#{LocalizacionMySQLDAO.getLocalizacionByIdAct(activity)}" />
+                         <f:actionListener binding="#{ActServiceMySQLDAO.showServicesinAct(activity)}" />
+                         <f:actionListener binding="#{ActividadMySQLDAO.guardarSession(activity, 'visualizar')}" /> 
+                        </h:commandLink>
+                        </h:form>    
+                    </h:column>    
             <h:column>
                 <f:facet name='header'>Editar</f:facet>
                 <h:form>

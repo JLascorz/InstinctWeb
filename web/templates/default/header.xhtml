@@ -25,7 +25,9 @@
                         </c:if>
                         <c:if test="#{userKey.getActivo() == true}">
                         <c:if test="#{userKey.getDiffus() >= 1}">
+                        <c:if test='#{ParticipaMySQLDAO.getInscripcionesUser(userKey).size() > 0}'>    
                         <li><a href="mis_inscripciones.xhtml" class="amyinscrip"><i class="fa fa-book" aria-hidden="true"></i> Mis Inscripciones</a></li>
+                        </c:if>
                         </c:if>    
                         <c:if test="#{userKey.getDiffus() != 3}">
                         <li><a href="mis_actividades.xhtml" class="amyactiv"><i class="fa fa-globe" aria-hidden="true"></i> Mis Actividades</a></li>

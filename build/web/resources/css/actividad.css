@@ -81,3 +81,36 @@ li{
     font-size: 15px;
     font-weight: bold;
 }
+
+.resultadoSubido{
+    height: 100vh;
+}
+
+.botonResultado{
+    background-color: #1E88E5;
+    color: white;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+
+.botonResultado:hover{
+    background-color: #42A5F5;
+}
+
+.botonResultado > form > a, .botonResultado > form > a:hover{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.imagen{
+    float:right;
+}
+
+.pathImagen{
+    width: 150px;
+    height: 200px;
+}

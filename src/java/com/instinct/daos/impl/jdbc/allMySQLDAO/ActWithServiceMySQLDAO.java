@@ -226,7 +226,7 @@ public class ActWithServiceMySQLDAO implements ActWithServiceDAO {
             }
             
             for(int j=0; j < actServ.size(); j++){
-                sql2 = conn.prepareCall("CALL getServicioByIdUs(?)");
+                sql2 = conn.prepareCall("CALL getServicioById(?)");
                 sql2.setEscapeProcessing(true);
                 sql2.setQueryTimeout(90);
                 sql2.setInt(1, actServ.get(j).getIdServicio());

@@ -30,11 +30,18 @@
                 </h:panelGroup>
                 <p id='titulo'>#{activKey.nombre}</p>
                 <div id='informacion' class="cajas">
+                <div class="imagen">    
+                <c:if test="#{activKey.pathResultado != null}">    
+                    <h:graphicImage value="#{activKey.pathImagen}" alt="logo" styleClass="pathImagen"/>
+                </c:if>
+                </div>
+                <div id="info">  
                 <p id='tipoActividad'><b>Tipo:</b> #{TiposMySQLDAO.getTipoByAct(activKey)}</p>
                 <p id="fecha"><b>Fecha:</b> #{activKey.fecha}</p>
                 <p id='localizacion'><b>Localizacion: </b>#{LocalizacionMySQLDAO.getMunicipio(localKey).getNombre()}, 
                                      #{LocalizacionMySQLDAO.getProvincia(localKey).getNombre()} | 
                                      #{LocalizacionMySQLDAO.getComunidad(localKey).getNombre()}</p>
+                </div>                     
                 </div>
                 <div id='contacto' class="cajas">
                     <p id='telefono'><b>Telf: </b>#{activKey.telefono}</p>
@@ -48,6 +55,7 @@
                     </ui:repeat> 
                 </div>    
                 <div id='descripcion' class="cajas">
+                    <p><b>Descripcion: </b></p>
                 <h:outputText value="#{activKey.descripcion}" escape="false" />
                 </div>
                 
@@ -73,8 +81,20 @@
                             <span>Inscribirme</span>
                     </div>
                 </h:commandLink>
+                </div><br></br>
                 </div>
+                <c:if test="#{activKey.pathResultado != null}">
+                <div id="boton3" class="botonResultado col-lg-12 col-md-6 col-xs-3">
+                    <h:commandLink styleClass="commandLink" action="resultados.xhtml?faces-redirect=true">
+                        <div class="boton-crear">
+                        <div id="TiposActividades" class='tipus inpSubmit'>
+                            <i class="fa fa-eye" aria-hidden="true"></i> 
+                                <span>Ver resultados</span>
+                        </div>
+                        </div>
+                    </h:commandLink>
                 </div>
+                </c:if>    
                 
                   
                 <h:dataTable  id="calend" styleClass="table table-striped tablaActividades" value="#{ParticipaMySQLDAO.getParticipantes(activKey)}" 

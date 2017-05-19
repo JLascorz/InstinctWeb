@@ -5,7 +5,10 @@
         <group>
             <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/impl/jdbc/allMySQLDAO/ActividadMySQLDAO.java</file>
             <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/backoffice.xhtml</file>
-            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/edit_backoffice.xhtml</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/primefaces/showcase/view/input/SelectManyView.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/subir_resultado.xhtml</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/src/java/com/instinct/daos/contracts/ActividadDAO.java</file>
+            <file>file:/home/daw2017/NetBeansProjects/InstinctWeb/web/mis_actividades.xhtml</file>
         </group>
     </open-files>
 </project-private>

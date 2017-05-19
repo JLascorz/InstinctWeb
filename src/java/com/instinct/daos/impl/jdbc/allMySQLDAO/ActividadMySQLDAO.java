@@ -14,6 +14,7 @@ import com.instinct.web.objects.Actividad;
 import com.instinct.web.objects.Usuario;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import static java.lang.Boolean.FALSE;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -390,6 +393,12 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 } catch (IOException ex) {
                     Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }else if(pagina.equals("subirImagen")){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("subir_imagen.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         FacesContext.getCurrentInstance().responseComplete();
@@ -666,7 +675,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date date = format.parse(fec);
                 fecAct = new Date(date.getTime());
-                sql = conn.prepareCall("CALL editActivAdm(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql = conn.prepareCall("CALL editActivAdm(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 sql.setDate(10, fecAct);
             }
                 //</editor-fold>
@@ -712,22 +721,165 @@ public class ActividadMySQLDAO implements ActividadDAO{
     }
 
     @Override
-    public void uploadResultado(FileUploadEvent e, Actividad activ) throws IOException {
-        UploadedFile uploadedResultado=e.getFile();
- 
-        String filePath="/uploads/actividades/resultados/";
-        String fileNameActividad = Integer.toString(activ.getIdAct());
-        byte[] bytes=null;
- 
-            if (null!=uploadedResultado) {
-                    bytes = uploadedResultado.getContents();
-                    String filename = FilenameUtils.getName(uploadedResultado.getFileName());
-                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+fileNameActividad)));
-                    stream.write(bytes);
-                    stream.close();
-            }
+    public void uploadResultado(UploadedFile resultado, Actividad activ) throws PersistenceException, ClassNotFoundException, FileNotFoundException, IOException{
+        Class.forName("com.mysql.jdbc.Driver");
+        int i = 0;
+        int comprueba = 0;
+        UploadedFile uploadedResultado = resultado;
+        String filePath = "../applications/InstinctWeb/resources/uploads/actividades/resultados/";
+        String filePathToUpload = "/resources/uploads/actividades/resultados/";
+        String filename = "actividad_" + activ.getIdAct() + "_resultado";
+        String key = ".pdf";
+        String fullPath = filePathToUpload + filename + key;
+        byte[] bytes = null;
+        
+        String realName = uploadedResultado.getFileName();
+        String pattern = "^.*\\.(pdf|PDF)$";
+        
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(realName);
+        if(m.find()){
+        if(null!= uploadedResultado){
+            bytes = uploadedResultado.getContents();
+            //String filename = FilenameUtils.getName(uploadedResultado.getFileName());
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+filename+key)));
+            stream.write(bytes);
+            stream.close();
+            comprueba = 1;
+        }else{
+            FacesMessage message = new FacesMessage("Ha habido un error importando los resultados.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
 
-            FacesContext.getCurrentInstance().addMessage("messages",new FacesMessage(FacesMessage.SEVERITY_INFO,"Your Photo (File Name "+ uploadedResultado.getFileName()+ " with size "+ uploadedResultado.getSize()+ ")  Uploaded Successfully", ""));
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        if(comprueba == 1){
+            try{
+                Connection conn = connect();
+                    sql = conn.prepareCall("CALL uploadResultado(?, ?)");
+                    sql.setEscapeProcessing(true);
+                    sql.setQueryTimeout(90);
+                        sql.setInt(1, activ.getIdAct());
+                        sql.setString(2, fullPath);
+                  i = sql.executeUpdate();
+
+
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }finally{
+                try{
+                    if(sql !=null){
+                         sql.close();
+                    }
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+                //Llama a la funció per a tancar la conexio
+                connectionClose();
+               //closeConnections();
+            }
+        }else{
+            FacesMessage message = new FacesMessage("Ha habido un error al subir los resultados.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+            if(i>0){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                FacesMessage message = new FacesMessage("Ha habido un error al subir los resultados.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+        
+            }
+        //</editor-fold>
+        }else{
+            FacesMessage message = new FacesMessage("El archivo tiene que ser .pdf");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+
+    @Override
+    public void uploadImagen(UploadedFile imagen, Actividad activ) throws PersistenceException, ClassNotFoundException, FileNotFoundException, IOException {
+    Class.forName("com.mysql.jdbc.Driver");
+        int i = 0;
+        int comprueba = 0;
+        UploadedFile uploadedImagen = imagen;
+        String filePath = "../applications/InstinctWeb/resources/uploads/actividades/imagenes/";
+        String filePathToUpload = "/resources/uploads/actividades/imagenes/";
+        String filename = "actividad_" + activ.getIdAct() + "_imagen";
+        String key = ".jpg";
+        String fullPath = filePathToUpload + filename + key;
+        byte[] bytes = null;
+        
+        String realName = uploadedImagen.getFileName();
+        String pattern = "^.*\\.(jpg|JPG|png|PNG)$";
+        
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(realName);
+        if(m.find()){
+        if(null!= uploadedImagen){
+            bytes = uploadedImagen.getContents();
+            //String filename = FilenameUtils.getName(uploadedResultado.getFileName());
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+filename+key)));
+            stream.write(bytes);
+            stream.close();
+            comprueba = 1;
+        }else{
+            FacesMessage message = new FacesMessage("Ha habido un error importando la imagen.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
+        if(comprueba == 1){
+            try{
+                Connection conn = connect();
+                    sql = conn.prepareCall("CALL uploadImage(?, ?)");
+                    sql.setEscapeProcessing(true);
+                    sql.setQueryTimeout(90);
+                        sql.setInt(1, activ.getIdAct());
+                        sql.setString(2, fullPath);
+                  i = sql.executeUpdate();
+
+
+            }catch(SQLException e){
+                throw new PersistenceException(e.getErrorCode());
+            }finally{
+                try{
+                    if(sql !=null){
+                         sql.close();
+                    }
+                }catch(SQLException e){
+                    throw new PersistenceException(e.getErrorCode());
+                }
+                //Llama a la funció per a tancar la conexio
+                connectionClose();
+               //closeConnections();
+            }
+        }else{
+            FacesMessage message = new FacesMessage("Ha habido un error al subir la imagen.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
+            if(i>0){
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ActividadMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                FacesMessage message = new FacesMessage("Ha habido un error al subir la imagen.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+        
+            }
+        //</editor-fold>
+        }else{
+            FacesMessage message = new FacesMessage("El archivo tiene que ser .jpg o .png");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }    
     }
     
 
