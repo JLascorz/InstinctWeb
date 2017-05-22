@@ -28,6 +28,14 @@
             <c:if test="#{adminView.funcion eq 'usuarios'}">
                 <div id="usuarios">
                     <p class="tituloEdit">Editar Usuario</p>
+                    <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
+                        <p><h:message for="nombre"></h:message></p>
+                        <p><h:message for="apellidos"></h:message></p>
+                        <p><h:message for="nif"></h:message></p>
+                        <p><h:message for="fecnac"></h:message></p>
+                        <p><h:message for="email"></h:message></p>
+                        <h:messages globalOnly="true" ></h:messages>
+                    </h:panelGroup>
                     <h:form>
                     <div id="informacionPersonal">
                         <h:inputText  id="nombre" styleClass="inpText" value="#{userAdm.nombre}"  a:placeholder="Nombre" required="true" 
@@ -71,14 +79,7 @@
                         <h:commandButton id="modify" styleClass="btnSubmitEdit" value="Editar Datos" action="#{UsuarioMySQLDAO.callEditar(userAdm,'editAdmin')}"></h:commandButton>
                     </div>
                     </h:form>
-                    <div id="errores">
-                        <p><h:message for="nombre"></h:message></p>
-                        <p><h:message for="apellidos"></h:message></p>
-                        <p><h:message for="nif"></h:message></p>
-                        <p><h:message for="fecnac"></h:message></p>
-                        <p><h:message for="email"></h:message></p>
-                        <h:messages globalOnly="true" ></h:messages>
-                    </div>
+                    
                 </div>
             </c:if>
             <c:if test="#{adminView.funcion eq 'actividades'}">

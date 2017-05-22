@@ -30,6 +30,7 @@
             <h:message for="password2"></h:message><br></br>
             <h:message for="nif"></h:message><br></br>
             <h:message for="fecnac"></h:message><br></br>
+            <h:message for="tipus"></h:message><br></br>
             <h:messages globalOnly="true" ></h:messages><br></br>
         </h:panelGroup>
         <div id="registro">    
@@ -73,7 +74,8 @@
                          <f:validator validatorId="registerValidator" />
             </h:inputText><br></br>
             <label>Tipo de Usuario:</label>
-            <h:selectOneRadio value="#{Usuario.diffus}">
+            <h:selectOneRadio id='tipus' value="#{Usuario.diffus}" required="true"
+                              requiredMessage="El tipus d'usuari es obligatori.">
                 <f:selectItem itemValue="3" itemLabel="Deportista" />
                 <f:selectItem itemValue="2" itemLabel="Organizador"/>
             </h:selectOneRadio>
