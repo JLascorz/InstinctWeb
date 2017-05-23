@@ -73,7 +73,7 @@ public class ActividadMySQLDAO implements ActividadDAO{
         if(comprueba == 0){
             //Si no existeix ninguna activitat en aquell any l'inserta a la base de dades.
             devuelve = insertarActividad(activ, idUser);
-            //activ = getActividadByName(activ);
+            activ = getActividadByName(activ);
             if(!devuelve.equals("insertado")){
                 //Mostra un error en cas de que no es pugui insertar l'activitat.
                 FacesMessage message = new FacesMessage("No se ha podido insertar la actividad.");

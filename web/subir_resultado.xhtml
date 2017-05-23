@@ -20,11 +20,17 @@
         <c:if test="#{userKey.getActivo() == true}">
         <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">        
         <div id="crearActividad">
+            
+            <!-- PAGINA PARA SUBIR EL RESULTADO DE UNA ACTIVIDAD -->
+            
             <span id="titulo">Subir Resultado</span><br></br>
             <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
             <h:message for="resultado"></h:message>
             <h:messages globalOnly="true" id="errorGlobal"></h:messages>
             </h:panelGroup>
+            
+            <!-- FORMULARIO PARA SUBIR EL RESULTADO -->
+            
         <h:form  enctype="multipart/form-data">    
             <h:outputLabel for="resultado" value="Sube los resultados de tu actividad:" /><br></br>
  

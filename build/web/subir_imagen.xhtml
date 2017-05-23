@@ -20,11 +20,17 @@
         <c:if test="#{userKey.getActivo() == true}">
         <c:if test="#{userKey.getDiffus() == 2 || userKey.getDiffus() == 1}">        
         <div id="crearActividad">
+            
+            <!-- PAGINA PARA SUBIR LA IMAGEN DE UNA ACTIVIDAD -->
+            
             <span id="titulo">Subir Imagen</span><br></br>
             <h:panelGroup layout="block" id="errores" rendered="#{not empty facesContext.messageList}">
             <h:message for="imagen"></h:message>
             <h:messages globalOnly="true" id="errorGlobal"></h:messages>
             </h:panelGroup>
+            
+            <!-- FORMULARIO PARA SUBIR LA IMAGEN -->
+            
         <h:form  enctype="multipart/form-data">
             <p>Tamaño recomendado 150 x 200</p>
             <h:outputLabel for="imagen" value="Sube la imagen de tu actividad:" /><br></br>
