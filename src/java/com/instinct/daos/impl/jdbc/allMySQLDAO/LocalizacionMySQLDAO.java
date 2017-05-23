@@ -32,8 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- *
- * @author daw2017
+ * LocalizacionMySQLDAO classe per englobar les funcions de de localització.
+ * @author Jordi Lascorz
+ * @since 17/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="LocalizacionMySQLDAO")
 @SessionScoped
@@ -42,6 +44,12 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     CallableStatement sql = null;
     ResultSet reader = null;
     
+    /**
+     * Funcio que retorna la llista de totes les comunitats
+     * @return List de Comunidades
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Comunidades> getComunidades() throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -78,6 +86,13 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return comunidades;  
     }
 
+    /**
+     * Funció que retorna la llista de totes les provincies a partir de la comunitat
+     * @param idComunidad
+     * @return List de Provincias
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Provincias> getProvincias(int idComunidad) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -115,6 +130,13 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return provincias;
     }
 
+    /**
+     * Funció que retorna la llista de tots els municipis a partir de la provincia
+     * @param idProvincia
+     * @return List de Municipis
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Municipios> getMunicipios(int idProvincia) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -153,6 +175,17 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return municipios;
     }
 
+    /**
+     * Funció que inserta a la base de dades la localització d'una activitat
+     * @param activity
+     * @param idComunidad
+     * @param idProvincia
+     * @param idMunicipio
+     * @param calle
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String escogerLocalizacion(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -161,13 +194,14 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         int i=0;
        String verifica = null;
         if(activity.getIdAct() != 0){
+        //Verifica que la localitat existeixi
         verifica = verificarLocalidad(idComunidad, idProvincia, idMunicipio);
         if(verifica == "existe"){
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
-            
+            //Procedure que inserta la localització a la base de dades
             sql = conn.prepareCall("CALL insertLocalizacion(?, ?, ?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
@@ -197,17 +231,20 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     //<editor-fold defaultstate="collapsed" desc="Return a la pagina">
         if(i>0){
             try {
+                //Redirecciona a mis actividades
                 FacesContext.getCurrentInstance().getExternalContext().redirect("mis_actividades.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
              FacesContext.getCurrentInstance().responseComplete();
         }else{
+            //Mostra error en cas de que no es pugui afegir la localització
             FacesMessage message = new FacesMessage("No se ha podido añadir la localizacion a la actividad.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
     }else{
         try {
+            //Redirecciona a crear la activitat
             FacesContext.getCurrentInstance().getExternalContext().redirect("crear_actividad.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(LocalizacionMySQLDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,6 +252,7 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
             FacesContext.getCurrentInstance().responseComplete();
     }
     }else{
+        //Mostra un error en cas de que l'activitat no s'hagi pogut crear
         FacesMessage message = new FacesMessage("Error: Ha habido un problema al crear la actividad.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -222,6 +260,12 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     //</editor-fold>
     }
     
+    /**
+     * Funció que agafa la localització depenent de la id de l'activitat
+     * @param activ
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public void getLocalizacionByIdAct(Actividad activ) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -256,14 +300,22 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
 
             }
         //</editor-fold>
-        
+        //<editor-fold defaultstate="collapsed" desc="Sessio">
+        //Sessió necessaria per poder mostrar la localitat en la pagina
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
         HttpSession httpSession = request.getSession(false);
         httpSession.setAttribute("localKey", localizacion);
-            
+        //</editor-fold>          
     }
 
+    /**
+     * Funció que agafa la comunitat per la seva id
+     * @param local
+     * @return Comunidad
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public Comunidades getComunidad(Localizacion local) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -301,6 +353,13 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return comunidad;
     }
 
+    /**
+     * Funcio que agafa la provincia per la seva id
+     * @param local
+     * @return Provincia
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public Provincias getProvincia(Localizacion local) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -338,6 +397,13 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return provincia;
     }
 
+    /**
+     * Funcio que agafa el municipi per la seva id
+     * @param local
+     * @return Municipio
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public Municipios getMunicipio(Localizacion local) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -375,6 +441,19 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         return municipio;
     }
 
+    /**
+     * Edita la localització d'una activitat amb les noves dades
+     * @param activity
+     * @param idComunidad
+     * @param idProvincia
+     * @param idMunicipio
+     * @param calle
+     * @param error
+     * @param pagina
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String editaLocalizacionAct(Actividad activity, int idComunidad, int idProvincia, int idMunicipio, String calle, int error, String pagina) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -390,7 +469,7 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
-            
+            //Procedure per editar la localització d'una activitat
             sql = conn.prepareCall("CALL editLocalizacionAct(?, ?, ?, ?, ?)");
             sql.setEscapeProcessing(true);
             sql.setQueryTimeout(90);
@@ -448,28 +527,49 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
     //</editor-fold>
     }
 
+    /**
+     * Verificar la localidad que engloba la verificació de la provincia i el municipi
+     * @param idComunidad
+     * @param idProvincia
+     * @param idMunicipio
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String verificarLocalidad(int idComunidad, int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException  {
         String vProvincia = null;
         String vMunicipio = null;
         
+        //Primer de tot verifica la provincia
         vProvincia = verifProvincia(idComunidad, idProvincia);
-        
+        //En cas de que existeixi verifica el municipi
         if(vProvincia == "ok"){
             vMunicipio = verifMunicipio(idProvincia, idMunicipio);
+            //En cas de que existeixi retorna un ok
             if(vMunicipio == "ok"){
                 return "existe";
             }else{
+                //Mostra un error en cas de que aquest municipi no perteneixi a aquesta provincia
                 FacesMessage message = new FacesMessage("Este municipio no pertenece a esa provincia.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
         }else{
+            //Mostra un error en cas de que aquesta provincia no perteneixi a aquesta comunitat
             FacesMessage message = new FacesMessage("Esta provincia no pertenece a esa comunidad.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         return null;
     }
 
+    /**
+     * Verifica que la provincia pertenezca a la comunitat que s'ha passat
+     * @param idComunidad
+     * @param idProvincia
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String verifProvincia(int idComunidad, int idProvincia) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -514,6 +614,14 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
 
     }
 
+    /**
+     * Verifica que el municipi perteneixi a la provincia que s'ha passat
+     * @param idProvincia
+     * @param idMunicipio
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String verifMunicipio(int idProvincia, int idMunicipio) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -557,14 +665,25 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
         //</editor-fold>
     }
 
+    /**
+     * Selecciona el lugar de l'activitat de la base de dades
+     * @param activ
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callGetLugar(Actividad activ) throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributos">
         Localizacion local = null;
         Municipios municipio = null;
         Provincias provincia = null;
         Comunidades comunidad = null;
         String lugar = null;
+        //</editor-fold>
+        
         local = getLugarAct(activ);
+        //Si la localitat no es null, retorna un string amb tot el municipi adaptat
         if(local != null){
             municipio = getMunicipio(local);
             provincia = getProvincia(local);
@@ -577,6 +696,13 @@ public class LocalizacionMySQLDAO implements LocalizacionDAO {
 
     }
 
+    /**
+     * Selecciona la localització d'una activitat
+     * @param activ
+     * @return Localizacion
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public Localizacion getLugarAct(Actividad activ) throws PersistenceException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");

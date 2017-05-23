@@ -28,8 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- *
- * @author daw2017
+ * ServicioMySQLDAO classe per englobar les funcions de serveis.
+ * @author Jordi Lascorz
+ * @since 19/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="ServicioMySQLDAO")
 public class ServicioMySQLDAO implements ServicioDAO {
@@ -37,11 +39,20 @@ public class ServicioMySQLDAO implements ServicioDAO {
     CallableStatement sql = null;
     ResultSet reader = null;
     
+    /**
+     * Funcio per englobar les funcions de creació d'un servei
+     * @param serv
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callCrear(Servicio serv) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        //Verifica que no existeixi un serveix amb el mateix nom
         int comprueba = getServiceByName(serv);
         if(comprueba == 0){
+            //Inserta el servei en la base de dades despres de la verificació
             devuelve = insertarServicio(serv);
             return devuelve;
         }else{
@@ -51,11 +62,21 @@ public class ServicioMySQLDAO implements ServicioDAO {
         return null;
     }
 
+    /**
+     * Funció per verificar que no existeixi un serveix amb el mateix nom
+     * @param serv
+     * @return int
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public int getServiceByName(Servicio serv) throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
         Class.forName("com.mysql.jdbc.Driver");
         int comprobacion = 0;
         int idService = 0;
+        //</editor-fold>
+        
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL compruebaServicio(?)");
@@ -105,6 +126,13 @@ public class ServicioMySQLDAO implements ServicioDAO {
         return comprobacion;
     }
 
+    /**
+     * Funció per insertar el servei
+     * @param serv
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String insertarServicio(Servicio serv) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -149,6 +177,12 @@ public class ServicioMySQLDAO implements ServicioDAO {
     //</editor-fold>
     }
 
+    /**
+     * Funció per seleccionar tots els serveis que estiguin actius
+     * @return List de Servicio
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Servicio> getServiciosUs() throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -185,6 +219,12 @@ public class ServicioMySQLDAO implements ServicioDAO {
     return servicios;    
     }
 
+    /**
+     * Funció per seleccionar tots els serveis
+     * @return List de Servicio
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Servicio> getServiciosAdm() throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -221,8 +261,16 @@ public class ServicioMySQLDAO implements ServicioDAO {
     return servicios;  
     }
 
+    /**
+     * Funció per guardar la sessión d'un servei depenent de la pagina
+     * @param serv
+     * @param pagina
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public void guardarSession(Servicio serv, String pagina) throws PersistenceException, ClassNotFoundException {
+        //Si la pagina es la de administració guarda la sessió per utilitzarla en administració només.
         if(pagina.equals("backoffice")){
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
@@ -240,11 +288,20 @@ public class ServicioMySQLDAO implements ServicioDAO {
         
     }
 
+    /**
+     * Funcio que engloba les funcións per editar un servei
+     * @param serv
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callEditar(Servicio serv) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        //Verifica que no existeixi un serveix amb el mateix nom
         int comprueba = getServiceByName(serv);
         if(comprueba == 0){
+            //Edita el servei en la base de dades despres de la verificació
             devuelve = editarServicio(serv);
             return devuelve;
         }else{
@@ -254,6 +311,13 @@ public class ServicioMySQLDAO implements ServicioDAO {
         return null;    
     }
 
+    /**
+     * Funcio per editar un servei com usuari normal o administrador
+     * @param serv
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String editarServicio(Servicio serv) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">

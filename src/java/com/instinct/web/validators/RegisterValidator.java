@@ -19,10 +19,11 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- *
- * @author daw2017
+ * Valdador per a crear o editar usuaris
+ * @author Jordi Lascorz
+ * @since 19/05/2017
+ * @version 1.0
  */
-
 @ManagedBean(name="registerValidator")
 @SessionScoped
 @FacesValidator("registerValidator")

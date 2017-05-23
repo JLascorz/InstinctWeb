@@ -10,8 +10,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
- * @author daw2017
+ * connectMySQL2 fa una connexió a la base de dades del servidor
+ * @author Jordi Lascorz
+ * @since 9/05/2017
+ * @version 2.0
  */
 public abstract class connectMySQL2 {
     private static Connection conn;

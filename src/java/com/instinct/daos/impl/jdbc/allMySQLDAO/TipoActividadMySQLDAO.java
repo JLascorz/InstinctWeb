@@ -29,8 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- *
- * @author daw2017
+ * TipoActividadMySQLDAO classe per englobar les funcions de tipos d'actividades.
+ * @author Jordi Lascorz
+ * @since 13/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="TiposMySQLDAO")
 @SessionScoped
@@ -39,11 +41,20 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     CallableStatement sql = null;
     ResultSet reader = null;
     
+    /**
+     * Funció que engloba les funcións que s'utilitzen per crear tipus d'activitat
+     * @param tipoAct
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callCrear(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        //Verifica que no existeixi un tipus amb el mateix nom
         int comprueba = getTipoByName(tipoAct);
         if(comprueba == 0){
+            //Inserta un tipus d'activitat en la base de dades
             devuelve = insertarTipoActividad(tipoAct);
             return devuelve;
         }else{
@@ -53,11 +64,21 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         return null;
     }
 
+    /**
+     * Verifica que no existeixi un tipus amb el mateix nom
+     * @param tipoAct
+     * @return int
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public int getTipoByName(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
         Class.forName("com.mysql.jdbc.Driver");
         int comprobacion = 0;
         int idTipo = 0;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL compruebaTipo(?)");
@@ -104,9 +125,18 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
             }
         
         
-        return comprobacion;    
+        return comprobacion;
+        //</editor-fold>
+            
     }
 
+    /**
+     * Inserta un tipus d'activitat en la base de dades
+     * @param tipoAct
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String insertarTipoActividad(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -150,7 +180,12 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     //</editor-fold>
     }
     
-    
+    /**
+     * Agafa els tipus d'activitats que esten actius
+     * @return List de TipoActividad
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<TipoActividad> getTiposActividad() throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -187,6 +222,13 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     return tiposActividad;    
     }
 
+    /**
+     * Seleccionar el tipo de actividad d'una actividad
+     * @param activity
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String getTipoByAct(Actividad activity) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -226,6 +268,12 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         return tipo;    
     }
 
+    /**
+     * Agafa tots els tipus d'activitats 
+     * @return List de TipoActividad
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<TipoActividad> getTiposActividadAdm() throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -262,8 +310,16 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
     return tiposActividad;
     }
 
+    /**
+     * Guarda la sessió del tipus d'activitat
+     * @param tipoAct
+     * @param pagina
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public void guardarSession(TipoActividad tipoAct, String pagina) throws PersistenceException, ClassNotFoundException {
+        //Verifica que la pagina desde que s'ha entrat sigui la del panel d'administració i assigna una sessio de tipus d'activitat
         if(pagina.equals("backoffice")){
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
@@ -280,11 +336,20 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         }    
     }
 
+    /**
+     * Funció que engloba les funcións per editar un tipus d'activitat
+     * @param tipoAct
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callEditar(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
         String devuelve = null;
+        //Verifica que no existeixi un tipus amb el mateix nom
         int comprueba = getTipoByName(tipoAct);
         if(comprueba == 0){
+            //Edita un tipus d'activitat en la base de dades
             devuelve = editarTipoActividad(tipoAct);
             return devuelve;
         }else{
@@ -294,6 +359,13 @@ public class TipoActividadMySQLDAO implements TipoActividadDAO{
         return null;
     }
 
+    /**
+     * Funció que permet editar el Tipus d'activitat
+     * @param tipoAct
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String editarTipoActividad(TipoActividad tipoAct) throws PersistenceException, ClassNotFoundException {
         //<editor-fold defaultstate="collapsed" desc="Atributos">

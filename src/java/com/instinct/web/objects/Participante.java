@@ -6,12 +6,17 @@
 package com.instinct.web.objects;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte de la relacio entre Usuario-Actividad.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 public class Participante {
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private int idUsuario, idActividad;
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public int getIdActividad() {
         return idActividad;
     }
@@ -27,7 +32,9 @@ public class Participante {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
     public Participante(int idUsuario, int idActividad) {
         this.setIdUsuario(idUsuario);
         this.setIdActividad(idActividad);
@@ -35,6 +42,8 @@ public class Participante {
     
     public Participante() {
     }
+    //</editor-fold>
+    
 
     
     

@@ -10,17 +10,24 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
- * @author daw2017
+ * calendarioView te atributs que s'utilitzen per a agafar atributs,
+ * les clases de vista no es poden fer abstractes, perque si no no deixa
+ * utilitzarles.
+ * @author Jordi Lascorz
+ * @since 19/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="calendarioView")
 @ViewScoped
 public class calendarioView {
-    
+   
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     public int month;
     public int year;
     public String carga;
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public int getMonth() {
         return month;
     }
@@ -44,6 +51,8 @@ public class calendarioView {
     public void setCarga(String carga) {
         this.carga = carga;
     }
+    //</editor-fold>
+    
     
     
     

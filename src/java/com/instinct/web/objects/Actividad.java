@@ -12,12 +12,15 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Actividad.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="Actividad")
 @ViewScoped
 public class Actividad {
+    //<editor-fold defaultstate="collapsed" desc="Atributos">
     //Datos principales de la actividad.
     private String nombre, descripcion, email, telefono, web, fecha;
     //El booleano "Activo" verifica si esta pendiente de moderacion y "Baja" si esta eliminado.
@@ -25,14 +28,14 @@ public class Actividad {
     //Identificadores de las otras tablas.
     private int idAct, idUser, idTipo;
     //Objetos necesarios para actividad, como la informacion y la localizacion en el mapa.
-    private InformacionAct infoAct;
+    //private InformacionAct infoAct;
     private Localizacion lugar;
     //Fichero de los resultados
     private String pathResultado, pathImagen;
     //Valores por defecto
     private static final boolean DEF_BAJA = FALSE;
     private static final boolean DEF_ACTIVO = FALSE;
-    
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Getters">
     public int getIdAct(){
 	return idAct;
@@ -78,9 +81,9 @@ public class Actividad {
     	return baja;
     }
 	
-    public InformacionAct getInformacion(){
-	return infoAct;
-    }
+//    public InformacionAct getInformacion(){
+//	return infoAct;
+//    }
 	
     public Localizacion getLocalizacion(){
 	return lugar;
@@ -139,9 +142,9 @@ public class Actividad {
         this.baja = baja;
     }
 
-    public void setInformacion(InformacionAct infoAct){
-        this.infoAct = infoAct;
-    }
+//    public void setInformacion(InformacionAct infoAct){
+//        this.infoAct = infoAct;
+//    }
 
     public void setLocalizacion(Localizacion lugar){
         this.lugar = lugar;
@@ -159,7 +162,7 @@ public class Actividad {
     //Constructor completo
     public Actividad(int idAct, int idUser, int idTipo, String nombre, String descripcion, String email,
 		     String telefono, String web, String fecha, Boolean activo, Boolean baja,
-                     InformacionAct infoAct, Localizacion lugar, String pathResultado, String pathImagen){
+                     Localizacion lugar, String pathResultado, String pathImagen){
 		this.setIdAct(idAct);
 		this.setIdUser(idUser);
 		this.setIdTipo(idTipo);
@@ -171,7 +174,6 @@ public class Actividad {
 		this.setFecha(fecha);
 		this.setActivo(activo);
 		this.setBaja(baja);
-		this.setInformacion(infoAct);
 		this.setLocalizacion(lugar);
 		this.setPathResultado(pathResultado);
 		this.setPathImagen(pathImagen);
@@ -179,7 +181,7 @@ public class Actividad {
 	
 	//Constructor registro completo
 	public Actividad(int idAct, int idUser, int idTipo, String nombre, String descripcion, String email,
-			String telefono, String web, String fecha, InformacionAct infoAct, Localizacion lugar, String pathImagen){
+			String telefono, String web, String fecha, Localizacion lugar, String pathImagen){
 		this.setIdAct(idAct);
 		this.setIdUser(idUser);
 		this.setIdTipo(idTipo);
@@ -191,7 +193,6 @@ public class Actividad {
 		this.setFecha(fecha);
 		this.setActivo(DEF_ACTIVO);
 		this.setBaja(DEF_BAJA);
-		this.setInformacion(infoAct);
 		this.setLocalizacion(lugar);
 		this.setPathImagen(pathImagen);
 	}

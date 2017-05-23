@@ -10,7 +10,7 @@ package com.instinct.exception.PersistenceException;
  * <p>La classe <b>PersistenceException</b> serveix per a mostrar un error,
  * quan surt algun problema a l'hora de conectarse a la BD.</p>
  * @author Jordi Lascorz
- * @since 06/03/2017
+ * @since 06/05/2017
  * @version 1.0
  */
 public class PersistenceException extends Exception{

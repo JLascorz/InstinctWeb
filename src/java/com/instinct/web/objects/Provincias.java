@@ -9,15 +9,20 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Provincias.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="Provincias")
 @RequestScoped
 public class Provincias {
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private int idProvincia, idComunidad;
     private String nombre;
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public int getIdProvincia(){
         return idProvincia;
     }
@@ -41,7 +46,9 @@ public class Provincias {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
     public Provincias(int idProvincia, String nombre, int idComunidad) {
         this.setIdProvincia(idProvincia);
         this.setNombre(nombre);
@@ -50,4 +57,6 @@ public class Provincias {
     }
     
     public Provincias(){}
+    //</editor-fold>
+    
 }

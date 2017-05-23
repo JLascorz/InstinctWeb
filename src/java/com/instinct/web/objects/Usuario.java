@@ -11,12 +11,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Usuario.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="Usuario")
 @SessionScoped
 public class Usuario implements Serializable{
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private String nombre, apellidos, email, password, nif, genero;
     private Boolean activo, baja;
     private int diffus, idUser, numVisitas;
@@ -26,7 +29,7 @@ public class Usuario implements Serializable{
     private static final boolean DEF_BAJA = FALSE;
     private static final boolean DEF_ACTIVO = FALSE;
     private static final int DEF_VISITA = 0;
-
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Getters">
     public int getIdUser(){
     	return idUser;

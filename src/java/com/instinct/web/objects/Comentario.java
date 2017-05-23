@@ -8,18 +8,20 @@ package com.instinct.web.objects;
 import static java.lang.Boolean.FALSE;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Comentario - No s'utilitza.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 public class Comentario {
-
-	private int idAct, idCom, idUser, idComResp;
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+        private int idAct, idCom, idUser, idComResp;
 	private String fecha, contenido;
 	//resp -> Es un booleano que nos dice si es una respuesta o no.
 	private boolean resp;
 	
 	private static final boolean DEF_RESP = FALSE;
-
+    //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Getters">
         public int getIdAct(){
             return idAct;

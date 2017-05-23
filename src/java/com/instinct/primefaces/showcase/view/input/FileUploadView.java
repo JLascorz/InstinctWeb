@@ -23,15 +23,21 @@ import org.apache.commons.io.IOUtils;
 import org.primefaces.model.UploadedFile;
 
 /**
- *
- * @author daw2017
+ * FileUploadView te atributs que s'utilitzen per a la pujada de resultats a la base de dades i al servidor.
+ * @author Jordi Lascorz
+ * @since 19/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="FileUploadView")
 @ViewScoped
 public class FileUploadView implements Serializable {
     
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private UploadedFile file;
+    //</editor-fold>
     
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public UploadedFile getFile(){
         return file;
     }
@@ -39,7 +45,17 @@ public class FileUploadView implements Serializable {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
+    //</editor-fold>
     
+    
+    /**
+     * Upload Resultado - Aquesta funció no s'utilitza per que ya existeix en ActividadDAO
+     * @param resultado
+     * @param activ
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public String uploadResultado(UploadedFile resultado, Actividad activ) throws FileNotFoundException, IOException{
         UploadedFile uploadedResultado = getFile();
         String filePath = "../applications/InstinctWeb/resources/uploads/actividades/resultados/";

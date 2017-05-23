@@ -9,63 +9,66 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte TipoActividad.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="TipoAct")
 @ViewScoped
 public class TipoActividad {
-	private int idTipo;
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        private int idTipo;
 	private String nombre, descripcion;
         private boolean activo;
-	
-//<editor-fold defaultstate="collapsed" desc="Getters">
-        public int getIdTipo(){
-            return idTipo;
-        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Getters">
+            public int getIdTipo(){
+                return idTipo;
+            }
 
-        public String getNombre(){
-            return nombre;
-        }
+            public String getNombre(){
+                return nombre;
+            }
 
-        public String getDescripcion(){
-            return descripcion;
-        }
-        
-        public boolean getActivo(){
-            return activo;
-        }
+            public String getDescripcion(){
+                return descripcion;
+            }
 
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Setters">
-        public void setIdTipo(int idTipo){
-            this.idTipo = idTipo;
-        }
+            public boolean getActivo(){
+                return activo;
+            }
 
-        public void setNombre(String nombre){
-            this.nombre = nombre;
-        }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Setters">
+            public void setIdTipo(int idTipo){
+                this.idTipo = idTipo;
+            }
 
-        public void setDescripcion(String descripcion){
-            this.descripcion = descripcion;
-        }
+            public void setNombre(String nombre){
+                this.nombre = nombre;
+            }
 
-        public void setActivo(boolean activo) {
-            this.activo = activo;
-        }
+            public void setDescripcion(String descripcion){
+                this.descripcion = descripcion;
+            }
 
-        
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Constructores">
-        public TipoActividad(int idTipo, String nombre, String descripcion, boolean activo){
-		this.setIdTipo(idTipo);
-		this.setNombre(nombre);
-		this.setDescripcion(descripcion);
-                this.setActivo(activo);
-	}
-	
-	public TipoActividad(){}
-//</editor-fold>
+            public void setActivo(boolean activo) {
+                this.activo = activo;
+            }
+
+
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Constructores">
+            public TipoActividad(int idTipo, String nombre, String descripcion, boolean activo){
+                    this.setIdTipo(idTipo);
+                    this.setNombre(nombre);
+                    this.setDescripcion(descripcion);
+                    this.setActivo(activo);
+            }
+
+            public TipoActividad(){}
+    //</editor-fold>
 	
 	    
 }

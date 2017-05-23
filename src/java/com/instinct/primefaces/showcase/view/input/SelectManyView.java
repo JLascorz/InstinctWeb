@@ -15,11 +15,19 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.model.UploadedFile;
  
- 
+/**
+ * SelectManyView te atributs que s'utilitzen per a agafar llista d'objectes,
+ * les clases de vista no es poden fer abstractes, perque si no no deixa
+ * utilitzarles.
+ * @author Jordi Lascorz
+ * @since 19/05/2017
+ * @version 1.0
+ */
 @ManagedBean(name="SelectManyView")
 @SessionScoped
 public class SelectManyView {
      
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private List<String> selectedOptions;
     private List<String> selectedServices;
     private List<Servicio> services;
@@ -28,7 +36,9 @@ public class SelectManyView {
     
     @ManagedProperty("#{themeService}")
     private Servicio service;
-      
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public List<Servicio> getServicios() {
         return services;
     }
@@ -68,5 +78,7 @@ public class SelectManyView {
     public void setResultado(UploadedFile resultado) {
         this.resultado = resultado;
     }
+    //</editor-fold>
+    
 
 }

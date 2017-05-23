@@ -9,15 +9,20 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Comunidades.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="Comunidades")
 @RequestScoped
 public class Comunidades {
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
     private int idComunidad;
     private String nombre;
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public int getIdComunidad() {
         return idComunidad;
     }
@@ -33,12 +38,16 @@ public class Comunidades {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
     public Comunidades(int idComunidad, String nombre) {
         this.setIdComunidad(idComunidad);
         this.setNombre(nombre);
     }
     
     public Comunidades(){}
+    //</editor-fold>
+    
     
 }

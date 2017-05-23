@@ -22,10 +22,9 @@ import java.util.Date;
 
 
 /**
- * <p>La classe <b>JDBCUTILS</b> serveix per a crear objectes Alumne i Moduls,
- * a més tambe retorna una string de les dades de la relació.</p>
+ * <p>La classe <b>JDBCUTILS</b> serveix per a crear objectes.
  * @author Jordi Lascorz
- * @since 03/03/2017
+ * @since 10/05/2017
  * @version 1.0
  */
 public class JDBCUtils {
@@ -33,10 +32,11 @@ public class JDBCUtils {
      * El Constructor de JDBCUtils esta buit, i no s'utilitza.
      */
     private JDBCUtils(){}
+    
     /**
-     * La funció getAlumne, retorna un alumne que s'ha retornat de les dades de la BD.
+     * La funció getUsuari, retorna un usuari que s'ha retornat de les dades de la BD.
      * @param reader ResultSet
-     * @return Alumne
+     * @return Usuario
      * @throws SQLException 
      */
     public static Usuario getUsuario(ResultSet reader) throws SQLException{
@@ -68,6 +68,12 @@ public class JDBCUtils {
             return user;
     }
     
+    /**
+     * Retorna un objecte activitat que ha agafat desde la base de dades
+     * @param reader
+     * @return Actividad
+     * @throws SQLException 
+     */
     public static Actividad getActividad(ResultSet reader) throws SQLException{
         
         //Fecha de Nacimiento
@@ -93,6 +99,12 @@ public class JDBCUtils {
         return activ;
     }
     
+    /**
+     * Agafa un objecte de la relació entre Activitat i Serveis de la base de dades
+     * @param reader
+     * @return ActServ
+     * @throws SQLException 
+     */
     public static ActServ getActServ(ResultSet reader) throws SQLException{
         
         ActServ actserv = new ActServ(
@@ -103,6 +115,12 @@ public class JDBCUtils {
         return actserv;
     }
     
+    /**
+     * Agafa un objecte Participante de la relació entre Usuari i Activitat
+     * @param reader
+     * @return Participante
+     * @throws SQLException 
+     */
     public static Participante getParticipante(ResultSet reader) throws SQLException{
         
         Participante participante = new Participante(
@@ -113,6 +131,12 @@ public class JDBCUtils {
         return participante;
     }
     
+    /**
+     * Agafa un objecto TipoActividad de la base de dades
+     * @param reader
+     * @return
+     * @throws SQLException 
+     */
     public static TipoActividad getTipoActividad(ResultSet reader) throws SQLException{
         
         TipoActividad tipo = new TipoActividad(
@@ -124,6 +148,12 @@ public class JDBCUtils {
         return tipo;
     }
     
+    /**
+     * Agafa un objecte de tipus Servicio de la base de dades
+     * @param reader
+     * @return
+     * @throws SQLException 
+     */
     public static Servicio getServicio(ResultSet reader) throws SQLException{
         
         Servicio service = new Servicio(
@@ -135,6 +165,12 @@ public class JDBCUtils {
         return service;
     }
     
+    /**
+     * Agafa un objecte localizacion de la base de dades i el retorna
+     * @param reader
+     * @return Localizacion
+     * @throws SQLException 
+     */
     public static Localizacion getLocalizacion(ResultSet reader) throws SQLException{
         
         Localizacion localizacion = new Localizacion(
@@ -147,6 +183,12 @@ public class JDBCUtils {
         return localizacion;
     }
     
+    /**
+     * Agafa un objecte Comunidades de la base de dades
+     * @param reader
+     * @return Comunidades
+     * @throws SQLException 
+     */
     public static Comunidades getComunidad(ResultSet reader) throws SQLException{
         
         Comunidades comunidad = new Comunidades(
@@ -156,6 +198,12 @@ public class JDBCUtils {
         return comunidad;
     }
     
+    /**
+     * Agafa un objecte Provincias de la base de dades
+     * @param reader
+     * @return
+     * @throws SQLException 
+     */
     public static Provincias getProvincia(ResultSet reader) throws SQLException{
         
         Provincias provincia = new Provincias(
@@ -166,6 +214,12 @@ public class JDBCUtils {
         return provincia;
     }
     
+    /**
+     * Agafa un objecte Municipio de la base de dades
+     * @param reader
+     * @return
+     * @throws SQLException 
+     */
     public static Municipios getMunicipio(ResultSet reader) throws SQLException{
         
         Municipios municipio = new Municipios(

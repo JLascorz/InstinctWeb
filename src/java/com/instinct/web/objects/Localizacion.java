@@ -12,18 +12,21 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
- * @author daw2017
+ * Classe per al objecte Localizacion.
+ * @author Jordi Lascorz
+ * @since 04/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="Localizacion")
 @ViewScoped
 public class Localizacion implements Serializable {
-    	private int idAct;
+    //<editor-fold defaultstate="collapsed" desc="Atributs">
+        private int idAct;
         private int idComunidad, idProvincia, idMunicipio;
         private String calle;
-	
-	//Getters
-	public int getIdAct(){
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
+        public int getIdAct(){
 		return idAct;
 	}
 	
@@ -63,8 +66,9 @@ public class Localizacion implements Serializable {
         public void setCalle(String calle) {
             this.calle = calle;
         }
-
-        public Localizacion(int idAct, int idComunidad, int idProvincia, int idMunicipio, String calle){
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
+    public Localizacion(int idAct, int idComunidad, int idProvincia, int idMunicipio, String calle){
 		this.setIdAct(idAct);
                 this.setIdComunidad(idComunidad);
                 this.setIdProvincia(idProvincia);
@@ -73,5 +77,7 @@ public class Localizacion implements Serializable {
 
 	}
 	
-	public Localizacion(){}
+    public Localizacion(){}
+    //</editor-fold>
+        
 }

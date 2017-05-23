@@ -35,8 +35,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 /**
- *
- * @author daw2017
+ * ParticipaMySQLDAO classe per englobar les funcions de la relacio entre usuaris i activitats.
+ * @author Jordi Lascorz
+ * @since 16/05/2017
+ * @version 1.0
  */
 @ManagedBean(name="ParticipaMySQLDAO")
 @SessionScoped
@@ -46,8 +48,18 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
     CallableStatement sql2 = null;
     ResultSet reader = null;
 
+    /**
+     * Funció que engloba altres funcións per que al insertar la relació 
+     * del usuari amb l'activitat verifiqui errors.
+     * @param activity
+     * @param user
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String callParticipa(Actividad activity, Usuario user) throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
         String comprueba = null;
         int verificado = 0;
         int verifecha = 0;
@@ -66,8 +78,10 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
             int MesActiv  = Integer.parseInt(fecAct[1]);
             int YearActiv = Integer.parseInt(fecAct[2]);
         //</editor-fold>
-        
+        //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Comparar Fechas">
+        //Compara que la data de la inscripció no es pugui realitzar despres de
+        //que la activitat hagi finalitzat o falti un dia
             if(actyear < YearActiv){
                 verifecha = 0;
             }else if(actyear == YearActiv){
@@ -86,12 +100,14 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
                 verifecha = 1;
             }
         //</editor-fold>
-        
+        //<editor-fold defaultstate="collapsed" desc="Control d'errors">
         if(verifecha == 0){
             if(user != null){
                 if(activity.getIdUser() != user.getIdUser()){
+                    //Verifica que l'usuari no s'hagi inscrit ya
                     verificado = verificaInscripcion(activity, user);
                     if(verificado == 0){
+                        //Inserta l'usuari i la activitat en la relació
                         comprueba = insertaRelacion(activity, user);
                         if(comprueba.equals("insertado")){
                             FacesMessage message = new FacesMessage("Has sido inscrito correctamente.");
@@ -118,8 +134,17 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
         }
         
         return null;
+        //</editor-fold>   
     }
 
+    /**
+     * Fa el inerció de la inscripció d'un usuari en una activitat
+     * @param activity
+     * @param user
+     * @return String
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public String insertaRelacion(Actividad activity, Usuario user) throws PersistenceException, ClassNotFoundException {
     //<editor-fold defaultstate="collapsed" desc="Atributos">
@@ -167,11 +192,22 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
     //</editor-fold>
     }
 
+    /**
+     * Verifica que la inscripcio d'aquest usuari ya estigui feta
+     * @param activity
+     * @param user
+     * @return int
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public int verificaInscripcion(Actividad activity, Usuario user) throws PersistenceException, ClassNotFoundException {
-    Class.forName("com.mysql.jdbc.Driver");
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
+        Class.forName("com.mysql.jdbc.Driver");
         int comprobacion = 0;
         int idUser = 0;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL verificaInscripcion(?, ?)");
@@ -215,8 +251,17 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
         
         
         return comprobacion;
+        //</editor-fold>
+        
     }
 
+    /**
+     * Retorna la llista de tots els participants d'una activitat
+     * @param activity
+     * @return List de Usuario
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Usuario> getParticipantes(Actividad activity) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -271,6 +316,13 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
     return participantes;    
     }
 
+    /**
+     * Retorna la llista de totes les activitats a la que participa l'usuari
+     * @param user
+     * @return Lista de Actividades
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public List<Actividad> getInscripcionesUser(Usuario user) throws PersistenceException, ClassNotFoundException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -325,10 +377,19 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
     return inscripciones;   
     }
 
+    /**
+     * Agafa el numero de participants en activitats total
+     * @return int
+     * @throws PersistenceException
+     * @throws ClassNotFoundException 
+     */
     @Override
     public int getTotalParticipantes() throws PersistenceException, ClassNotFoundException {
+        //<editor-fold defaultstate="collapsed" desc="Atributs">
         Class.forName("com.mysql.jdbc.Driver");
         int participantes = 0;
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Try/Catch">
         try{
             Connection conn = connect();
             sql = conn.prepareCall("CALL getTotalParticipantes()");
@@ -363,6 +424,8 @@ public class ParticipaMySQLDAO implements ParticipaDAO {
         }
         
         return participantes;
+        //</editor-fold>
+        
     }
     
 }

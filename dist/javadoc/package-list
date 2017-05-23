@@ -1,0 +1,8 @@
+com.instinct.daos.connection
+com.instinct.daos.contracts
+com.instinct.daos.impl.jdbc.allMySQLDAO
+com.instinct.daos.impl.jdbcUtils
+com.instinct.exception.PersistenceException
+com.instinct.primefaces.showcase.view.input
+com.instinct.web.objects
+com.instinct.web.validators

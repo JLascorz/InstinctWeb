@@ -16,6 +16,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 
+ * ¡ IMPORTANT !
+ * -------------------------------------------------
+ * 
+ * AQUEST DOCUMENT NO S'UTILITZA A L'HORA DE FER LA CONNEXIÓ
+ * NOMÉS ERA UNA PROVA DE FER UN TUNEL SSH AL SERVIDOR
+ * 
+ * ----------------------------------------------------
+ * 
  * ConnectMySQL te com a funcions la de obrir la conexio i tancarla, cada vegada
  * que es demana desde els MySQLDAO.
  * @author Jordi Lascorz
@@ -34,7 +43,7 @@ public abstract class connectMySQL {
     private static String dataBaseName = "Instinct";
     
     /**
-     * Connect() obre la conexio a la Base de Dades.
+     * ConnectToServer() obre la conexio a la Base de Dades.
      * @return conn Connection
      */
     private static String driverName = "com.mysql.jdbc.Driver";
